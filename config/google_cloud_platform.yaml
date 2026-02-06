@@ -9,5 +9,6 @@ development:
     bucket: bucket-o26f5msw
     paths:
       raw: raw/
+      bronze: bronze/
       silver: silver/
       gold: gold/
