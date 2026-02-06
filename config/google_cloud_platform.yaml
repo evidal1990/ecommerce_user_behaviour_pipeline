@@ -1,0 +1,13 @@
+env: dev
+
+development:
+  gcp:
+    project_id: e-commerce-user-behavior-dev
+    location: us-central1
+
+  cloud_storage:
+    bucket: bucket-o26f5msw
+    paths:
+      raw: raw/
+      silver: silver/
+      gold: gold/
