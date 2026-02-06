@@ -12,3 +12,8 @@ development:
       bronze: bronze/
       silver: silver/
       gold: gold/
+
+production:
+  gcp:
+    project_id: e-commerce-user-behavior-prod
+    location: us-central1
