@@ -1,3 +1,4 @@
+import os
 from google.cloud import storage
 from google.auth import default
 
@@ -13,13 +14,12 @@ def get_blobs(bucket):
     return blobs_list
 
 
-def add_blob(bucket, blob_name):
+def add_file(bucket, blob, file_path):
     client = storage.Client()
     bucket = client.bucket(bucket)
-    bucket.blob(f"{blob_name}/").upload_from_string("")
 
+    file_name = os.path.basename(file_path)
+    blob_path = f"{blob}/{file_name}"
+    bucket.blob(blob_path).upload_from_filename(file_path)
 
-def del_blob(bucket, blob_name):
-    client = storage.Client()
-    bucket = client.bucket(bucket)
-    bucket.blob(f"{blob_name}/").delete()
+    return bucket.blob(blob_path).exists()

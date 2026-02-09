@@ -18,9 +18,8 @@ def test_get_blobs():
     assert "gold/" in blobs
 
 
-def test_add_blob():
+def test_add_file():
     blob = f'{paths["raw"]}{datetime.now()}'
-    gcs.add_blob(bucket=bucket, blob_name=blob)
-    blobs = gcs.get_blobs(bucket)
-    assert f'{blob}/' in blobs
+    file = gcs.add_file(bucket=bucket, blob=blob, file_path="data/raw/file.txt")
+    assert file is True
 
