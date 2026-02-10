@@ -1,2 +1,4 @@
-origin:
-  path: "data/origin/e_commerce_shopper_behaviour_and_lifestyle.csv"
+data:
+  origin: "data/origin/e_commerce_shopper_behaviour_and_lifestyle.csv"
+  destination:
+    raw: "data/raw/data.csv"
