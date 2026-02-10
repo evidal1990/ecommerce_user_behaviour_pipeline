@@ -1,9 +1,8 @@
-from argparse import FileType
 import yaml
 import polars as pl
 
 
-def read_yaml(path):
+def read_yaml(path) -> dict:
     try:
         with open(path, "r") as f:
             return yaml.safe_load(f)
@@ -11,7 +10,7 @@ def read_yaml(path):
         raise FileNotFoundError(f"Arquivo não encontrado: {path}")
 
 
-def read_csv(path):
+def read_csv(path) -> pl.DataFrame:
     try:
         return pl.read_csv(path)
     except FileNotFoundError:
