@@ -1,8 +1,7 @@
 import logging
 from pathlib import Path
 import polars as pl
-from src.utils import file_io
-from utils import dataframe
+from src.utils import file_io, dataframe
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
@@ -13,14 +12,12 @@ class CsvIngestion:
         self._settings = settings["data"]
         self._contract = self._load_contract()
 
-    # ---------- API Pública ----------
     def execute(self) -> None:
         self.df = self._read_csv()
         self._validate_required_columns()
         self._validate_dtypes()
         self._write_raw()
 
-    # ---------- Métodos Internos ----------
     def _read_csv(self) -> pl.DataFrame:
         logging.info("Iniciando a leitura de dados na origem...")
         df = file_io.read_csv(self._settings["origin"])
