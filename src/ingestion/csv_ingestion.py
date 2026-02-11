@@ -1,7 +1,8 @@
 import logging
 from pathlib import Path
 import polars as pl
-from src.utils import file_io, df_validation
+from src.utils import file_io
+from utils import dataframe
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
@@ -33,7 +34,7 @@ class CsvIngestion:
     def _validate_required_columns(self) -> None:
         logging.info("Iniciando validação de colunas obrigatórias...")
 
-        missing_columns = df_validation.validate_required_columns(
+        missing_columns = dataframe.validate_required_columns(
             df=self.df, required_columns=self._contract["required_columns"]
         )
 
@@ -45,7 +46,7 @@ class CsvIngestion:
     def _validate_dtypes(self) -> None:
         logging.info("Iniciando validação de tipos de colunas...")
 
-        divergences = df_validation.validate_dtypes(
+        divergences = dataframe.validate_dtypes(
             df=self.df, dtype_schema=self._contract["dtypes"]
         )
 

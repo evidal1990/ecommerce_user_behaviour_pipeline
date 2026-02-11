@@ -11,14 +11,6 @@ DTYPE_MAP = {
 }
 
 
-def load_yaml(parent_level: int, folder: str, file: str) -> dict:
-    BASE_DIR = Path(__file__).resolve().parents[parent_level]
-    try:
-        return file_io.read_yaml(BASE_DIR / folder / f"{file}.yaml")
-    except FileNotFoundError:
-        raise FileNotFoundError(f"Arquivo de configuração nao encontrado: {file}")
-
-
 def validate_required_columns(
     df: pl.DataFrame, required_columns: list[str]
 ) -> list[str]:
