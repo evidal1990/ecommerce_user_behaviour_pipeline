@@ -23,5 +23,5 @@ def test_get_blobs() -> None:
 
 def test_add_file() -> None:
     blob = f'{cloud_storage["paths"]["raw"]}{datetime.now()}'
-    file = gcs.add_file(blob=blob, file_path="data/raw/data.test.csv")
+    file = gcs.add_file(blob=blob, file_path="tests/data/test.csv")
     assert file is True
