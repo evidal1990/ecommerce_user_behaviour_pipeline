@@ -9,7 +9,7 @@ def test_exist_credentials():
     assert credentials is not None, "As credenciais do GCP não foram carregadas."
 
 
-def test_project_name():
+def test_project_name() -> None:
     environment = get_env_variables.load()
     BASE_DIR = Path(__file__).resolve().parents[2]
     config_path = BASE_DIR / "config" / "google_cloud_platform.yaml"
