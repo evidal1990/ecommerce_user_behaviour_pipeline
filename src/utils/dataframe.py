@@ -1,12 +1,7 @@
 import polars as pl
+from consts.dtypes import DTypes
 
-DTYPE_MAP = {
-    "Int64": pl.Int64(),
-    "Float64": pl.Float64(),
-    "String": pl.String(),
-    "Boolean": pl.Boolean(),
-    "Date": pl.Date(),
-}
+DTYPES = DTypes.as_dict()
 
 
 def validate_required_columns(
@@ -18,14 +13,14 @@ def validate_required_columns(
 def validate_dtypes(df: pl.DataFrame, dtype_schema: dict[str, str]) -> dict:
     result = {}
     for column, dtype_str in dtype_schema.items():
-        if dtype_str not in DTYPE_MAP:
-            raise Exception(f"Tipo {dtype_str} não está mapeado")
+        if dtype_str not in DTYPES:
+            raise TypeError(f"Tipo {dtype_str} não está mapeado")
 
         received = df.schema.get(column)
         if received is None:
-            raise Exception(f"Coluna {column} não está mapeada")
+            raise ValueError(f"Coluna {column} não está mapeada no schema")
 
-        expected = DTYPE_MAP[dtype_str]
+        expected = DTYPES[dtype_str]
         if received != expected:
             result.update({column: {"expected": expected, "received": received}})
     return result
