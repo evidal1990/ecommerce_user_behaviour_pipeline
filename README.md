@@ -5,6 +5,9 @@
 Este pipeline foi desenvolvido para automatizar o processo de ingestão de dados (de diferentes fontes), transformar esses dados e armazená-los para análise. 
 O objetivo é garantir que os dados estejam sempre atualizados e disponíveis para análise e tomada de decisões.
 
+## Link para a Documentação do Projeto
+https://drive.google.com/file/d/1To4Z_KnayDgVKSdtN9Zu-NozFfFH2g0c/view?usp=drive_link
+
 ## Arquitetura
 RAW -> BRONZE -> SILVER -> GOLD
 
