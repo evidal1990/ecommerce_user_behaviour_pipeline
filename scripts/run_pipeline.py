@@ -24,6 +24,7 @@ def execute_pipeline() -> None:
 
     try:
         global_settings = _load_global_settings()
+
         CsvIngestion(global_settings).execute()
 
     except Exception as exception:

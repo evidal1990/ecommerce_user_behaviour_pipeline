@@ -211,3 +211,4 @@ credentials/*.json
 data/*/*.csv
 tests/data/*.csv
 tests/data/*.yaml
+tests/results/*.csv
