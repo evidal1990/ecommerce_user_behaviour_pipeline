@@ -20,7 +20,7 @@ class CsvIngestion:
 
     def _read_csv(self) -> pl.DataFrame:
         logging.info("Iniciando a leitura de dados na origem...")
-        df = file_io.read_csv(self._settings["origin"])
+        df = pl.read_csv(self._settings["origin"])
 
         if df.is_empty():
             raise ValueError("Dataframe de origem está vazio.")
@@ -54,10 +54,7 @@ class CsvIngestion:
 
     def _write_raw(self) -> None:
         logging.info("Iniciando a escrita de dados na camada raw...")
-        file_io.write_csv(
-            df=self.df,
-            path=self._settings["destination"]["raw"],
-        )
+        self.df.write_csv(self._settings["destination"]["raw"])
         logging.info("Escrita de dados na camada raw concluída com sucesso")
 
     def _load_contract(self) -> dict:
