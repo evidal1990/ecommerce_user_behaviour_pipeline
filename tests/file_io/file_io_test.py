@@ -30,6 +30,6 @@ def test_write_csv() -> None:
     df_path = "tests/data/new.csv"
     df = pl.DataFrame({"col1": random(), "col2": random(), "col3": random()})
     file_io.write_csv(df=df, path=df_path)
-    df_read = file_io.read_csv(df_path)
+    df_read = pl.read_csv(df_path)
     assert df_read is not None
     assert df_read.equals(df)
