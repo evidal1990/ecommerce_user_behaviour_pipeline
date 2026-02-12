@@ -30,7 +30,7 @@ def test_csv_ingestion_without_origin_file() -> None:
             "destination": {"raw": f"tests/results/test{datetime.now()}.csv"},
         }
     }
-    with pytest.raises(FileNotFoundError, match=f"Arquivo não encontrado em {''}"):
+    with pytest.raises(FileNotFoundError, match=f"Arquivo não encontrado em ''"):
         CsvIngestion(settings).execute()
 
 
@@ -41,5 +41,5 @@ def test_csv_ingestion_without_destiny_file() -> None:
             "destination": {"raw": ""},
         }
     }
-    with pytest.raises(RuntimeError, match=f"Falha ao escrever CSV em {''}"):
+    with pytest.raises(RuntimeError, match=f"Falha ao escrever CSV em ''"):
         CsvIngestion(settings).execute()
