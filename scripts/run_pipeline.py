@@ -1,4 +1,3 @@
-# scripts/run_pipeline.py
 import logging
 from pathlib import Path
 from src.orchestration.pipeline import Pipeline
