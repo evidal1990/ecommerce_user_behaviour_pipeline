@@ -7,10 +7,44 @@ DTYPES = DTypes.as_dict()
 def validate_required_columns(
     df: pl.DataFrame, required_columns: list[str]
 ) -> list[str]:
+    """
+    Valida se as colunas obrigatórias est o presentes no DataFrame.
+
+    Parâmetros:
+        df (pl.DataFrame): DataFrame a ser validado.
+        required_columns (list[str]): Lista de colunas obrigatórias.
+
+    Retorno:
+        list[str]: Lista de colunas obrigatórias ausentes no DataFrame.
+    """
     return [col for col in required_columns if col not in df.schema]
 
 
 def validate_dtypes(df: pl.DataFrame, dtype_schema: dict[str, str]) -> dict:
+    """
+    Valida se os tipos de colunas do DataFrame de origem
+    convergem com os tipos especificados no contrato.
+
+    Se houver divergências, registra um log de warning com as colunas
+    e seus respectivos tipos divergentes.
+
+    Retorno:
+        dict: Dicionário com as colunas e seus respectivos tipos divergentes.
+
+    Exemplo de retorno:
+    {
+        "col1": 
+            {
+                "expected": pl.Int64(), 
+                "received": pl.String()
+            },
+        "col2": 
+            {
+                "expected": pl.Float64(), 
+                "received": pl.Int64()
+            }
+    }
+    """
     result = {}
     for column, dtype_str in dtype_schema.items():
         if dtype_str not in DTYPES:

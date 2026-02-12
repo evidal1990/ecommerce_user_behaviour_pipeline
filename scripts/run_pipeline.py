@@ -7,6 +7,14 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 
 
 def main() -> None:
+    
+    """
+    Função principal que executa o pipeline.
+    Carrega as configurações do pipeline, cria um objeto e executa o método run().
+    Em caso de erro, registra a falha no log e levanta uma exceção.
+    Retorno: 
+        None
+    """
     log_path = BASE_DIR / "logs" / "pipeline.log"
     log_format = "%(asctime)s | %(levelname)s | %(message)s"
 

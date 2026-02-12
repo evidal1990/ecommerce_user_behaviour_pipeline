@@ -16,6 +16,10 @@ DTYPE_SCHEMA = {
 REQUIRED_COLUMNS = {"col1", "col2", "col3","col4", "col5"}
 
 def test_df_required_columns_without_divergence() -> None:
+    """
+    Testa se a função validate_required_columns retorna uma lista vazia
+    quando todas as colunas obrigatórias est o presentes no DataFrame.
+    """
     df = pl.DataFrame(
         {
             "col1": 10, 
@@ -32,6 +36,11 @@ def test_df_required_columns_without_divergence() -> None:
 
 
 def test_df_required_columns_with_divergence() -> None:
+    """
+    Testa se a função validate_required_columns retorna uma lista com as colunas
+    obrigatórias ausentes no DataFrame quando há divergência entre as colunas
+    do DataFrame e as colunas obrigatórias.
+    """
     df = pl.DataFrame(
         {
             "col1": 10, 
@@ -45,6 +54,18 @@ def test_df_required_columns_with_divergence() -> None:
     assert "col4" and "col5" in result
 
 def test_dtypes_without_divergence() -> None:
+    """
+    Testa se a função validate_dtypes retorna um dicionário vazio
+    quando todos os tipos de colunas do DataFrame coincidem com os tipos
+    especificados no contrato.
+
+    Parâmetros:
+        df (pl.DataFrame): DataFrame a ser validado.
+        dtype_schema (dict[str, str]): Contrato de ingestão de CSV.
+
+    Retorno:
+        dict: Dicionário com as colunas e seus respectivos tipos divergentes.
+    """
     df = pl.DataFrame(
         {
             "col1": 10, 
@@ -60,6 +81,18 @@ def test_dtypes_without_divergence() -> None:
 
 
 def test_dtypes_with_divergence() -> None:
+    """
+    Testa se a função validate_dtypes retorna um dicionário com as colunas e seus
+    respectivos tipos divergentes quando há divergência entre os tipos de colunas
+    do DataFrame e os tipos especificados no contrato.
+
+    Parâmetros:
+        df (pl.DataFrame): DataFrame a ser validado.
+        dtype_schema (dict[str, str]): Contrato de ingestão de CSV.
+
+    Retorno:
+        dict: Dicionário com as colunas e seus respectivos tipos divergentes.
+    """
     df = pl.DataFrame(
         {
             "col1": "texto", 
@@ -80,6 +113,17 @@ def test_dtypes_with_divergence() -> None:
     }
 
 def test_invalid_dtypes() -> None:
+    """
+    Testa se a função validate_dtypes levanta um TypeError quando o tipo de
+    coluna especificado no contrato não está mapeado.
+
+    Parâmetros:
+        df (pl.DataFrame): DataFrame a ser validado.
+        dtype_schema (dict[str, polars.DataType]): Contrato de ingestão de CSV.
+
+    Retorno:
+        None
+    """
     dtype = pl.Int32()
     invalid_dtype_schema = {"col1": dtype}
     df = pl.DataFrame({"col1": 10,})
@@ -89,6 +133,17 @@ def test_invalid_dtypes() -> None:
 
 
 def test_not_found_df_column() -> None:
+    """
+    Testa se a função validate_dtypes levanta um ValueError quando uma coluna
+    obrigatória não está mapeada no schema do DataFrame.
+
+    Parâmetros:
+        df (pl.DataFrame): DataFrame a ser validado.
+        dtype_schema (dict[str, polars.DataType]): Contrato de ingestão de CSV.
+
+    Retorno:
+        None
+    """
     df = pl.DataFrame(
         {
             "col1": 10, 

@@ -14,6 +14,14 @@ gcs = GoogleCloudStorage(cloud_storage["bucket"])
 
 
 def test_get_blobs() -> None:
+    """
+    Testa se a função get_blobs retorna a lista com os nomes dos blobs
+    presentes no bucket do Google Cloud Storage.
+
+    Verifica se a lista retornada pela função contém os nomes dos blobs
+    'raw/', 'bronze/', 'silver/' e 'gold/'.
+
+    """
     blobs = gcs.get_blobs()
     assert "raw/" in blobs
     assert "bronze/" in blobs
@@ -22,6 +30,14 @@ def test_get_blobs() -> None:
 
 
 def test_add_file() -> None:
+    """
+    Testa se a função add_file adiciona um arquivo no bucket do Google Cloud Storage.
+
+    Adiciona um arquivo no bucket do Google Cloud Storage com o nome do blob
+    gerado com base no timestamp atual e verifica se o arquivo foi adicionado
+    com sucesso.
+
+    """
     blob = f'{cloud_storage["paths"]["raw"]}{datetime.now()}'
     file = gcs.add_file(blob=blob, file_path="tests/data/test.csv")
     assert file is True
