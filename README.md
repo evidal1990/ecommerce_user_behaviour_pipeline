@@ -41,8 +41,7 @@ RAW -> BRONZE -> SILVER -> GOLD
 ├── logs
 ├── pytest.ini
 ├── README.md
-├── requirements.development.txt
-├── requirements.production.txt
+├── requirements.txt
 ├── scripts
 │   ├── backkfill.py
 │   ├── cleanup.py
