@@ -19,41 +19,29 @@ class CsvIngestion:
         self._write_raw()
 
     def _read_csv(self) -> pl.DataFrame:
-        logging.info("Iniciando a leitura de dados na origem...")
         df = pl.read_csv(self._settings["origin"])
-
         if df.is_empty():
             raise ValueError("Dataframe de origem está vazio.")
-
         logging.info("Leitura de dados na origem concluída com sucesso.")
         return df
 
     def _validate_required_columns(self) -> None:
-        logging.info("Iniciando validação de colunas obrigatórias...")
-
         missing_columns = dataframe.validate_required_columns(
             df=self.df, required_columns=self._contract["required_columns"]
         )
-
         if missing_columns:
             raise ValueError(f"Colunas obrigatórias ausentes: {missing_columns}")
-
         logging.info("Validação de colunas obrigatórias concluída com sucesso")
 
     def _validate_dtypes(self) -> None:
-        logging.info("Iniciando validação de tipos de colunas...")
-
         divergences = dataframe.validate_dtypes(
             df=self.df, dtype_schema=self._contract["dtypes"]
         )
-
         if divergences:
             logging.warning(f"Colunas com tipos divergentes: {divergences}")
-
         logging.info("Validação de tipos de colunas concluída com sucesso.")
 
     def _write_raw(self) -> None:
-        logging.info("Iniciando a escrita de dados na camada raw...")
         self.df.write_csv(self._settings["destination"]["raw"])
         logging.info("Escrita de dados na camada raw concluída com sucesso")
 
