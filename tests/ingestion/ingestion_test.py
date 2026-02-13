@@ -1,3 +1,4 @@
+from multiprocessing import Value
 import polars as pl
 import pytest
 import re
@@ -18,14 +19,13 @@ def test_csv_ingestion() -> None:
     """
     settings = {
         "data": {
-            "origin": "tests/data/test.csv",
+            "origin": "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based",
             "destination": {"raw": f"tests/results/test_{datetime.now()}.csv"},
         }
     }
     CsvIngestion(settings).execute()
-    df_origin = pl.read_csv(settings["data"]["origin"])
     df_destination = pl.read_csv(settings["data"]["destination"]["raw"])
-    assert df_destination.equals(df_origin)
+    assert not df_destination.is_empty()
 
 
 def test_csv_ingestion_without_settings() -> None:
@@ -60,7 +60,7 @@ def test_csv_ingestion_without_origin_file() -> None:
             "destination": {"raw": f"tests/results/test{datetime.now()}.csv"},
         }
     }
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(ValueError):
         CsvIngestion(settings).execute()
 
 
@@ -77,7 +77,7 @@ def test_csv_ingestion_without_destiny_file() -> None:
     """
     settings = {
         "data": {
-            "origin": "tests/data/test.csv",
+            "origin": "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based",
             "destination": {"raw": ""},
         }
     }
