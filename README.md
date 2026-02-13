@@ -112,11 +112,11 @@ RAW -> BRONZE -> SILVER -> GOLD
 https://www.kaggle.com/datasets/dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based
 
 ## Como Executar o Pipeline
-*O CSV será baixado automaticamente do Kaggle através do link presente em `config/settings.yaml`:*
+**O CSV será baixado automaticamente do Kaggle através do link presente em `config/settings.yaml`**
 
 1. Certifique-se de ter as dependências instaladas 
 (verifique o arquivo `requirements.txt` para obter a lista de dependências)
-2. Execute o pipeline executando o comando `python src/orchestration/pipeline.py` no terminal.
+2. Execute o pipeline executando o comando `python scripts/run_pipeline.py` no terminal.
 
 ## Como Executar os Testes
 
@@ -129,7 +129,7 @@ https://www.kaggle.com/datasets/dhrubangtalukdar/e-commerce-shopper-behavior-ama
 
 O pipeline é composto por três camadas: raw, bronze, silver e gold. 
 O pipeline é executado pelo arquivo `pipeline.py`, que carrega as configurações do pipeline, cria um objeto `Pipeline` e executa o método `run()`.
-O resultado de cada etapa é registrado em um arquivo de log.
+**O resultado de cada etapa é registrado em um arquivo de log.**
 
 ### Camada raw
 Armazena os dados exatamente como foram recebidos, sem nenhum tipo de modificação.
