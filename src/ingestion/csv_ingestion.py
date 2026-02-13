@@ -1,5 +1,7 @@
 import logging
+from multiprocessing import Value
 import polars as pl
+import kagglehub
 from pathlib import Path
 from src.utils import file_io, dataframe
 
@@ -45,7 +47,16 @@ class CsvIngestion:
         Retorno:
             pl.DataFrame: Dataframe Polars com os dados lidos do arquivo CSV.
         """
-        df = pl.read_csv(self._settings["origin"])
+        if not self._settings["origin"]:
+            raise ValueError("Arquivo de origem não informado.")
+
+        dataset = Path(kagglehub.dataset_download(self._settings["origin"]))
+        dataset_list = list(dataset.glob("*.csv"))
+        if dataset_list == []:
+            raise FileNotFoundError("Dataset baixado não foi encontrado.")
+        logging.info(f"CSV disponível em {dataset_list[0]}")
+
+        df = pl.read_csv(dataset_list[0])
         if df.is_empty():
             raise ValueError("Dataframe de origem está vazio.")
         logging.info("Leitura de dados na origem concluída com sucesso.")
@@ -84,7 +95,10 @@ class CsvIngestion:
         Retorno:
             None
         """
-        self.df.write_csv(self._settings["destination"]["raw"])
+        path = self._settings["destination"]["raw"]
+        if not Path(path).parent.exists():
+            Path(path).parent.mkdir()
+        self.df.write_csv(path)
         logging.info("Escrita de dados na camada raw concluída com sucesso")
 
     def _load_contract(self) -> dict:

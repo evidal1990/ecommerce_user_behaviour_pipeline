@@ -105,11 +105,15 @@ RAW -> BRONZE -> SILVER -> GOLD
         └── test.py
 ```
 
+## Link do Kaggle
+https://www.kaggle.com/datasets/dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based
+
 ## Como Executar o Pipeline
+*O CSV será baixado automaticamente do Kaggle através do link presente em `config/settings.yaml`:*
 
 1. Certifique-se de ter as dependências instaladas 
 (verifique o arquivo `requirements.txt` para obter a lista de dependências)
-3. Execute o pipeline executando o comando `python src/orchestration/pipeline.py` no terminal.
+2. Execute o pipeline executando o comando `python src/orchestration/pipeline.py` no terminal.
 
 ## Como Executar os Testes
 

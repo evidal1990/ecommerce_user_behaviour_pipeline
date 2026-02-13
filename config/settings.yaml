@@ -1,4 +1,4 @@
 data:
-  origin: "data/origin/e_commerce_shopper_behaviour_and_lifestyle.csv"
+  origin: "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based"
   destination:
     raw: "data/raw/data.csv"

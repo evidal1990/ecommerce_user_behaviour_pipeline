@@ -27,6 +27,8 @@ ipython_pygments_lexers==1.1.1
 jedi==0.19.2
 jupyter_client==8.8.0
 jupyter_core==5.9.1
+kagglehub==1.0.0
+kagglesdk==0.1.15
 matplotlib-inline==0.2.1
 nest-asyncio==1.6.0
 numpy==2.4.2
@@ -57,6 +59,7 @@ rsa==4.9.1
 six==1.17.0
 stack-data==0.6.3
 tornado==6.5.4
+tqdm==4.67.3
 traitlets==5.14.3
 typing_extensions==4.15.0
 urllib3==2.6.3
