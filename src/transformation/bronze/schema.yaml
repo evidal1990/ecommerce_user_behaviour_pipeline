@@ -40,26 +40,6 @@ rules:
     values: [0, 1]
   weekend_shopper:
     values: [0, 1]
-  gender:
-    values: [
-      "Male", 
-      "Female", 
-      "Non-Binary" , 
-      "Other"
-    ]
-  urban_rural:
-    values: [
-      "Urban", 
-      "Rural"
-    ]
-  employment_status:
-    values: [
-      "Employed", 
-      "Unemployed", 
-      "Self-Employed", 
-      "Student", 
-      "Retired"
-    ]
   education_level:
     values: [
       "High School", 
