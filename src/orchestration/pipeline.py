@@ -28,4 +28,4 @@ class Pipeline:
         """
         logging.info("Ingestão de CSV iniciada...")
         CsvIngestion(self.settings).execute()
-        logging.info("Ingestão de CSV finaliza...")
+        logging.info("Ingestão de CSV finalizada...")
