@@ -1,0 +1,108 @@
+rules:
+  frequency:
+    per_year: 
+      min: 0
+      max: 12
+    per_month:
+      min: 0  
+      max: 31
+    per_week:
+      min: 0
+      max: 7
+  rate:
+    min: 0
+    max: 100
+  ratio:
+    min: 0
+    max: 100
+  score:
+    min: 0
+    max: 10
+  level:
+    min: 0
+    max: 10
+  count:
+    min: 0
+    max: 10
+has_children:
+  - 0
+  - 1
+environmental_conscientiousness:
+  - 0
+  - 1
+health_conscious_shopping:
+  - 0
+  - 1
+weekend_shopper:
+  - 0
+  - 1
+loyalty_program_member:
+  - 0
+  - 1
+gender:
+  - Male
+  - Female
+  - Non-Binary
+  - Other
+employment_status:
+  - Employed
+  - Unemployed
+  - Retired
+  - Student
+  - Self-Employed
+urban_rural:
+  - Urban
+  - Rural
+education_level:
+  - High School
+  - Bachelor
+  - Master
+  - PhD
+  - Associeate Degree 
+relationship_status:
+  - Single
+  - In a Relationship
+  - Married
+  - Divorced
+  - Widowed
+device_type:
+  - Mobile
+  - Desktop
+  - Tablet
+ethnicity:
+  - Black/African American
+  - Caucasian
+  - Asian
+  - Indigebous/Native
+  - Arabic
+  - Jewish
+  - Hispanic/Latin
+  - Pacific
+  - Other
+budgeting_style:
+  - Strict
+  - Moderate
+  - Loose
+preferred_payment_method:
+  - Credit Card
+  - Debit Card
+  - Apple Pay
+  - Google Pay
+  - PayPal
+  - Bank Transfer
+  - Other
+product_category_preference:
+  - Groceries
+  - Beauty
+  - Toys
+  - Home & Health
+  - Home & Kitchen
+  - Sports
+  - Electronics
+  - Fashion
+  - Books
+shopping_time_of_day:
+  - Morning
+  - Afternoon
+  - Evening
+  - Night

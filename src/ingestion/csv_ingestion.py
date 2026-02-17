@@ -1,9 +1,9 @@
 import logging
-from multiprocessing import Value
 import polars as pl
 import kagglehub
 from pathlib import Path
-from src.utils import file_io, dataframe
+from src.utils import file_io
+from src.validation.quality_checks import QualityChecks
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
@@ -35,8 +35,9 @@ class CsvIngestion:
             None
         """
         self.df = self._read_csv()
-        self._validate_required_columns()
-        self._validate_dtypes()
+        quality_checks = QualityChecks(self.df, self._contract)
+        quality_checks._validate_required_columns()
+        quality_checks._validate_dtypes()
         self._write_raw()
 
     def _read_csv(self) -> pl.DataFrame:
@@ -61,32 +62,6 @@ class CsvIngestion:
             raise ValueError("Dataframe de origem está vazio.")
         logging.info("Leitura de dados na origem concluída com sucesso.")
         return df
-
-    def _validate_required_columns(self) -> None:
-        missing_columns = dataframe.validate_required_columns(
-            df=self.df, required_columns=self._contract["required_columns"]
-        )
-        if missing_columns:
-            raise ValueError(f"Colunas obrigatórias ausentes: {missing_columns}")
-        logging.info("Validação de colunas obrigatórias concluída com sucesso")
-
-    def _validate_dtypes(self) -> None:
-        """
-        Valida se os tipos de colunas do DataFrame de origem
-        convergem com os tipos especificados no contrato.
-
-        Se houver divergências, registra um log de warning com as colunas
-        e seus respectivos tipos divergentes.
-
-        Retorno:
-            None
-        """
-        divergences = dataframe.validate_dtypes(
-            df=self.df, dtype_schema=self._contract["dtypes"]
-        )
-        if divergences:
-            logging.warning(f"Colunas com tipos divergentes: {divergences}")
-        logging.info("Validação de tipos de colunas concluída com sucesso.")
 
     def _write_raw(self) -> None:
         """

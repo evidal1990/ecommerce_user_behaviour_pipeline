@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 
 
 class CleanRawData:
-    def __init__(self, settings) -> None:
+    def __init__(self, settings, df: pl.DataFrame) -> None:
         self.settings = settings["data"]
 
     def execute(self) -> Any:
