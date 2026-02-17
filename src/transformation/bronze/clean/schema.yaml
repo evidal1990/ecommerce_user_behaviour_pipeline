@@ -42,15 +42,16 @@ loyalty_program_member:
 gender:
   - Male
   - Female
-  - Non-Binary
+  - Non-binary
   - Other
 employment_status:
   - Employed
   - Unemployed
   - Retired
   - Student
-  - Self-Employed
+  - Self-employed
 urban_rural:
+  - Suburban
   - Urban
   - Rural
 education_level:
@@ -58,10 +59,10 @@ education_level:
   - Bachelor
   - Master
   - PhD
-  - Associeate Degree 
+  - Associate Degree 
 relationship_status:
   - Single
-  - In a Relationship
+  - In a relationship
   - Married
   - Divorced
   - Widowed
@@ -70,13 +71,14 @@ device_type:
   - Desktop
   - Tablet
 ethnicity:
-  - Black/African American
+  - African
+  - African American
   - Caucasian
   - Asian
   - Indigebous/Native
   - Arabic
   - Jewish
-  - Hispanic/Latin
+  - Hispanic
   - Pacific
   - Other
 budgeting_style:
@@ -106,3 +108,4 @@ shopping_time_of_day:
   - Afternoon
   - Evening
   - Night
+

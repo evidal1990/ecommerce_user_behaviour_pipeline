@@ -20,6 +20,8 @@ class StructureData:
         columns = quality_checks._validate_dtypes()
         self._structure_data(columns)
         self._rename_columns()
+        
+        return self.df
 
     def _load_contract(self) -> dict:
         contract_path = (
@@ -36,7 +38,6 @@ class StructureData:
 
     def _structure_data(self, columns: dict) -> None:
         for key, value in columns.items():
-            logging.info(key)
             self.df = self.df.with_columns(pl.col(key).cast(value["expected"]))
         logging.info("Dtypes alterados com sucesso.")
 

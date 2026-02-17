@@ -1,7 +1,18 @@
 import polars as pl
+import logging
 from consts.dtypes import DTypes
 
 DTYPES = DTypes.as_dict()
+
+
+def check_column_values(df: pl.DataFrame, column_values: list, column: str) -> None:
+    df_aux = df.group_by(column).len()
+    logging.info(df_aux)
+    for col in df_aux[column]:
+        if col not in column_values:
+            raise ValueError(
+                f"Valor {col} da coluna {column} não foi encontrado no schema"
+            )
 
 
 def validate_required_columns(
@@ -33,14 +44,14 @@ def validate_dtypes(df: pl.DataFrame, dtype_schema: dict[str, str]) -> dict:
 
     Exemplo de retorno:
     {
-        "col1": 
+        "col1":
             {
-                "expected": pl.Int64(), 
+                "expected": pl.Int64(),
                 "received": pl.String()
             },
-        "col2": 
+        "col2":
             {
-                "expected": pl.Float64(), 
+                "expected": pl.Float64(),
                 "received": pl.Int64()
             }
     }
