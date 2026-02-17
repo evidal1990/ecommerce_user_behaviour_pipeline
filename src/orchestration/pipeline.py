@@ -1,5 +1,6 @@
 import logging
 from src.ingestion.csv_ingestion import CsvIngestion
+from src.transformation.bronze.clean import CleanRawData
 
 
 class Pipeline:
@@ -29,3 +30,7 @@ class Pipeline:
         logging.info("Ingestão de CSV iniciada...")
         CsvIngestion(self.settings).execute()
         logging.info("Ingestão de CSV finalizada...")
+
+        logging.info("Transformação de dados brutos iniciada...")
+        CleanRawData(self.settings).execute()
+        logging.info("Transformação de dados brutos finalizada...")
