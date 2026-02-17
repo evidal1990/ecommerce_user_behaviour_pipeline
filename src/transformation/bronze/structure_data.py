@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parents[3]
 class StructureData:
     def __init__(self, settings) -> None:
         self.df = None
-        self.settings = settings["data"]
+        self._settings = settings["data"]
         self._contract = self._load_contract()
 
     def execute(self) -> pl.DataFrame:
@@ -19,6 +19,7 @@ class StructureData:
         columns = quality_checks._validate_dtypes()
         self._structure_data(columns)
         self._rename_columns()
+        self._write_bronze()
         
         return self.df
 
@@ -29,7 +30,7 @@ class StructureData:
         return file_io.read_yaml(contract_path)
 
     def _read_csv(self) -> pl.DataFrame:
-        df = pl.read_csv(self.settings["destination"]["raw"])
+        df = pl.read_csv(self._settings["destination"]["raw"])
         if df.is_empty():
             raise ValueError("Dataframe de raw está vazio.")
         logging.info("Leitura de dados na raw concluída com sucesso.")
@@ -38,9 +39,22 @@ class StructureData:
     def _structure_data(self, columns: dict) -> None:
         for key, value in columns.items():
             self.df = self.df.with_columns(pl.col(key).cast(value["expected"]))
-        logging.info("Dtypes alterados com sucesso.")
+        logging.info("Tipos de dados alterados com sucesso.")
 
     def _rename_columns(self) -> None:
         for key, value in self._contract["from-to"].items():
             self.df = self.df.rename({key: value})
         logging.info(f"Colunas renomeadas com sucesso: {self.df.columns}")
+
+    def _write_bronze(self) -> None:
+        """
+        Realiza a escrita dos dados do DataFrame na camada raw.
+
+        Retorno:
+            None
+        """
+        path = self._settings["destination"]["bronze"]
+        if not Path(path).parent.exists():
+            Path(path).parent.mkdir()
+        self.df.write_csv(path)
+        logging.info("Escrita de dados na camada bronze concluída com sucesso")

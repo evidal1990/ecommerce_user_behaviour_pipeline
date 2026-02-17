@@ -2,3 +2,4 @@ data:
   origin: "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based"
   destination:
     raw: "data/raw/data.csv"
+    bronze: "data/bronze/data.csv"

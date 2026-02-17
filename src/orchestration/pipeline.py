@@ -34,7 +34,3 @@ class Pipeline:
         logging.info("Estruturação de dados brutos iniciada...")
         df = StructureData(self.settings).execute()
         logging.info("Estruturação de dados brutos finalizada...")
-
-        # logging.info("Limpeza de dados brutos iniciada...")
-        # CleanRawData(df).execute()
-        # logging.info("Limpeza de dados brutos finalizada...")
