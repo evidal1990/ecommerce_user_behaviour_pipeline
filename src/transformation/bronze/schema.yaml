@@ -6,6 +6,12 @@ from-to:
   return_frequency: return_frequency_per_year
   app_usage_frequency: app_usage_frequency_per_week
   social_sharing_frequency: social_sharing_frequency_per_week
+  environmental_conscientiousness: has_environmental_conscientiousness
+  health_conscious_shopping: has_health_conscious_shopping
+  weekend_shopper: is_weekend_shopper
+  loyalty_program_member: is_loyalty_program_member
+  review_wrighting_frequency: review_wrighting_frequency_per_year
+
 rules:
   frequency:
     per_year: 
@@ -32,84 +38,88 @@ rules:
   count:
     min: 0
     max: 10
-  has_children:
-    values: [0, 1]
-  environmental_conscientiousness:
-    values: [0, 1]
-  health_conscious_shopping:
-    values: [0, 1]
-  weekend_shopper:
-    values: [0, 1]
-  education_level:
-    values: [
-      "High School", 
-      "Bachelor", 
-      "Master", 
-      "PhD", 
-      "Associate Degree"
-    ]
-  relationship_status:
-    values: [
-        "Single", 
-        "Married", 
-        "Divorced", 
-        "In a Relationship", 
-        "Widowed"
-      ]
-  device_type:
-    values: [
-      "Mobile", 
-      "Desktop", 
-      "Tablet"
-    ]
-  ethnicity:
-    values: [
-      "Black", 
-      "Caucasian", 
-      "Asian", 
-      "Indigenous/Native", 
-      "Arabic",
-      "Jewish", 
-      "Hispanic/Latin",
-      "Pacific",
-      "Other"
-    ]
-  budgeting_style:
-    values: [
-      "Strict", 
-      "Moderate", 
-      "Loose"
-    ]
-  preferred_payment_method:
-    values: [
-      "Credit Card", 
-      "Debit Card", 
-      "PayPal",
-      "Apple Pay",
-      "Google Pay",
-      "Brank Transfer",
-      "Other"
-    ]
-    product_category_preference:
-      values: [
-        "Groceries",
-        "Beauty",
-        "Books",
-        "Toys",
-        "Fashion",
-        "Electronics",
-        "Sports",
-        "Home & Health",
-        "Home & Kitchen",
-      ]
-    shopping_time_of_day:
-      values: [
-        "Morning",
-        "Afternoon",
-        "Evening",
-        "Night",
-      ]
-  
+has_children:
+  - 0
+  - 1
+has_environmental_conscientiousness:
+  - 0
+  - 1
+has_health_conscious_shopping:
+  - 0
+  - 1
+is_weekend_shopper:
+  - 0
+  - 1
+is_loyalty_program_member:
+  - 0
+  - 1
+gender:
+  - Male
+  - Female
+  - Non-Binary
+  - Other
+employment_status:
+  - Employed
+  - Unemployed
+  - Retired
+  - Student
+  - Self-Employed
+urban_rural:
+  - Urban
+  - Rural
+education_level:
+  - High School
+  - Bachelor
+  - Master
+  - PhD
+  - Associeate Degree 
+relationship_status:
+  - Single
+  - In a Relationship
+  - Married
+  - Divorced
+  - Widowed
+device_type:
+  - Mobile
+  - Desktop
+  - Tablet
+ethnicity:
+  - Black/African American
+  - Caucasian
+  - Asian
+  - Indigebous/Native
+  - Arabic
+  - Jewish
+  - Hispanic/Latin
+  - Pacific
+  - Other
+budgeting_style:
+  - Strict
+  - Moderate
+  - Loose
+preferred_payment_method:
+  - Credit Card
+  - Debit Card
+  - Apple Pay
+  - Google Pay
+  - PayPal
+  - Bank Transfer
+  - Other
+product_category_preference:
+  - Groceries
+  - Beauty
+  - Toys
+  - Home & Health
+  - Home & Kitchen
+  - Sports
+  - Electronics
+  - Fashion
+  - Books
+shopping_time_of_day:
+  - Morning
+  - Afternoon
+  - Evening
+  - Night
 required_columns:
   - user_id
   - age
