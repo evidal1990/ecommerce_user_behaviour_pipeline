@@ -25,20 +25,20 @@ rules:
     min: 0
     max: 10
 has_children:
-  - 0
-  - 1
-environmental_conscientiousness:
-  - 0
-  - 1
-health_conscious_shopping:
-  - 0
-  - 1
-weekend_shopper:
-  - 0
-  - 1
-loyalty_program_member:
-  - 0
-  - 1
+  - False
+  - True
+has_environmental_consciousness:
+  - False
+  - True
+has_health_conscious_shopping:
+  - False
+  - True
+is_weekend_shopper:
+  - False
+  - True
+is_loyalty_program_member:
+  - False
+  - True
 gender:
   - Male
   - Female

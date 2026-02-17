@@ -15,7 +15,8 @@ class CleanRawData:
 
     def execute(self) -> Any:
         self._check_null_count()
-        self._check_column_values()
+        self._check_bool_column_values()
+        self._check_str_column_values()
 
     def _load_contract(self) -> dict:
         contract_path = (
@@ -31,7 +32,34 @@ class CleanRawData:
             level(f"{column}: {null_count}")
         logging.info(f"Verificação de dados ausentes concluída com sucesso.")
 
-    def _check_column_values(self) -> None:
+    def _check_bool_column_values(self) -> None:
+        dataframe.check_column_values(
+            df=self.df, 
+            column_values=self._contract["has_children"], 
+            column="has_children"
+        )
+        dataframe.check_column_values(
+            df=self.df, 
+            column_values=self._contract["has_environmental_consciousness"], 
+            column="has_environmental_consciousness"
+        )
+        dataframe.check_column_values(
+            df=self.df, 
+            column_values=self._contract["has_health_conscious_shopping"], 
+            column="has_health_conscious_shopping"
+        )
+        dataframe.check_column_values(
+            df=self.df, 
+            column_values=self._contract["is_weekend_shopper"], 
+            column="is_weekend_shopper"
+        )
+        dataframe.check_column_values(
+            df=self.df, 
+            column_values=self._contract["is_loyalty_program_member"], 
+            column="is_loyalty_program_member"
+        )
+        logging.info(f"Validação dos valores de colunas bool concluída com sucesso.")
+    def _check_str_column_values(self) -> None:
         dataframe.check_column_values(
             df=self.df, 
             column_values=self._contract["gender"], 
@@ -87,4 +115,4 @@ class CleanRawData:
             column_values=self._contract["shopping_time_of_day"],
             column="shopping_time_of_day",
         )
-        logging.info(f"Validação dos valores das colunas concluída com sucesso.")
+        logging.info(f"Validação dos valores de colunas str concluída com sucesso.")
