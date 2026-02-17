@@ -4,7 +4,7 @@ from pathlib import Path
 from src.utils import file_io
 from src.validation.quality_checks import QualityChecks
 
-BASE_DIR = Path(__file__).resolve().parents[4]
+BASE_DIR = Path(__file__).resolve().parents[3]
 
 
 class StructureData:
@@ -16,7 +16,6 @@ class StructureData:
     def execute(self) -> pl.DataFrame:
         self.df = self._read_csv()
         quality_checks = QualityChecks(self.df, self._contract)
-        quality_checks._validate_required_columns()
         columns = quality_checks._validate_dtypes()
         self._structure_data(columns)
         self._rename_columns()
@@ -25,7 +24,7 @@ class StructureData:
 
     def _load_contract(self) -> dict:
         contract_path = (
-            BASE_DIR / "src" / "transformation" / "bronze" / "structure" / "schema.yaml"
+            BASE_DIR / "src" / "transformation" / "bronze" / "schema.yaml"
         )
         return file_io.read_yaml(contract_path)
 

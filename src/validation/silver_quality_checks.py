@@ -8,7 +8,7 @@ from src.utils import file_io, dataframe
 BASE_DIR = Path(__file__).resolve().parents[4]
 
 
-class CleanRawData:
+class SilverQualityChecks:
     def __init__(self, df: pl.DataFrame) -> None:
         self.df = df
         self._contract = self._load_contract()

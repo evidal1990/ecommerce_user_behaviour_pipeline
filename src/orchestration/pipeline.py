@@ -1,7 +1,6 @@
 import logging
 from src.ingestion.csv_ingestion import CsvIngestion
-from src.transformation.bronze.structure.structure_data import StructureData
-from src.transformation.bronze.clean.clean_data import CleanRawData
+from src.transformation.bronze.structure_data import StructureData
 
 
 class Pipeline:
@@ -36,6 +35,6 @@ class Pipeline:
         df = StructureData(self.settings).execute()
         logging.info("Estruturação de dados brutos finalizada...")
 
-        logging.info("Limpeza de dados brutos iniciada...")
-        CleanRawData(df).execute()
-        logging.info("Limpeza de dados brutos finalizada...")
+        # logging.info("Limpeza de dados brutos iniciada...")
+        # CleanRawData(df).execute()
+        # logging.info("Limpeza de dados brutos finalizada...")
