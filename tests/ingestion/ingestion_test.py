@@ -19,12 +19,14 @@ def test_csv_ingestion() -> None:
     """
     settings = {
         "data": {
-            "origin": "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based",
-            "destination": {"raw": f"tests/results/test_{datetime.now()}.csv"},
+            "ingestion": {
+                "origin": "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based",
+                "destination": f"tests/results/test_{datetime.now()}.csv",
+            }
         }
     }
     CsvIngestion(settings).execute()
-    df_destination = pl.read_csv(settings["data"]["destination"]["raw"])
+    df_destination = pl.read_csv(settings["data"]["ingestion"]["destination"])
     assert not df_destination.is_empty()
 
 
@@ -56,9 +58,11 @@ def test_csv_ingestion_without_origin_file() -> None:
     """
     settings = {
         "data": {
-            "origin": "",
-            "destination": {"raw": f"tests/results/test{datetime.now()}.csv"},
-        }
+            "ingestion": {
+                "origin": "",
+                "destination": f"tests/results/test{datetime.now()}.csv",
+            }
+        }   
     }
     with pytest.raises(ValueError):
         CsvIngestion(settings).execute()
@@ -77,8 +81,10 @@ def test_csv_ingestion_without_destiny_file() -> None:
     """
     settings = {
         "data": {
-            "origin": "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based",
-            "destination": {"raw": ""},
+            "ingestion": {
+                "origin": "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based",
+                "destination": "",
+            }
         }
     }
     with pytest.raises(FileNotFoundError):

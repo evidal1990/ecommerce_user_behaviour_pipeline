@@ -19,7 +19,7 @@ class StructureData:
             None
         """
         self.df = None
-        self._settings = settings["data"]
+        self._settings = settings["data"]["bronze"]
         self._contract = self._load_contract()
 
     def execute(self) -> pl.DataFrame:
@@ -60,7 +60,7 @@ class StructureData:
         Retorno:
             pl.DataFrame: Dataframe Polars com os dados lidos do arquivo CSV.
         """
-        df = pl.read_csv(self._settings["destination"]["raw"])
+        df = pl.read_csv(self._settings["origin"])
         if df.is_empty():
             raise ValueError("Dataframe de raw está vazio.")
         logging.info("Leitura de dados na raw concluída com sucesso.")
@@ -98,7 +98,7 @@ class StructureData:
         Retorno:
             None
         """
-        path = self._settings["destination"]["bronze"]
+        path = self._settings["destination"]
         if not Path(path).parent.exists():
             Path(path).parent.mkdir()
         self.df.write_csv(path)

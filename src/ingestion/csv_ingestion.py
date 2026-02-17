@@ -20,7 +20,7 @@ class CsvIngestion:
             None
         """
         self.df = None
-        self._settings = settings["data"]
+        self._settings = settings["data"]["ingestion"]
         self._contract = self._load_contract()
 
     def execute(self) -> None:
@@ -70,7 +70,7 @@ class CsvIngestion:
         Retorno:
             None
         """
-        path = self._settings["destination"]["raw"]
+        path = self._settings["destination"]
         if not Path(path).parent.exists():
             Path(path).parent.mkdir()
         self.df.write_csv(path)
