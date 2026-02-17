@@ -24,6 +24,12 @@ class Pipeline:
         executa a classe CsvIngestion e registra logs de início e fim
         da execução.
 
+        Executa o pipeline de transformação dos dados (bronze)
+
+        Inicia a transformação dos dados com as configurações fornecidas,
+        executa a classe StructureData e registra logs de início e fim
+        da execução.
+
         Retorno:
             None
         """
@@ -32,5 +38,5 @@ class Pipeline:
         logging.info("Ingestão de CSV finalizada...")
 
         logging.info("Estruturação de dados brutos iniciada...")
-        df = StructureData(self.settings).execute()
+        StructureData(self.settings).execute()
         logging.info("Estruturação de dados brutos finalizada...")

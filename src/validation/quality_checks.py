@@ -5,6 +5,16 @@ from src.utils import dataframe
 
 class QualityChecks:
     def __init__(self, df: pl.DataFrame, contract: dict) -> None:
+        """
+        Inicializa o objeto QualityChecks com o DataFrame e o contrato fornecidos.
+
+        Parametros:
+            df (pl.DataFrame): DataFrame a ser validado.
+            contract (dict): Contrato de ingestão de CSV.
+
+        Retorno:
+            None
+        """
         self.df = df
         self.contract = contract
 
