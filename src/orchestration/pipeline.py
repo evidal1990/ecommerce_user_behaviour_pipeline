@@ -1,6 +1,7 @@
 import logging
 from src.ingestion.csv_ingestion import CsvIngestion
 from src.transformation.bronze.structure_data import StructureData
+from src.validation.business_rules import BusinessRulesChecks
 
 
 class Pipeline:
@@ -38,5 +39,9 @@ class Pipeline:
         logging.info("Ingestão de CSV finalizada...")
 
         logging.info("Estruturação de dados brutos iniciada...")
-        StructureData(self.settings).execute()
+        df = StructureData(self.settings).execute()
         logging.info("Estruturação de dados brutos finalizada...")
+
+        logging.info("Validação de regras de negócio iniciada...")
+        BusinessRulesChecks(df).execute()
+        logging.info("Validação de regras de negócio finalizada...")
