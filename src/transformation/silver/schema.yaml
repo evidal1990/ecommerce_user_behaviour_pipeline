@@ -1,27 +1,57 @@
+columns_to_check_values:
+  - has_children
+  - has_environmental_consciousness
+  - has_health_conscious_shopping
+  - is_weekend_shopper
+  - is_loyalty_program_member
+  - gender
+  - employment_status
+  - urban_rural
+  - education_level
+  - relationship_status
+  - device_type
+  - ethnicity
+  - budgeting_style
+  - preferred_payment_method
+  - product_category_preference
+  - shopping_time_of_day
+columns_to_check_score_or_level:
+  - brand_loyalty_score
+  - impulse_buying_score
+  - social_media_influence_score
+  - mental_health_score
+  - overall_stress_level
+  - physical_activity_level
+  - sleep_quality_level
+  - stress_from_financial_decisions_level
+columns_to_check_rate_or_ratio:
+  - return_rate
+  - purchase_conversion_rate
+  - notification_response_rate
+  - cart_abandonment_rate
+  - browse_to_buy_ratio
+columns_to_check_frequency_per_week:
+  - exercise_frequency_per_week
+columns_to_check_frequency_per_month:
+  - reading_habits_per_month
+  - impulse_purchases_per_month
+  - checkout_abandonments_per_month
+columns_to_check_frequency_per_year:
+  - travel_frequency_per_year
 rules:
-  frequency:
-    per_year: 
+  per_year: 
       min: 0
       max: 12
-    per_month:
-      min: 0  
-      max: 31
-    per_week:
-      min: 0
-      max: 7
-  rate:
+  per_month:
+    min: 0  
+    max: 31
+  per_week:
+    min: 0
+    max: 7
+  rate_or_ratio:
     min: 0
     max: 100
-  ratio:
-    min: 0
-    max: 100
-  score:
-    min: 0
-    max: 10
-  level:
-    min: 0
-    max: 10
-  count:
+  score_or_level:
     min: 0
     max: 10
 has_children:

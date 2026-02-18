@@ -119,10 +119,11 @@ dtypes:
   review_writing_frequency: Int64
 
 from-to:
-  reading_habits: reading_habits_frequency
+  income_level: annual_income
+  travel_frequency: travel_frequency_per_year
+  reading_habits: reading_habits_per_month
   stress_from_financial_decisions: stress_from_financial_decisions_level
   sleep_quality: sleep_quality_level
-  impulse_purchases_per_month: impulse_purchases_per_month_level
   return_frequency: return_frequency_per_year
   app_usage_frequency: app_usage_frequency_per_week
   social_sharing_frequency: social_sharing_frequency_per_week
@@ -131,3 +132,4 @@ from-to:
   weekend_shopper: is_weekend_shopper
   loyalty_program_member: is_loyalty_program_member
   review_writing_frequency: review_writing_frequency_per_year
+  exercise_frequency: exercise_frequency_per_week
