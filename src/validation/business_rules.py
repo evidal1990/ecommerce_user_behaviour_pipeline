@@ -13,33 +13,25 @@ class BusinessRulesChecks:
         self.df = df
         self._contract = self._load_contract()
 
-    def execute(self) -> Any:
+    def execute(self) -> pl.DataFrame:
+        """
+        Executa o pipeline de validação de regras de negócios.
+
+        Valida se as colunas do DataFrame apresentam valores nulos,
+        valores fora do esperado e regras de negócios.
+
+        - Valida se as colunas do DataFrame apresentam valores nulos.
+        - Valida se as colunas do DataFrame apresentam valores fora do esperado.
+        - Valida se as colunas do DataFrame atendem as regras de negócios.
+
+        Retorno:
+            pl.DataFrame: Dataframe com os dados validados pelas regras de negócios.
+        """
         self._check_null_count()
         self._check_columns_values()
+        self._check_columns_rules()
 
-        score_or_level_cols = self._contract["columns_to_check_score_or_level"]
-        score_or_level_rule = self._contract["rules"]["score_or_level"]
-        self._check_columns_rules(
-            columns=score_or_level_cols, column_rules=score_or_level_rule
-        )
-
-        rate_or_ratio_cols = self._contract["columns_to_check_rate_or_ratio"]
-        rate_or_ratio_rule = self._contract["rules"]["rate_or_ratio"]
-        self._check_columns_rules(
-            columns=rate_or_ratio_cols, column_rules=rate_or_ratio_rule
-        )
-
-        per_week_cols = self._contract["columns_to_check_frequency_per_week"]
-        per_week_rule = self._contract["rules"]["per_week"]
-        self._check_columns_rules(columns=per_week_cols, column_rules=per_week_rule)
-
-        per_month_cols = self._contract["columns_to_check_frequency_per_month"]
-        per_month_rule = self._contract["rules"]["per_month"]
-        self._check_columns_rules(columns=per_month_cols, column_rules=per_month_rule)
-
-        per_year_cols = self._contract["columns_to_check_frequency_per_year"]
-        per_year_rule = self._contract["rules"]["per_year"]
-        self._check_columns_rules(columns=per_year_cols, column_rules=per_year_rule)
+        return self.df
 
     def _load_contract(self) -> dict:
         contract_path = BASE_DIR / "src" / "transformation" / "silver" / "schema.yaml"
@@ -60,16 +52,29 @@ class BusinessRulesChecks:
         logging.info(f"Verificação de dados ausentes concluída com sucesso.")
 
     def _check_columns_values(self) -> None:
+        """
+        Valida se as colunas do DataFrame apresentam valores permitidos.
+
+        Se houver divergências, registra um log de error com as colunas
+        e seus respectivos valores divergentes.
+
+        Retorno:
+            None
+        """
         logging.info("Validando lista de valores permitidos nas colunas bool e str")
-        for column in self._contract["columns_to_check_values"]:
-            result = [
-                col
-                for col in self.df.group_by(column).len()[column]
-                if col not in self._contract[column]
-            ]
-            if len(result) > 0:
+
+        columns = self._contract["columns_to_check_values"]
+
+        df_subset = self.df.select(columns)
+
+        for column in columns:
+            invalids = set(df_subset[column].unique().to_list()) - set(
+                self._contract[column]
+            )
+
+            if invalids:
                 logging.error(
-                    f"Coluna {column} possui dados inexistentes no schema: {result}"
+                    f"Coluna {column} possui dados inexistentes no schema: {sorted(invalids)}"
                 )
             else:
                 logging.info(
@@ -79,21 +84,50 @@ class BusinessRulesChecks:
             "Validação de lista de valores permitidos nas colunas concluída com sucesso"
         )
 
-    def _check_columns_rules(self, columns, column_rules) -> None:
+    def _check_columns_rules(self) -> None:
+        """
+        Valida se as colunas do DataFrame atendem as regras de negócios
+        de valores mínimos e máximos.
+
+        Se houver divergências, registra um log de error com as colunas
+        e seus respectivos valores divergentes.
+
+        Retorno:
+            None
+        """
+        logging.info("Validando regras de negócio de valores mínimos e máximos")
+
+        columns = self._contract["columns_to_check_min_max_values"]
+
+        exprs = []
+        for col in columns:
+            exprs.extend(
+                [
+                    pl.col(col).min().alias(f"{col}__min"),
+                    pl.col(col).max().alias(f"{col}__max"),
+                ]
+            )
+
+        stats = self.df.select(exprs).row(0)
+        stats_map = dict(zip(self.df.select(exprs).columns, stats))
+
         for column in columns:
-            expected_min = column_rules["min"]
-            received_min = self.df.select(pl.col(column)).min()[column][0]
-            if received_min < expected_min:
-                logging.error(
-                    f"Coluna {column} com valor mínimo fora do range: {received_min}"
-                )
+            rules = self._contract[column]
+
+            received_min = stats_map[f"{column}__min"]
+            if received_min >= rules["min"]:
+                logging.info(f"Coluna {column}: mínimo recebido OK")
             else:
-                logging.info(f"Coluna {column} com valor mínimo dentro do range.")
-            expected_max = column_rules["max"]
-            received_max = self.df.select(pl.col(column)).max()[column][0]
-            if received_max > expected_max:
                 logging.error(
-                    f"Coluna {column} com valor máximo fora do range: {received_max}"
+                    f"Coluna {column}: mínimo esperado {rules["min"]} mínimo recebido {received_min}"
                 )
+            received_max = stats_map[f"{column}__max"]
+            if received_max <= rules["max"]:
+                logging.info(f"Coluna {column}: máximo recebido OK")
             else:
-                logging.info(f"Coluna {column} com valor máximo dentro do range.")
+                logging.error(
+                    f"Coluna {column}: máximo esperado {rules["max"]} máximo recebido {received_max}"
+                )
+        logging.info(
+            "Validação de regras de negócio de valores mínimos e máximos concluída"
+        )

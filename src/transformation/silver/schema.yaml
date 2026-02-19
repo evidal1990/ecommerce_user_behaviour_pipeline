@@ -15,7 +15,7 @@ columns_to_check_values:
   - preferred_payment_method
   - product_category_preference
   - shopping_time_of_day
-columns_to_check_score_or_level:
+columns_to_check_min_max_values:
   - brand_loyalty_score
   - impulse_buying_score
   - social_media_influence_score
@@ -24,36 +24,71 @@ columns_to_check_score_or_level:
   - physical_activity_level
   - sleep_quality_level
   - stress_from_financial_decisions_level
-columns_to_check_rate_or_ratio:
   - return_rate
   - purchase_conversion_rate
   - notification_response_rate
   - cart_abandonment_rate
   - browse_to_buy_ratio
-columns_to_check_frequency_per_week:
   - exercise_frequency_per_week
-columns_to_check_frequency_per_month:
   - reading_habits_per_month
   - impulse_purchases_per_month
   - checkout_abandonments_per_month
-columns_to_check_frequency_per_year:
   - travel_frequency_per_year
-rules:
-  per_year: 
-      min: 0
-      max: 12
-  per_month:
-    min: 0  
-    max: 31
-  per_week:
-    min: 0
-    max: 7
-  rate_or_ratio:
-    min: 0
-    max: 100
-  score_or_level:
-    min: 0
-    max: 10
+stress_from_financial_decisions_level:
+  min: 0  
+  max: 10
+sleep_quality_level:
+  min: 0  
+  max: 10
+physical_activity_level:
+  min: 0  
+  max: 10
+overall_stress_level:
+  min: 0  
+  max: 10
+mental_health_score:
+  min: 0  
+  max: 10
+social_media_influence_score:
+  min: 0  
+  max: 10
+impulse_buying_score:
+  min: 0  
+  max: 10
+brand_loyalty_score:
+  min: 0  
+  max: 10
+browse_to_buy_ratio:
+  min: 0  
+  max: 100
+cart_abandonment_rate:
+  min: 0  
+  max: 100
+notification_response_rate:
+  min: 0  
+  max: 100
+purchase_conversion_rate:
+  min: 0  
+  max: 100
+return_rate:
+  min: 0  
+  max: 100
+exercise_frequency_per_week:
+  min: 0  
+  max: 7
+reading_habits_per_month:
+  min: 0  
+  max: 31
+impulse_purchases_per_month:
+  min: 0  
+  max: 31
+checkout_abandonments_per_month:
+  min: 0  
+  max: 31
+travel_frequency_per_year:
+  min: 0
+  max: 12
+  max: 12
 has_children:
   - False
   - True
