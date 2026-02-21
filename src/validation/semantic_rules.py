@@ -20,7 +20,7 @@ class SemanticRules:
         )
         if duplicated_ids:
             message = f"user_id duplicados encontrados: {duplicated_ids}"
-            log_lvl = logging.error
+            log_lvl = logging.critical
         else:
             message = "Coluna user_id sem valores duplicados"
             log_lvl = logging.info

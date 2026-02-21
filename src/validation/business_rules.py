@@ -6,8 +6,44 @@ from src.utils import file_io, dataframe
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-ALLOWED_RANGE = "range"
-ALLOWED_VALUES = "values"
+ALLOWED_RANGE_COLUMNS = [
+    "stress_from_financial_decisions_level",
+    "sleep_quality_level",
+    "physical_activity_level",
+    "overall_stress_level",
+    "mental_health_score",
+    "social_media_influence_score",
+    "impulse_buying_score",
+    "brand_loyalty_score",
+    "browse_to_buy_ratio",
+    "cart_abandonment_rate",
+    "notification_response_rate",
+    "purchase_conversion_rate",
+    "return_rate",
+    "exercise_frequency_per_week",
+    "reading_habits_per_month",
+    "impulse_purchases_per_month",
+    "checkout_abandonments_per_month",
+    "travel_frequency_per_year",
+]
+ALLOWED_VALUES_COLUMNS = [
+    "has_children",
+    "has_environmental_consciousness",
+    "has_health_conscious_shopping",
+    "is_weekend_shopper",
+    "is_loyalty_program_member",
+    "gender",
+    "employment_status",
+    "urban_rural",
+    "education_level",
+    "relationship_status",
+    "device_type",
+    "ethnicity",
+    "budgeting_style",
+    "preferred_payment_method",
+    "product_category_preference",
+    "shopping_time_of_day",
+]
 
 
 class BusinessRulesChecks:
@@ -29,12 +65,20 @@ class BusinessRulesChecks:
         for key, value in self._contract.items():
             logging.info(f"Coluna {key}")
             assert isinstance(key, str)
+            assert isinstance(value, dict)
             self._check_null_count(key)
-            if value["rules"] == ALLOWED_RANGE:
-                self._check_min_value(key, value)
-                self._check_max_value(key, value)
-            else:
-                self._check_allowed_values(key, value["values"])
+            match key:
+                case _ if key in ALLOWED_RANGE_COLUMNS:
+                    self._check_min_value(key, value["min"])
+                    self._check_max_value(key, value["max"])
+
+                case _ if key in ALLOWED_VALUES_COLUMNS:
+                    self._check_allowed_values(key, value["values"])
+
+                case _:
+                    raise ValueError(
+                        "Regra de negócio não reconhecida para a coluna em questão."
+                    )
         logging.info("Verificação concluída")
 
         return self.df
@@ -104,8 +148,8 @@ class BusinessRulesChecks:
             None
         """
         min_val = self.df.select(pl.col(key).min())[key][0]
-        log_lvl = logging.error if min_val < value["min"] else logging.info
-        log_lvl(f"Mínimo esperado: {value["min"]} ; Mínimo recebido: {min_val}")
+        log_lvl = logging.error if min_val < value else logging.info
+        log_lvl(f"Mínimo esperado: {value} ; Mínimo recebido: {min_val}")
 
     def _check_max_value(self, key, value) -> None:
         """
@@ -123,5 +167,5 @@ class BusinessRulesChecks:
             None
         """
         max_val = self.df.select(pl.col(key).max())[key][0]
-        log_lvl = logging.error if max_val > value["max"] else logging.info
-        log_lvl(f"Máximo esperado: {value["max"]} ; Máximo recebido: {max_val}")
+        log_lvl = logging.error if max_val > value else logging.info
+        log_lvl(f"Máximo esperado: {value} ; Máximo recebido: {max_val}")
