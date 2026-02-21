@@ -58,3 +58,17 @@ def validate_dtypes(df: pl.DataFrame, dtype_schema: dict[str, str]) -> dict:
         if received != expected:
             result.update({column: {"expected": expected, "received": received}})
     return result
+
+
+def get_stats_map(df: pl.DataFrame, columns: list):
+    exprs = []
+    for col in columns:
+        exprs.extend(
+            [
+                pl.col(col).min().alias(f"{col}__min"),
+                pl.col(col).max().alias(f"{col}__max"),
+            ]
+        )
+
+    stats = df.select(exprs).row(0)
+    return dict(zip(df.select(exprs).columns, stats))

@@ -1,176 +1,189 @@
-columns_to_check_values:
-  - has_children
-  - has_environmental_consciousness
-  - has_health_conscious_shopping
-  - is_weekend_shopper
-  - is_loyalty_program_member
-  - gender
-  - employment_status
-  - urban_rural
-  - education_level
-  - relationship_status
-  - device_type
-  - ethnicity
-  - budgeting_style
-  - preferred_payment_method
-  - product_category_preference
-  - shopping_time_of_day
-columns_to_check_min_max_values:
-  - brand_loyalty_score
-  - impulse_buying_score
-  - social_media_influence_score
-  - mental_health_score
-  - overall_stress_level
-  - physical_activity_level
-  - sleep_quality_level
-  - stress_from_financial_decisions_level
-  - return_rate
-  - purchase_conversion_rate
-  - notification_response_rate
-  - cart_abandonment_rate
-  - browse_to_buy_ratio
-  - exercise_frequency_per_week
-  - reading_habits_per_month
-  - impulse_purchases_per_month
-  - checkout_abandonments_per_month
-  - travel_frequency_per_year
 stress_from_financial_decisions_level:
+  rules: range
   min: 0  
   max: 10
 sleep_quality_level:
+  rules: range
   min: 0  
   max: 10
 physical_activity_level:
+  rules: range
   min: 0  
   max: 10
 overall_stress_level:
+  rules: range
   min: 0  
   max: 10
 mental_health_score:
+  rules: range
   min: 0  
   max: 10
 social_media_influence_score:
+  rules: range
   min: 0  
   max: 10
 impulse_buying_score:
+  rules: range
   min: 0  
   max: 10
 brand_loyalty_score:
+  rules: range
   min: 0  
   max: 10
 browse_to_buy_ratio:
+  rules: range
   min: 0  
   max: 100
 cart_abandonment_rate:
+  rules: range
   min: 0  
   max: 100
 notification_response_rate:
+  rules: range
   min: 0  
   max: 100
 purchase_conversion_rate:
+  rules: range
   min: 0  
   max: 100
 return_rate:
+  rules: range
   min: 0  
   max: 100
 exercise_frequency_per_week:
+  rules: range
   min: 0  
   max: 7
 reading_habits_per_month:
+  rules: range
   min: 0  
   max: 31
 impulse_purchases_per_month:
+  rules: range
   min: 0  
   max: 31
 checkout_abandonments_per_month:
+  rules: range
   min: 0  
   max: 31
 travel_frequency_per_year:
+  rules: range
   min: 0
   max: 12
-  max: 12
 has_children:
-  - False
-  - True
+  rules: values
+  values:
+    - False
+    - True
 has_environmental_consciousness:
-  - False
-  - True
+  rules: values
+  values:
+    - False
+    - True
 has_health_conscious_shopping:
-  - False
-  - True
+  rules: values
+  values:
+    - False
+    - True
 is_weekend_shopper:
-  - False
-  - True
+  rules: values
+  values:
+    - False
+    - True
 is_loyalty_program_member:
-  - False
-  - True
+  rules: values
+  values:
+    - False
+    - True
 gender:
-  - Male
-  - Female
-  - Non-binary
-  - Other
+  rules: values
+  values:
+    - Male
+    - Female
+    - Non-binary
+    - Other
 employment_status:
-  - Employed
-  - Unemployed
-  - Retired
-  - Student
-  - Self-employed
+  rules: values
+  values:
+    - Employed
+    - Unemployed
+    - Retired
+    - Student
+    - Self-employed
 urban_rural:
-  - Suburban
-  - Urban
-  - Rural
+  rules: values
+  values:
+    - Suburban
+    - Urban
+    - Rural
 education_level:
-  - High School
-  - Bachelor
-  - Master
-  - PhD
-  - Associate Degree 
+  rules: values
+  values:
+    - High School
+    - Bachelor
+    - Master
+    - PhD
+    - Associate Degree 
 relationship_status:
-  - Single
-  - In a relationship
-  - Married
-  - Divorced
-  - Widowed
+  rules: values
+  values:
+    - Single
+    - In a relationship
+    - Married
+    - Divorced
+    - Widowed
 device_type:
-  - Mobile
-  - Desktop
-  - Tablet
+  rules: values
+  values:
+    - Mobile
+    - Desktop
+    - Tablet
 ethnicity:
-  - African
-  - African American
-  - Caucasian
-  - Asian
-  - Indigebous/Native
-  - Arabic
-  - Jewish
-  - Hispanic
-  - Pacific
-  - Other
+  rules: values
+  values:
+    - African
+    - African American
+    - Caucasian
+    - Asian
+    - Indigebous/Native
+    - Arabic
+    - Jewish
+    - Hispanic
+    - Pacific
+    - Other
 budgeting_style:
-  - Strict
-  - Moderate
-  - Loose
+  rules: values
+  values:
+    - Strict
+    - Moderate
+    - Loose
 preferred_payment_method:
-  - Credit Card
-  - Debit Card
-  - Apple Pay
-  - Google Pay
-  - PayPal
-  - Bank Transfer
-  - Other
+  rules: values
+  values:
+    - Credit Card
+    - Debit Card
+    - Apple Pay
+    - Google Pay
+    - PayPal
+    - Bank Transfer
+    - Other
 product_category_preference:
-  - Groceries
-  - Beauty
-  - Toys
-  - Home & Health
-  - Home & Kitchen
-  - Sports
-  - Electronics
-  - Fashion
-  - Books
+  rules: values
+  values:
+    - Groceries
+    - Beauty
+    - Toys
+    - Home & Health
+    - Home & Kitchen
+    - Sports
+    - Electronics
+    - Fashion
+    - Books
 shopping_time_of_day:
-  - Morning
-  - Afternoon
-  - Evening
-  - Night
+  rules: values
+  values:
+    - Morning
+    - Afternoon
+    - Evening
+    - Night
 

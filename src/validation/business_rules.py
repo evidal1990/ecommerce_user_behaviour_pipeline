@@ -2,10 +2,12 @@ import logging
 import polars as pl
 from typing import Any
 from pathlib import Path
-from src.utils import file_io
+from src.utils import file_io, dataframe
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+ALLOWED_RANGE = "range"
+ALLOWED_VALUES = "values"
 
 
 class BusinessRulesChecks:
@@ -15,119 +17,113 @@ class BusinessRulesChecks:
 
     def execute(self) -> pl.DataFrame:
         """
-        Executa o pipeline de validação de regras de negócios.
+        Executa as verificações de regras de negócios.
 
-        Valida se as colunas do DataFrame apresentam valores nulos,
-        valores fora do esperado e regras de negócios.
+        Verifica se as colunas do DataFrame tem valores nulos, se os valores
+        estão dentro de um range especificado e se os valores estão dentro
+        de uma lista de valores permitidos.
 
-        - Valida se as colunas do DataFrame apresentam valores nulos.
-        - Valida se as colunas do DataFrame apresentam valores fora do esperado.
-        - Valida se as colunas do DataFrame atendem as regras de negócios.
-
-        Retorno:
-            pl.DataFrame: Dataframe com os dados validados pelas regras de negócios.
+        Retorna o DataFrame com as verificações concluídas.
         """
-        self._check_null_count()
-        self._check_columns_values()
-        self._check_columns_rules()
+        logging.info("Verificando valores permitidos por coluna")
+        for key, value in self._contract.items():
+            logging.info(f"Coluna {key}")
+            self._check_null_count(key)
+            if value["rules"] == ALLOWED_VALUES:
+                self._check_allowed_values(key, value["values"])
+            else:
+                self._check_min_value(key, value)
+                self._check_max_value(key, value)
+        logging.info("Verificação concluída")
 
         return self.df
 
     def _load_contract(self) -> dict:
+        """
+        Carrega o contrato de regras de negócios, que é um arquivo YAML
+        com as configurações de regras de negócios.
+
+        Retorno:
+            dict: Contrato de regras de negócios.
+        """
         contract_path = BASE_DIR / "src" / "transformation" / "silver" / "schema.yaml"
         return file_io.read_yaml(contract_path)
 
-    def _check_null_count(self) -> None:
-        logging.info(f"Verificando total de dados ausentes por coluna...")
-        for column in self.df.columns:
-            null_count = self.df[column].null_count()
-            if null_count > 0:
-                logging.warning(
-                    f"Total de dados ausentes para a coluna {column}: {null_count}"
-                )
-            else:
-                logging.info(
-                    f"Total de dados ausentes para a coluna {column}: {null_count}"
-                )
-        logging.info(f"Verificação de dados ausentes concluída com sucesso.")
-
-    def _check_columns_values(self) -> None:
+    def _check_null_count(self, key) -> None:
         """
-        Valida se as colunas do DataFrame apresentam valores permitidos.
+        Verifica se a coluna do DataFrame tem valores nulos.
 
-        Se houver divergências, registra um log de error com as colunas
-        e seus respectivos valores divergentes.
+        Registra um log de warning se houver valores nulos e um log de info se os valores forem de acordo com o esperado.
+
+        Parametros:
+            key (str): Nome da coluna a ser verificada.
 
         Retorno:
             None
         """
-        logging.info("Validando lista de valores permitidos nas colunas bool e str")
+        null_count = self.df[key].null_count()
+        log_lvl = logging.warning if null_count > 0 else logging.info
+        log_lvl(f"Total de dados ausentes: {null_count}")
 
-        columns = self._contract["columns_to_check_values"]
-
-        df_subset = self.df.select(columns)
-
-        for column in columns:
-            invalids = set(df_subset[column].unique().to_list()) - set(
-                self._contract[column]
-            )
-
-            if invalids:
-                logging.error(
-                    f"Coluna {column} possui dados inexistentes no schema: {sorted(invalids)}"
-                )
-            else:
-                logging.info(
-                    f"Valores da coluna {column} de acordo com as regras de negócio"
-                )
-        logging.info(
-            "Validação de lista de valores permitidos nas colunas concluída com sucesso"
-        )
-
-    def _check_columns_rules(self) -> None:
+    def _check_allowed_values(self, key, values) -> None:
         """
-        Valida se as colunas do DataFrame atendem as regras de negócios
-        de valores mínimos e máximos.
+        Verifica se os valores presentes em uma coluna do DataFrame são iguais aos valores permitidos pela regra de negócio.
 
-        Se houver divergências, registra um log de error com as colunas
-        e seus respectivos valores divergentes.
+        Registra um log de warning se houver valores inválidos e um log de info se os valores forem de acordo com as regras de negócio.
+
+        Parametros:
+            key (str): Nome da coluna a ser verificada.
+            values (list[str]): Lista de valores permitidos pela regra de negócio.
 
         Retorno:
             None
         """
-        logging.info("Validando regras de negócio de valores mínimos e máximos")
-
-        columns = self._contract["columns_to_check_min_max_values"]
-
-        exprs = []
-        for col in columns:
-            exprs.extend(
-                [
-                    pl.col(col).min().alias(f"{col}__min"),
-                    pl.col(col).max().alias(f"{col}__max"),
-                ]
+        expected = set(values)
+        received = set(self.df[key])
+        invalids = received - expected
+        if invalids:
+            logging.error(
+                f"Valores inválidos encontrados no dataset: {sorted(invalids)}"
+            )
+        else:
+            logging.info(
+                f"Valores encontrados estão de acordo com as regras: {received}"
             )
 
-        stats = self.df.select(exprs).row(0)
-        stats_map = dict(zip(self.df.select(exprs).columns, stats))
+    def _check_min_value(self, key, value) -> None:
+        """
+        Verifica se o valor mínimo de uma coluna do DataFrame é maior ou igual
+        ao valor mínimo esperado pela regra de negócio.
 
-        for column in columns:
-            rules = self._contract[column]
+        Registra um log de warning se o valor mínimo for menor ao valor
+        esperado e um log de info se for maior ou igual.
 
-            received_min = stats_map[f"{column}__min"]
-            if received_min >= rules["min"]:
-                logging.info(f"Coluna {column}: mínimo recebido OK")
-            else:
-                logging.error(
-                    f"Coluna {column}: mínimo esperado {rules["min"]} mínimo recebido {received_min}"
-                )
-            received_max = stats_map[f"{column}__max"]
-            if received_max <= rules["max"]:
-                logging.info(f"Coluna {column}: máximo recebido OK")
-            else:
-                logging.error(
-                    f"Coluna {column}: máximo esperado {rules["max"]} máximo recebido {received_max}"
-                )
-        logging.info(
-            "Validação de regras de negócio de valores mínimos e máximos concluída"
-        )
+        Parametros:
+            key (str): Nome da coluna a ser verificada.
+            value (dict): Dicionário com as configurações de tipo de dados da coluna.
+
+        Retorno:
+            None
+        """
+        min_val = self.df.select(pl.col(key).min())[key][0]
+        log_lvl = logging.error if min_val < value["min"] else logging.info
+        log_lvl(f"Mínimo esperado: {value["min"]} ; Mínimo recebido: {min_val}")
+
+    def _check_max_value(self, key, value) -> None:
+        """
+        Verifica se o valor máximo de uma coluna do DataFrame é menor ou igual
+        ao valor máximo esperado pela regra de negócio.
+
+        Registra um log de warning se o valor máximo for maior do que o valor
+        esperado e um log de info se for menor ou igual.
+
+        Parametros:
+            key (str): Nome da coluna a ser verificada.
+            value (dict): Dicionário com as configurações de tipo de dados da coluna.
+
+        Retorno:
+            None
+        """
+        max_val = self.df.select(pl.col(key).max())[key][0]
+        log_lvl = logging.error if max_val > value["max"] else logging.info
+        log_lvl(f"Máximo esperado: {value["max"]} ; Máximo recebido: {max_val}")
