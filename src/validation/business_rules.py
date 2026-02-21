@@ -28,12 +28,13 @@ class BusinessRulesChecks:
         logging.info("Verificando valores permitidos por coluna")
         for key, value in self._contract.items():
             logging.info(f"Coluna {key}")
+            assert isinstance(key, str)
             self._check_null_count(key)
-            if value["rules"] == ALLOWED_VALUES:
-                self._check_allowed_values(key, value["values"])
-            else:
+            if value["rules"] == ALLOWED_RANGE:
                 self._check_min_value(key, value)
                 self._check_max_value(key, value)
+            else:
+                self._check_allowed_values(key, value["values"])
         logging.info("Verificação concluída")
 
         return self.df
@@ -78,17 +79,14 @@ class BusinessRulesChecks:
         Retorno:
             None
         """
-        expected = set(values)
-        received = set(self.df[key])
-        invalids = received - expected
+        invalids = set(self.df[key]) - set(values)
         if invalids:
-            logging.error(
-                f"Valores inválidos encontrados no dataset: {sorted(invalids)}"
-            )
+            message = f"Valores inválidos encontrados no dataset: {sorted(invalids)}"
+            log_lvl = logging.error
         else:
-            logging.info(
-                f"Valores encontrados estão de acordo com as regras: {received}"
-            )
+            message = f"Valores encontrados estão de acordo com as regras."
+            log_lvl = logging.info
+        log_lvl(message)
 
     def _check_min_value(self, key, value) -> None:
         """

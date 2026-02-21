@@ -1,3 +1,4 @@
+from os import dup
 import polars as pl
 import logging
 
@@ -18,7 +19,10 @@ class SemanticRules:
             .to_list()
         )
         if duplicated_ids:
-            logging.error(f"user_id duplicados encontrados: {duplicated_ids}")
+            message = f"user_id duplicados encontrados: {duplicated_ids}"
+            log_lvl = logging.error
         else:
-            logging.info("Coluna user_id sem valores duplicados")
-        logging.info("Verificação de duplicidade de user_id concluida.")
+            message = "Coluna user_id sem valores duplicados"
+            log_lvl = logging.info
+        log_lvl(message)
+        logging.info("Verificação de duplicidade concluída.")
