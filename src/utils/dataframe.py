@@ -1,5 +1,7 @@
+from typing import Any
 import polars as pl
 from consts.dtypes import DTypes
+from datetime import datetime
 
 DTYPES = DTypes.as_dict()
 
@@ -60,7 +62,7 @@ def validate_dtypes(df: pl.DataFrame, dtype_schema: dict[str, str]) -> dict:
     return result
 
 
-def get_stats_map(df: pl.DataFrame, columns: list):
+def get_stats_map(df: pl.DataFrame, columns: list) -> dict[str, Any]:
     exprs = []
     for col in columns:
         exprs.extend(

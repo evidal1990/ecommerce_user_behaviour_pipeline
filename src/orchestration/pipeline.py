@@ -47,6 +47,6 @@ class Pipeline:
         SemanticRules(df).execute()
         logging.info("Validação de regras semânticas finalizada...")
 
-        logging.info("Validação de regras de negócio iniciada...")
-        BusinessRulesChecks(df).execute()
-        logging.info("Validação de regras de negócio finalizada...")
+        # logging.info("Validação de regras de negócio iniciada...")
+        # BusinessRulesChecks(df).execute()
+        # logging.info("Validação de regras de negócio finalizada...")

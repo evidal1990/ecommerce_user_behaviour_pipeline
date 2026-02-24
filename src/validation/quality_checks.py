@@ -54,3 +54,18 @@ class QualityChecks:
         logging.info("Validação de tipos de colunas concluída com sucesso.")
 
         return divergences
+
+    def _validate_date_format(self) -> list:
+        date_columns = [col for col in self.df if col.dtype == pl.Date]
+        for column in date_columns:
+            logging.info(f"Coluna {column}")
+            invalid_formats = self.df.with_columns(
+                pl.col(column)
+                .str.strptime(pl.Date, format="%Y-%m-%d", strict=False)
+                .is_not_null()
+            )
+            if invalid_formats:
+                logging.error(
+                    f"Total de datas com formato inválido: {len(invalid_formats)}"
+                )
+            return invalid_formats

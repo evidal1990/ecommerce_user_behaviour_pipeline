@@ -2,7 +2,7 @@ import logging
 import polars as pl
 from typing import Any
 from pathlib import Path
-from src.utils import file_io, dataframe
+from src.utils import file_io
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
