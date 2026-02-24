@@ -8,8 +8,12 @@ class SemanticRules:
         self.df = df
 
     def execute(self) -> None:
+        current_date = datetime.now().date()
         duplicated_ids = self._check_duplicated_user_id()
-        last_purchase_date_result = self._check_future_dates("last_purchase_date")
+        last_purchase_date_result = self._check_future_dates(
+            "last_purchase_date", current_date
+        )
+        income_level_result = self._check_annual_income()
 
     def _check_duplicated_user_id(self) -> list:
         """
@@ -23,14 +27,14 @@ class SemanticRules:
             None
         """
         logging.info("Verificando duplicidade de user_id...")
-        duplicated_ids = (
+        users = (
             self.df["user_id"]
             .filter(self.df["user_id"].is_duplicated())
             .unique()
             .to_list()
         )
-        if duplicated_ids:
-            message = f"user_id duplicados encontrados: {duplicated_ids}"
+        if users:
+            message = f"user_id duplicados encontrados: {users}"
             log_lvl = logging.critical
         else:
             message = "Coluna user_id sem valores duplicados"
@@ -38,18 +42,48 @@ class SemanticRules:
         log_lvl(message)
         logging.info("Verificação de duplicidade concluída.")
 
-        return duplicated_ids
+        return users
 
-    def _check_future_dates(self, column) -> list[pl.Date]:
-        current_date = datetime.now().date()
-        future_dates = [row for row in self.df[column].to_list() if row > current_date]
-        dates_greather_than_now = len(future_dates)
-        if dates_greather_than_now > 0:
-            message = f"Coluna {column}: {dates_greather_than_now} datas maiores que a data atual"
+    def _check_future_dates(self, column, expected_date) -> list[pl.Date]:
+        users = (
+            self.df.filter(pl.col(column) > expected_date)
+            .select(["user_id", column])
+            .to_dict()
+        )
+        users_total = len(users)
+        if users_total > 0:
+            message = f"Usuários com {column} maior do que a data esperada: {users}"
             log_lvl = logging.error
         else:
-            message = f"Coluna {column}: Nenhuma data maior que a data atual foi encontrada"
+            message = f"Nenhuma inconsistência encontrada para a coluna {column}"
             log_lvl = logging.info
         log_lvl(message)
 
-        return future_dates
+        return users
+
+    def _check_annual_income(self) -> dict:
+        """
+        Verifica se há usuários com annual_income negativo.
+
+        Se houver usuários com annual_income negativo, registra um log de error com a lista
+        de usuários e seus respectivos valores de annual_income. Caso contrário, registra um log de info com a mensagem
+        de que não há usuários com annual_income negativo.
+
+        Retorno:
+            dict: Dicionário com os usuários e seus respectivos valores de annual_income.
+        """
+        EXPECTED_MIN = 0
+        users = dict()
+        if self.df["annual_income"].min() < EXPECTED_MIN:
+            users = (
+                self.df.filter(pl.col("annual_income") < EXPECTED_MIN)
+                .select(["user_id", "annual_income"])
+                .to_dict()
+            )
+            message = f"Usuários com annual_income < {EXPECTED_MIN}: {users}"
+            log_lvl = logging.error
+        else:
+            message = "Nenhum usuário com annual_income negativo."
+            log_lvl = logging.info
+        log_lvl(message)
+        return users

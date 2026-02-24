@@ -1,3 +1,6 @@
+age:
+  min: 18
+  max: 99
 stress_from_financial_decisions_level:
   min: 0  
   max: 10

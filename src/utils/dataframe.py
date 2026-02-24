@@ -67,7 +67,7 @@ def get_stats_map(df: pl.DataFrame, columns: list) -> dict[str, Any]:
     for col in columns:
         exprs.extend(
             [
-                pl.col(col).min().alias(f"{col}__min"),
+                (col).min().alias(f"{col}__min"),
                 pl.col(col).max().alias(f"{col}__max"),
             ]
         )
