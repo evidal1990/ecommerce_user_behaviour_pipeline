@@ -7,24 +7,43 @@ class SemanticRules:
     def __init__(self, df: pl.DataFrame) -> None:
         self.df = df
 
-    def execute(self) -> None:
+    def execute(self) -> dict:
         current_date = datetime.now().date()
-        duplicated_ids = self._check_duplicated_user_id()
-        last_purchase_date_result = self._check_future_dates(
+        duplicated_users_result = self._check_duplicated_user_id()
+        future_dates_result = self._check_future_dates(
             "last_purchase_date", current_date
         )
-        income_level_result = self._check_annual_income()
+        min_rule_columns = [
+            "annual_income",
+            "household_size",
+            "monthly_spend",
+            "average_order_value",
+            "daily_session_time_minutes",
+            "cart_items_average",
+            "account_age_months",
+        ]
+        min_rule_result = []
+        for column in min_rule_columns:
+            min_rule_result.append(self._check_min_rule(column, 0.0))
+
+        employment_status_result = self._check_employment_status_and_annual_income()
+
+        return {
+            "duplicated_ids": duplicated_users_result,
+            "future_dates_result": future_dates_result,
+            "min_rule_result": min_rule_result,
+            "employment_status_result": employment_status_result,
+        }
 
     def _check_duplicated_user_id(self) -> list:
         """
-        Verifica se há valores duplicados na coluna user_id.
+        Verifica se a coluna user_id do DataFrame tem valores duplicados.
 
-        Se houver valores duplicados, registra um log de critical com a lista
-        de valores duplicados. Caso contrário, registra um log de info com a mensagem
-        de que a coluna não tem valores duplicados.
+        Se houver duplicidade, registra um log de warning com a lista de user_id duplicados.
+        Caso contrário, registra um log de info com mensagem de que a coluna não tem valores duplicados.
 
         Retorno:
-            None
+            list: Lista de user_id duplicados encontrados.
         """
         logging.info("Verificando duplicidade de user_id...")
         users = (
@@ -44,15 +63,25 @@ class SemanticRules:
 
         return users
 
-    def _check_future_dates(self, column, expected_date) -> list[pl.Date]:
-        users = (
-            self.df.filter(pl.col(column) > expected_date)
-            .select(["user_id", column])
-            .to_dict()
+    def _check_future_dates(self, column, expected_date) -> pl.DataFrame:
+        """
+        Verifica se a coluna do DataFrame tem valores maior do que a data esperada.
+
+        Se houver valores futuros, registra um log de warning com a lista de user_id
+        e seus respectivos valores futuros. Caso contrário, registra um log de info com
+        mensagem de que a coluna não tem valores futuros.
+
+        Retorno:
+            pl.DataFrame: Dataframe com os usuários e suas datas futuras.
+        """
+        users = self.df.filter(pl.col(column) > expected_date).select(
+            ["user_id", column]
         )
         users_total = len(users)
         if users_total > 0:
-            message = f"Usuários com {column} maior do que a data esperada: {users}"
+            message = (
+                f"Usuários com {column} maior do que a data esperada: {users_total}"
+            )
             log_lvl = logging.error
         else:
             message = f"Nenhuma inconsistência encontrada para a coluna {column}"
@@ -61,29 +90,44 @@ class SemanticRules:
 
         return users
 
-    def _check_annual_income(self) -> dict:
+    def _check_min_rule(self, column, expected_min) -> pl.DataFrame:
         """
-        Verifica se há usuários com annual_income negativo.
+        Verifica se a coluna do DataFrame tem valores menores do que o valor esperado.
 
-        Se houver usuários com annual_income negativo, registra um log de error com a lista
-        de usuários e seus respectivos valores de annual_income. Caso contrário, registra um log de info com a mensagem
-        de que não há usuários com annual_income negativo.
+        Se houver valores menores, registra um log de warning com a lista de user_id
+        e seus respectivos valores menores. Caso contrário, registra um log de info com
+        mensagem de que a coluna não tem valores menores.
 
         Retorno:
-            dict: Dicionário com os usuários e seus respectivos valores de annual_income.
+            pl.DataFrame: Dataframe com os usuários e seus valores menores.
         """
-        EXPECTED_MIN = 0
-        users = dict()
-        if self.df["annual_income"].min() < EXPECTED_MIN:
-            users = (
-                self.df.filter(pl.col("annual_income") < EXPECTED_MIN)
-                .select(["user_id", "annual_income"])
-                .to_dict()
-            )
-            message = f"Usuários com annual_income < {EXPECTED_MIN}: {users}"
+        users = self.df.filter(pl.col(column) < expected_min).select(
+            ["user_id", column]
+        )
+        users_total = len(users)
+        if users_total < expected_min:
+            message = f"Usuários com {column} < {expected_min}: {users_total}"
             log_lvl = logging.error
         else:
-            message = "Nenhum usuário com annual_income negativo."
+            message = f"Nenhum usuário com {column} negativo."
             log_lvl = logging.info
         log_lvl(message)
+        return users
+
+    def _check_employment_status_and_annual_income(self) -> pl.DataFrame:
+        logging.info("Validando regra semântica da coluna employment_status")
+        condition1 = pl.col("employment_status") == "Unemployed"
+        condition2 = pl.col("annual_income") > 0
+        users = self.df.filter(condition1 & condition2).select(
+            ["user_id", "employment_status", "annual_income"]
+        )
+        users_total = len(users)
+        if users_total > 0:
+            message = f"Usuários encontrados com annual_income > 0 e employment_status == Unemployed: {len(users)}"
+            log_lvl = logging.warning
+        else:
+            message = "Nenhum usuário encontrado com inconsistência"
+            log_lvl = logging.info
+        log_lvl(message)
+        logging.info("Validação semântica da coluna employment_status concluída")
         return users
