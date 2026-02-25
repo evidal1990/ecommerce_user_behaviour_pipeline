@@ -1,4 +1,6 @@
 from datetime import datetime
+from consts.error_code import ErrorCode
+from consts.validation_status import ValidationStatus
 import polars as pl
 import logging
 
@@ -6,34 +8,37 @@ import logging
 class SemanticRules:
     def __init__(self, df: pl.DataFrame) -> None:
         self.df = df
+        self.TOTAL_RECORDS = self.df.shape[0]
 
     def execute(self) -> dict:
+        result = {}
         current_date = datetime.now().date()
-        duplicated_users_result = self._check_duplicated_user_id()
-        future_dates_result = self._check_future_dates(
-            "last_purchase_date", current_date
+        result.update(
+            {
+                "duplicated_user_id": self._check_duplicated_user_id(),
+                "future_last_purchase_date": self._check_future_dates(
+                    "last_purchase_date", current_date
+                ),
+            }
         )
-        min_rule_columns = [
-            "annual_income",
-            "household_size",
-            "monthly_spend",
-            "average_order_value",
-            "daily_session_time_minutes",
-            "cart_items_average",
-            "account_age_months",
-        ]
-        min_rule_result = []
-        for column in min_rule_columns:
-            min_rule_result.append(self._check_min_rule(column, 0.0))
+        # min_rules = self._check_min_rules([
+        #     "annual_income",
+        #     "household_size",
+        #     "monthly_spend",
+        #     "average_order_value",
+        #     "daily_session_time_minutes",
+        #     "cart_items_average",
+        #     "account_age_months",
+        # ])
+        # employment_status = self._check_employment_status_and_annual_income()
 
-        employment_status_result = self._check_employment_status_and_annual_income()
-
-        return {
-            "duplicated_ids": duplicated_users_result,
-            "future_dates_result": future_dates_result,
-            "min_rule_result": min_rule_result,
-            "employment_status_result": employment_status_result,
-        }
+        # return {
+        #     "duplicated_user_ids": duplicated_user_ids,
+        #     "future_dates": future_dates,
+        #     "min_rules": min_rules,
+        #     "employment_status": employment_status,
+        # }
+        logging.info(result)
 
     def _check_duplicated_user_id(self) -> list:
         """
@@ -53,15 +58,26 @@ class SemanticRules:
             .to_list()
         )
         if users:
+            status = ValidationStatus.FAIL
+            error_code = ErrorCode.DUPLICATED_USER_ID
             message = f"user_id duplicados encontrados: {users}"
             log_lvl = logging.critical
         else:
+            status = ValidationStatus.PASS
+            error_code = None
             message = "Coluna user_id sem valores duplicados"
             log_lvl = logging.info
         log_lvl(message)
         logging.info("Verificação de duplicidade concluída.")
 
-        return users
+        return {
+            "status": status,
+            "error_code": error_code,
+            "total_records": self.TOTAL_RECORDS,
+            "invalid_records": len(users),
+            "invalid_percentage": len(users) / self.TOTAL_RECORDS,
+            "users": users,
+        }
 
     def _check_future_dates(self, column, expected_date) -> pl.DataFrame:
         """
