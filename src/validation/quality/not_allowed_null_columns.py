@@ -1,8 +1,11 @@
 import polars as pl
+from pathlib import Path
 from src.utils import dataframe, statistics
 from src.validation.interfaces.rule import Rule
 from consts.validation_status import ValidationStatus
 
+
+BASE_DIR = Path(__file__).resolve().parents[3]
 
 class NotAllowedNullCount(Rule):
     def __init__(self, column: str, sample_size: int = 5) -> None:
@@ -35,3 +38,7 @@ class NotAllowedNullCount(Rule):
             "invalid_percentage": percentage,
             "sample": sample,
         }
+    
+    def _load_contract(self) -> dict:
+        contract_path = BASE_DIR / "src" / "transformation" / "bronze" / "schema.yaml"
+        return file_io.read_yaml(contract_path)
