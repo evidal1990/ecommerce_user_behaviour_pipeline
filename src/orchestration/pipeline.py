@@ -2,7 +2,8 @@ import logging
 from src.ingestion.csv_ingestion import CsvIngestion
 from src.transformation.bronze.structure_data import StructureData
 from src.validation.business_rules import BusinessRulesChecks
-from src.validation.semantic_rules import SemanticRules
+from src.validation.semantic_rules_validator import SemanticRulesValidator
+from src.validation.duplicated_user_id import DuplicatedUserId
 
 
 class Pipeline:
@@ -44,7 +45,7 @@ class Pipeline:
         logging.info("Estruturação de dados brutos finalizada...")
 
         logging.info("Validação de regras semânticas iniciada...")
-        SemanticRules(df).execute()
+        SemanticRulesValidator([DuplicatedUserId()]).execute(df)
         logging.info("Validação de regras semânticas finalizada...")
 
         # logging.info("Validação de regras de negócio iniciada...")
