@@ -6,6 +6,7 @@ from src.validation.business_rules import BusinessRulesChecks
 from src.validation.semantic_rules_validator import SemanticRulesValidator
 from src.validation.duplicated_user_id import DuplicatedUserId
 from src.validation.future_dates import FutureDates
+from src.validation.min_value import MinValue
 
 
 class Pipeline:
@@ -50,7 +51,16 @@ class Pipeline:
         SemanticRulesValidator(
             [
                 DuplicatedUserId(),
-                FutureDates("last_purchase_date", datetime.now().date()),
+                FutureDates(
+                    column="last_purchase_date", date_limit=datetime.now().date()
+                ),
+                MinValue(column="annual_income", min_limit=0.0),
+                MinValue(column="household_size", min_limit=0),
+                MinValue(column="monthly_spend", min_limit=0.0),
+                MinValue(column="average_order_value", min_limit=0),
+                MinValue(column="daily_session_time_minutes", min_limit=0),
+                MinValue(column="cart_items_average", min_limit=0),
+                MinValue(column="account_age_months", min_limit=0),
             ]
         ).execute(df)
         logging.info("Validação de regras semânticas finalizada...")

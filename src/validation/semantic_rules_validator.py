@@ -14,7 +14,7 @@ class SemanticRulesValidator():
             results[rule.name()] = result
             status = result["status"]
             message = (
-                f"[SEMANTIC_VALIDATION] "
+                f"[SEMANTIC_RULES_VALIDATION] "
                 f"rule={rule.name()} "
                 f"status={status} "
                 f"total_records={result['total_records']} "
