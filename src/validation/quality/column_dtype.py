@@ -1,11 +1,12 @@
-from typing import Any
 import polars as pl
 from pathlib import Path
 from src.utils import file_io
 from src.validation.interfaces.rule import Rule
 from consts.validation_status import ValidationStatus
+from consts.dtypes import DTypes
 
 
+DTYPES = DTypes.as_dict()
 BASE_DIR = Path(__file__).resolve().parents[3]
 
 
@@ -16,12 +17,9 @@ class ColumnDType(Rule):
     def name(self) -> str:
         return f"dtype_column_{self.column}"
 
-    def dtype(self) -> Any:
-        return
-
     def validate(self, df: pl.DataFrame) -> dict:
         contract = self._load_contract()
-        expected = contract["dtypes"][self.column]
+        expected = DTYPES[contract["dtypes"][self.column]]
         received = df[self.column].dtype
         if expected == received:
             status = ValidationStatus.PASS

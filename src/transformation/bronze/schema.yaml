@@ -97,6 +97,7 @@ dtypes:
   age: Int64
   gender: String
   country: String
+  urban_rural: String
   income_level: Float64
   employment_status: String
   education_level: String

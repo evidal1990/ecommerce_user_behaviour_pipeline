@@ -3,7 +3,7 @@ from datetime import datetime
 from consts.rule_type import RuleType
 from src.ingestion.csv_ingestion import CsvIngestion
 from src.transformation.bronze.structure_data import StructureData
-from src.validation.rules_validator import RulesValidator
+from src.validation import RulesValidator, DtypeValidator, DataFrameValidator
 from src.validation.semantic import (
     DuplicatedUserId,
     FutureDates,
@@ -12,15 +12,8 @@ from src.validation.semantic import (
     UnemployedUserWithIncome,
     SelfEmployedWithoutIncome,
 )
-from src.validation.business import (
-    AllowedMinMaxValues,
-    AllowedColumnValues
-)
-from src.validation.quality import (
-    NotAllowedNullCount, 
-    RequiredColumns
-)
-from src.validation.columns_validator import RequiredColumnsValidator
+from src.validation.business import AllowedMinMaxValues, AllowedColumnValues
+from src.validation.quality import NotAllowedNullCount, RequiredColumns, ColumnDType
 
 
 class Pipeline:
@@ -55,10 +48,80 @@ class Pipeline:
         """
         logging.info("Ingestão de CSV iniciada...")
         df = CsvIngestion(self.settings).execute()
-        logging.info("Ingestão de CSV finalizada...")
+        logging.info("Ingestão de CSV finalizada...\n")
 
-        logging.info("Validação de qualidade dos dados iniciada...")
-        RequiredColumnsValidator(RuleType.QUALITY, [RequiredColumns()]).execute(df)
+        logging.info("Validação de colunas do dataframe iniciada...")
+        DataFrameValidator(RuleType.QUALITY, [RequiredColumns()]).execute(df)
+        logging.info("Validação de colunas do dataframe finalizada...\n")
+
+        logging.info("Validação de tipos das colunas do dataframe iniciada...")
+        DtypeValidator(
+            RuleType.QUALITY,
+            [
+                ColumnDType(column="user_id"),
+                ColumnDType(column="age"),
+                ColumnDType(column="gender"),
+                ColumnDType(column="country"),
+                ColumnDType(column="urban_rural"),
+                ColumnDType(column="income_level"),
+                ColumnDType(column="employment_status"),
+                ColumnDType(column="education_level"),
+                ColumnDType(column="relationship_status"),
+                ColumnDType(column="has_children"),
+                ColumnDType(column="household_size"),
+                ColumnDType(column="occupation"),
+                ColumnDType(column="ethnicity"),
+                ColumnDType(column="language_preference"),
+                ColumnDType(column="device_type"),
+                ColumnDType(column="budgeting_style"),
+                ColumnDType(column="brand_loyalty_score"),
+                ColumnDType(column="impulse_buying_score"),
+                ColumnDType(column="environmental_consciousness"),
+                ColumnDType(column="health_conscious_shopping"),
+                ColumnDType(column="travel_frequency"),
+                ColumnDType(column="hobby_count"),
+                ColumnDType(column="social_media_influence_score"),
+                ColumnDType(column="reading_habits"),
+                ColumnDType(column="exercise_frequency"),
+                ColumnDType(column="stress_from_financial_decisions"),
+                ColumnDType(column="overall_stress_level"),
+                ColumnDType(column="sleep_quality"),
+                ColumnDType(column="physical_activity_level"),
+                ColumnDType(column="mental_health_score"),
+                ColumnDType(column="weekly_purchases"),
+                ColumnDType(column="monthly_spend"),
+                ColumnDType(column="average_order_value"),
+                ColumnDType(column="preferred_payment_method"),
+                ColumnDType(column="coupon_usage_frequency"),
+                ColumnDType(column="loyalty_program_member"),
+                ColumnDType(column="referral_count"),
+                ColumnDType(column="product_category_preference"),
+                ColumnDType(column="shopping_time_of_day"),
+                ColumnDType(column="weekend_shopper"),
+                ColumnDType(column="impulse_purchases_per_month"),
+                ColumnDType(column="browse_to_buy_ratio"),
+                ColumnDType(column="return_frequency"),
+                ColumnDType(column="return_rate"),
+                ColumnDType(column="daily_session_time_minutes"),
+                ColumnDType(column="product_views_per_day"),
+                ColumnDType(column="ad_views_per_day"),
+                ColumnDType(column="wishlist_items_count"),
+                ColumnDType(column="cart_items_average"),
+                ColumnDType(column="checkout_abandonments_per_month"),
+                ColumnDType(column="purchase_conversion_rate"),
+                ColumnDType(column="app_usage_frequency"),
+                ColumnDType(column="notification_response_rate"),
+                ColumnDType(column="account_age_months"),
+                ColumnDType(column="last_purchase_date"),
+                ColumnDType(column="social_sharing_frequency"),
+                ColumnDType(column="premium_subscription"),
+                ColumnDType(column="cart_abandonment_rate"),
+                ColumnDType(column="review_writing_frequency"),
+            ],
+        ).execute(df)
+        logging.info("Validação de tipos das colunas do dataframe finalizada...\n")
+
+        logging.info("Validação de regras de qualidade iniciada...")
         RulesValidator(
             RuleType.QUALITY,
             [
@@ -94,36 +157,36 @@ class Pipeline:
                 NotAllowedNullCount(column="account_age_months"),
                 NotAllowedNullCount(column="last_purchase_date"),
                 NotAllowedNullCount(column="premium_subscription"),
-                NotAllowedNullCount(column="cart_abandonment_rate")
+                NotAllowedNullCount(column="cart_abandonment_rate"),
             ],
         ).execute(df)
-        logging.info("Validação de qualidade dos dados finalizada.")
+        logging.info("Validação de regras de qualidade finalizada...\n")
 
         logging.info("Estruturação de dados brutos iniciada...")
         df = StructureData(self.settings).execute()
-        logging.info("Estruturação de dados brutos finalizada...")
+        logging.info("Estruturação de dados brutos finalizada...\n")
 
         logging.info("Validação de regras semânticas iniciada...")
-        # semantic_rules_validation_result = RulesValidator(
-        #     RuleType.SEMANTIC,
-        #     [
-        #         DuplicatedUserId(),
-        #         FutureDates(
-        #             column="last_purchase_date", date_limit=datetime.now().date()
-        #         ),
-        #         MinValue(column="annual_income", min_limit=0.0),
-        #         MinValue(column="household_size", min_limit=0),
-        #         MinValue(column="monthly_spend", min_limit=0.0),
-        #         MinValue(column="average_order_value", min_limit=0),
-        #         MinValue(column="daily_session_time_minutes", min_limit=0),
-        #         MinValue(column="cart_items_average", min_limit=0),
-        #         MinValue(column="account_age_months", min_limit=0),
-        #         EmployedWithoutIncome(),
-        #         SelfEmployedWithoutIncome(),
-        #         UnemployedUserWithIncome(),
-        #     ]
-        # ).execute(df)
-        logging.info("Validação de regras semânticas finalizada...")
+        semantic_rules_validation_result = RulesValidator(
+            RuleType.SEMANTIC,
+            [
+                DuplicatedUserId(),
+                FutureDates(
+                    column="last_purchase_date", date_limit=datetime.now().date()
+                ),
+                MinValue(column="annual_income", min_limit=0.0),
+                MinValue(column="household_size", min_limit=0),
+                MinValue(column="monthly_spend", min_limit=0.0),
+                MinValue(column="average_order_value", min_limit=0),
+                MinValue(column="daily_session_time_minutes", min_limit=0),
+                MinValue(column="cart_items_average", min_limit=0),
+                MinValue(column="account_age_months", min_limit=0),
+                EmployedWithoutIncome(),
+                SelfEmployedWithoutIncome(),
+                UnemployedUserWithIncome(),
+            ]
+        ).execute(df)
+        logging.info("Validação de regras semânticas finalizada...\n")
 
         logging.info("Validação de regras de negócio iniciada...")
         # RulesValidator(
@@ -165,4 +228,4 @@ class Pipeline:
         #         AllowedColumnValues(column="urban_rural"),
         #     ],
         # ).execute(df)
-        logging.info("Validação de regras de negócio finalizada...")
+        logging.info("Validação de regras de negócio finalizada...\n")

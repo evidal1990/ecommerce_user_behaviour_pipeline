@@ -3,7 +3,7 @@ from src.validation.interfaces.column import Column
 from consts.validation_status import ValidationStatus
 
 
-class RequiredColumnsValidator:
+class DataFrameValidator:
     def __init__(self, rule_type: str, rules: list[Column]) -> None:
         self.rules = rules
         self.rule_type = rule_type
