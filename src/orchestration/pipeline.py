@@ -6,6 +6,15 @@ from src.validation.semantic_rules_validator import SemanticRulesValidator
 from src.validation.semantic.duplicated_user_id import DuplicatedUserId
 from src.validation.semantic.future_dates import FutureDates
 from src.validation.semantic.min_value import MinValue
+from src.validation.semantic.employed_without_income import (
+    EmployedWithoutIncome,
+)
+from src.validation.semantic.unemployed_with_income import (
+    UnemployedUserWithIncome,
+)
+from src.validation.semantic.self_employed_without_income import (
+    SelfEmployedWithoutIncome,
+)
 
 
 class Pipeline:
@@ -47,7 +56,7 @@ class Pipeline:
         logging.info("Estruturação de dados brutos finalizada...")
 
         logging.info("Validação de regras semânticas iniciada...")
-        SemanticRulesValidator(
+        semantic_rules_validation_result = SemanticRulesValidator(
             [
                 DuplicatedUserId(),
                 FutureDates(
@@ -60,6 +69,9 @@ class Pipeline:
                 MinValue(column="daily_session_time_minutes", min_limit=0),
                 MinValue(column="cart_items_average", min_limit=0),
                 MinValue(column="account_age_months", min_limit=0),
+                EmployedWithoutIncome(),
+                SelfEmployedWithoutIncome(),
+                UnemployedUserWithIncome(),
             ]
         ).execute(df)
         logging.info("Validação de regras semânticas finalizada...")
