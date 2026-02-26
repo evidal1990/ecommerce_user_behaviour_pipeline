@@ -2,7 +2,7 @@ import logging
 import polars as pl
 from pathlib import Path
 from src.utils import file_io
-from src.validation.quality_checks import QualityChecks
+from src.validation.quality.quality_checks import QualityChecks
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 

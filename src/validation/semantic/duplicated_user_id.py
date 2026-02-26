@@ -1,6 +1,6 @@
 import polars as pl
 from consts.validation_status import ValidationStatus
-from src.validation.semantic_rule import SemanticRule
+from src.validation.interfaces.semantic_rule import SemanticRule
 from src.utils import dataframe, statistics
 
 

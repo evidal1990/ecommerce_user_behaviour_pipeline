@@ -2,11 +2,10 @@ import logging
 from datetime import datetime
 from src.ingestion.csv_ingestion import CsvIngestion
 from src.transformation.bronze.structure_data import StructureData
-from src.validation.business_rules import BusinessRulesChecks
 from src.validation.semantic_rules_validator import SemanticRulesValidator
-from src.validation.duplicated_user_id import DuplicatedUserId
-from src.validation.future_dates import FutureDates
-from src.validation.min_value import MinValue
+from src.validation.semantic.duplicated_user_id import DuplicatedUserId
+from src.validation.semantic.future_dates import FutureDates
+from src.validation.semantic.min_value import MinValue
 
 
 class Pipeline:

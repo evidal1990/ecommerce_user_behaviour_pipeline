@@ -1,5 +1,5 @@
 import logging
-from src.validation.semantic_rule import SemanticRule
+from src.validation.interfaces.semantic_rule import SemanticRule
 from consts.validation_status import ValidationStatus
 
 
