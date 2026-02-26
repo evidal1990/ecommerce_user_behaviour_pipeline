@@ -35,10 +35,6 @@ class CsvIngestion:
             None
         """
         self.df = self._read_csv()
-        quality_checks = QualityChecks(self.df, self._contract)
-        quality_checks._validate_required_columns()
-        quality_checks._validate_dtypes()
-        quality_checks._validate_date_format()
         self._write_raw()
         return self.df
 

@@ -1,12 +1,12 @@
 import logging
-from src.validation.interfaces.rule import Rule
+from src.validation.interfaces.column import Column
 from consts.validation_status import ValidationStatus
 
 
-class RulesValidator():
-    def __init__(self, rule_type: str, rules: list[Rule]) -> None:
-        self.rule_type = rule_type
+class RequiredColumnsValidator:
+    def __init__(self, rule_type: str, rules: list[Column]) -> None:
         self.rules = rules
+        self.rule_type = rule_type
 
     def execute(self, df) -> dict:
         results = {}
@@ -18,10 +18,10 @@ class RulesValidator():
                 f"[{self.rule_type.value}_RULES_VALIDATION]\n"
                 f"rule={rule.name()}\n"
                 f"status={status}\n"
-                f"total_records={result['total_records']}\n"
-                f"invalid_records={result['invalid_records']}\n"
-                f"invalid_percentage={result['invalid_percentage']}\n"
-                f"sample={result['sample']}"
+                f"total_columns={result['total_columns']}\n"
+                f"not_found_columns={result['not_found_columns']}\n"
+                f"not_found_percentage={result['not_found_percentage']}\n"
+                f"columns={result['columns']}"
             )
             log_lvl = (
                 logging.info

@@ -12,8 +12,15 @@ from src.validation.semantic import (
     UnemployedUserWithIncome,
     SelfEmployedWithoutIncome,
 )
-from src.validation.business import AllowedMinMaxValues, AllowedColumnValues
-from src.validation.quality import NotAllowedNullCount
+from src.validation.business import (
+    AllowedMinMaxValues,
+    AllowedColumnValues
+)
+from src.validation.quality import (
+    NotAllowedNullCount, 
+    RequiredColumns
+)
+from src.validation.columns_validator import RequiredColumnsValidator
 
 
 class Pipeline:
@@ -51,6 +58,7 @@ class Pipeline:
         logging.info("Ingestão de CSV finalizada...")
 
         logging.info("Validação de qualidade dos dados iniciada...")
+        RequiredColumnsValidator(RuleType.QUALITY, [RequiredColumns()]).execute(df)
         RulesValidator(
             RuleType.QUALITY,
             [
