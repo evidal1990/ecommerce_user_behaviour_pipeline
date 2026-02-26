@@ -1,30 +1,11 @@
 import logging
 import polars as pl
-from typing import Any
 from pathlib import Path
 from src.utils import file_io
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 ALLOWED_RANGE_COLUMNS = [
-    "stress_from_financial_decisions_level",
-    "sleep_quality_level",
-    "physical_activity_level",
-    "overall_stress_level",
-    "mental_health_score",
-    "social_media_influence_score",
-    "impulse_buying_score",
-    "brand_loyalty_score",
-    "browse_to_buy_ratio",
-    "cart_abandonment_rate",
-    "notification_response_rate",
-    "purchase_conversion_rate",
-    "return_rate",
-    "exercise_frequency_per_week",
-    "reading_habits_per_month",
-    "impulse_purchases_per_month",
-    "checkout_abandonments_per_month",
-    "travel_frequency_per_year",
 ]
 ALLOWED_VALUES_COLUMNS = [
     "has_children",

@@ -1,10 +1,11 @@
 import logging
-from src.validation.interfaces.semantic_rule import SemanticRule
+from src.validation.interfaces.rule import Rule
 from consts.validation_status import ValidationStatus
 
 
-class SemanticRulesValidator():
-    def __init__(self, rules: list[SemanticRule]) -> None:
+class RulesValidator():
+    def __init__(self, rule_type: str, rules: list[Rule]) -> None:
+        self.rule_type = rule_type
         self.rules = rules
 
     def execute(self, df) -> dict:
@@ -14,7 +15,7 @@ class SemanticRulesValidator():
             results[rule.name()] = result
             status = result["status"]
             message = (
-                f"[SEMANTIC_RULES_VALIDATION] "
+                f"[{self.rule_type}_RULES_VALIDATION] "
                 f"rule={rule.name()} "
                 f"status={status} "
                 f"total_records={result['total_records']} "

@@ -1,21 +1,26 @@
 import polars as pl
-from consts.validation_status import ValidationStatus
+from pathlib import Path
+from src.utils import file_io, dataframe, statistics
 from src.validation.interfaces.rule import Rule
-from src.utils import dataframe, statistics
+from consts.validation_status import ValidationStatus
 
 
-class MinValue(Rule):
-    def __init__(self, column: str, min_limit: int, sample_size: int = 5) -> None:
+BASE_DIR = Path(__file__).resolve().parents[3]
+
+
+class AllowedMinValues(Rule):
+    def __init__(self, column: str, sample_size: int = 5) -> None:
         self.column = column
-        self.min_limit = min_limit
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return "min_value"
+        return f"allowed_min_values_{self.column}"
 
     def validate(self, df: pl.DataFrame) -> dict:
         total_records = df.shape[0]
-        users = df.filter(pl.col(self.column) < self.min_limit).select([self.column])
+        contract = self._load_contract()
+        min_value = contract[self.column]["min"]
+        users = df.filter(pl.col(self.column).min() < min_value).select([self.column])
         users_total = len(users)
         if users_total == 0:
             status = ValidationStatus.PASS
@@ -36,3 +41,14 @@ class MinValue(Rule):
             "invalid_percentage": percentage,
             "sample": sample,
         }
+
+    def _load_contract(self) -> dict:
+        """
+        Carrega o contrato de regras de negócios, que é um arquivo YAML
+        com as configurações de regras de negócios.
+
+        Retorno:
+            dict: Contrato de regras de negócios.
+        """
+        contract_path = BASE_DIR / "src" / "transformation" / "silver" / "schema.yaml"
+        return file_io.read_yaml(contract_path)

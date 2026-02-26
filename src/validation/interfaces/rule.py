@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class SemanticRule(ABC):
+class Rule(ABC):
 
     @abstractmethod
     def name(self) -> str:

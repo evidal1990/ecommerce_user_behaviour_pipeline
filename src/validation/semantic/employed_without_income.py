@@ -1,11 +1,11 @@
 import polars as pl
 from consts.validation_status import ValidationStatus
 from consts.employment_status import EmploymentStatus
-from src.validation.interfaces.semantic_rule import SemanticRule
+from src.validation.interfaces.rule import Rule
 from src.utils import dataframe, statistics
 
 
-class EmployedWithoutIncome(SemanticRule):
+class EmployedWithoutIncome(Rule):
 
     def __init__(
         self,
