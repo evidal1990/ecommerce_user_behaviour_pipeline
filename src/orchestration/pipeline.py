@@ -1,9 +1,11 @@
 import logging
+from datetime import datetime
 from src.ingestion.csv_ingestion import CsvIngestion
 from src.transformation.bronze.structure_data import StructureData
 from src.validation.business_rules import BusinessRulesChecks
 from src.validation.semantic_rules_validator import SemanticRulesValidator
 from src.validation.duplicated_user_id import DuplicatedUserId
+from src.validation.future_dates import FutureDates
 
 
 class Pipeline:
@@ -45,7 +47,12 @@ class Pipeline:
         logging.info("Estruturação de dados brutos finalizada...")
 
         logging.info("Validação de regras semânticas iniciada...")
-        SemanticRulesValidator([DuplicatedUserId()]).execute(df)
+        SemanticRulesValidator(
+            [
+                DuplicatedUserId(),
+                FutureDates("last_purchase_date", datetime.now().date()),
+            ]
+        ).execute(df)
         logging.info("Validação de regras semânticas finalizada...")
 
         # logging.info("Validação de regras de negócio iniciada...")

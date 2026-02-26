@@ -2,21 +2,23 @@ import polars as pl
 from consts.validation_status import ValidationStatus
 from src.validation.semantic_rule import SemanticRule
 from src.utils import dataframe, statistics
+from datetime import datetime
 
 
-class DuplicatedUserId(SemanticRule):
-    def __init__(self, sample_size: int = 10) -> None:
-        self.column = "user_id"
+class FutureDates(SemanticRule):
+    def __init__(
+        self, column: str, date_limit: datetime, sample_size: int = 10
+    ) -> None:
+        self.column = column
+        self.date_limit = date_limit
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return "duplicated_user_id"
+        return "future_dates"
 
     def validate(self, df: pl.DataFrame) -> dict:
         total_records = df.shape[0]
-        users = (
-            df[self.column].filter(df[self.column].is_duplicated()).unique().to_list()
-        )
+        users = df.filter(pl.col(self.column) > self.date_limit).select([self.column])
         users_total = len(users)
         if users_total == 0:
             status = ValidationStatus.PASS

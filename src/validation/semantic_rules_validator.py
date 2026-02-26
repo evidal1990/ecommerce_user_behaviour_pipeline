@@ -26,8 +26,8 @@ class SemanticRulesValidator():
                 logging.info
                 if status == ValidationStatus.PASS
                 else (
-                    status == ValidationStatus.WARN
-                    if logging.warning
+                    logging.warning
+                    if status == ValidationStatus.WARN
                     else logging.error
                 )
             )
