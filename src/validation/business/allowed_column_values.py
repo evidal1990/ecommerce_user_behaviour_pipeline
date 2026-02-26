@@ -8,19 +8,19 @@ from consts.validation_status import ValidationStatus
 BASE_DIR = Path(__file__).resolve().parents[3]
 
 
-class AllowedMinValues(Rule):
+class AllowedColumnValues(Rule):
     def __init__(self, column: str, sample_size: int = 5) -> None:
         self.column = column
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return f"allowed_min_values_{self.column}"
+        return f"allowed_column_values_{self.column}"
 
     def validate(self, df: pl.DataFrame) -> dict:
         total_records = df.shape[0]
         contract = self._load_contract()
-        min_value = contract[self.column]["min"]
-        users = df.filter(pl.col(self.column).min() < min_value).select([self.column])
+        column_options = contract[self.column]["values"]
+        users = df.filter(~pl.col(self.column).is_in(column_options))
         users_total = len(users)
         if users_total == 0:
             status = ValidationStatus.PASS

@@ -16,8 +16,8 @@ from src.validation.semantic.unemployed_with_income import (
 from src.validation.semantic.self_employed_without_income import (
     SelfEmployedWithoutIncome,
 )
-from src.validation.business.allowed_min_values import AllowedMinValues
-from src.validation.business.allowed_max_values import AllowedMaxValues
+from src.validation.business.allowed_min_max_values import AllowedMinMaxValues
+from src.validation.business.allowed_column_values import AllowedColumnValues
 
 
 class Pipeline:
@@ -82,43 +82,42 @@ class Pipeline:
 
         logging.info("Validação de regras de negócio iniciada...")
         RulesValidator(
-            RuleType.BUSINESS, [
-                AllowedMinValues(column="brand_loyalty_score"),
-                AllowedMaxValues(column="brand_loyalty_score"),
-                AllowedMinValues(column="browse_to_buy_ratio"),
-                AllowedMaxValues(column="browse_to_buy_ratio"),
-                AllowedMinValues(column="cart_abandonment_rate"),
-                AllowedMaxValues(column="cart_abandonment_rate"),
-                AllowedMinValues(column="checkout_abandonments_per_month"),
-                AllowedMaxValues(column="checkout_abandonments_per_month"),
-                AllowedMinValues(column="exercise_frequency_per_week"),
-                AllowedMaxValues(column="exercise_frequency_per_week"),
-                AllowedMinValues(column="impulse_buying_score"),
-                AllowedMaxValues(column="impulse_buying_score"),
-                AllowedMinValues(column="impulse_purchases_per_month"),
-                AllowedMaxValues(column="impulse_purchases_per_month"),
-                AllowedMinValues(column="mental_health_score"),
-                AllowedMaxValues(column="mental_health_score"),
-                AllowedMinValues(column="notification_response_rate"),
-                AllowedMaxValues(column="notification_response_rate"),
-                AllowedMinValues(column="overall_stress_level"),
-                AllowedMaxValues(column="overall_stress_level"),
-                AllowedMinValues(column="physical_activity_level"),
-                AllowedMaxValues(column="physical_activity_level"),
-                AllowedMinValues(column="purchase_conversion_rate"),
-                AllowedMaxValues(column="purchase_conversion_rate"),
-                AllowedMinValues(column="reading_habits_per_month"),
-                AllowedMaxValues(column="reading_habits_per_month"),
-                AllowedMinValues(column="return_rate"),
-                AllowedMaxValues(column="return_rate"),
-                AllowedMinValues(column="sleep_quality_level"),
-                AllowedMaxValues(column="sleep_quality_level"),
-                AllowedMinValues(column="social_media_influence_score"),
-                AllowedMaxValues(column="social_media_influence_score"),
-                AllowedMinValues(column="stress_from_financial_decisions_level"),
-                AllowedMaxValues(column="stress_from_financial_decisions_level"),
-                AllowedMinValues(column="travel_frequency_per_year"),
-                AllowedMaxValues(column="travel_frequency_per_year"),
-                ]
+            RuleType.BUSINESS,
+            [
+                AllowedMinMaxValues(column="brand_loyalty_score"),
+                AllowedMinMaxValues(column="browse_to_buy_ratio"),
+                AllowedMinMaxValues(column="cart_abandonment_rate"),
+                AllowedMinMaxValues(column="checkout_abandonments_per_month"),
+                AllowedMinMaxValues(column="exercise_frequency_per_week"),
+                AllowedMinMaxValues(column="impulse_buying_score"),
+                AllowedMinMaxValues(column="impulse_purchases_per_month"),
+                AllowedMinMaxValues(column="mental_health_score"),
+                AllowedMinMaxValues(column="notification_response_rate"),
+                AllowedMinMaxValues(column="overall_stress_level"),
+                AllowedMinMaxValues(column="physical_activity_level"),
+                AllowedMinMaxValues(column="purchase_conversion_rate"),
+                AllowedMinMaxValues(column="reading_habits_per_month"),
+                AllowedMinMaxValues(column="return_rate"),
+                AllowedMinMaxValues(column="sleep_quality_level"),
+                AllowedMinMaxValues(column="social_media_influence_score"),
+                AllowedMinMaxValues(column="stress_from_financial_decisions_level"),
+                AllowedMinMaxValues(column="travel_frequency_per_year"),
+                AllowedColumnValues(column="budgeting_style"),
+                AllowedColumnValues(column="device_type"),
+                AllowedColumnValues(column="education_level"),
+                AllowedColumnValues(column="employment_status"),
+                AllowedColumnValues(column="ethnicity"),
+                AllowedColumnValues(column="gender"),
+                AllowedColumnValues(column="has_children"),
+                AllowedColumnValues(column="has_environmental_consciousness"),
+                AllowedColumnValues(column="has_health_conscious_shopping"),
+                AllowedColumnValues(column="is_loyalty_program_member"),
+                AllowedColumnValues(column="is_weekend_shopper"),
+                AllowedColumnValues(column="preferred_payment_method"),
+                AllowedColumnValues(column="product_category_preference"),
+                AllowedColumnValues(column="relationship_status"),
+                AllowedColumnValues(column="shopping_time_of_day"),
+                AllowedColumnValues(column="urban_rural"),
+            ],
         ).execute(df)
         logging.info("Validação de regras de negócio finalizada...")

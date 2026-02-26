@@ -15,7 +15,7 @@ class RulesValidator():
             results[rule.name()] = result
             status = result["status"]
             message = (
-                f"[{self.rule_type}_RULES_VALIDATION] "
+                f"[{self.rule_type.value}_RULES_VALIDATION] "
                 f"rule={rule.name()} "
                 f"status={status} "
                 f"total_records={result['total_records']} "
