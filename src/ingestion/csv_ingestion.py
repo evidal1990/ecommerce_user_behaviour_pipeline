@@ -40,6 +40,7 @@ class CsvIngestion:
         quality_checks._validate_dtypes()
         quality_checks._validate_date_format()
         self._write_raw()
+        return self.df
 
     def _read_csv(self) -> pl.DataFrame:
         """
