@@ -2,7 +2,9 @@ import logging
 import polars as pl
 from pathlib import Path
 from src.utils import file_io
-from src.validation.quality.quality_checks import QualityChecks
+from consts.dtypes import DTypes
+
+DTYPES = DTypes.as_dict()
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 
@@ -33,9 +35,7 @@ class StructureData:
             pl.DataFrame: Dataframe com os dados estruturados na camada bronze.
         """
         self.df = self._read_csv()
-        quality_checks = QualityChecks(self.df, self._contract)
-        columns = quality_checks._validate_dtypes()
-        self._structure_data(columns)
+        self._structure_data()
         self._rename_columns()
         self._write_bronze()
 
@@ -66,7 +66,7 @@ class StructureData:
         logging.info("Leitura de dados na raw concluída com sucesso.")
         return df
 
-    def _structure_data(self, columns: dict) -> None:
+    def _structure_data(self) -> None:
         """
         Altera os tipos de dados do DataFrame com base nas configurações do contrato.
 
@@ -76,8 +76,10 @@ class StructureData:
         Retorno:
             None
         """
-        for key, value in columns.items():
-            self.df = self.df.with_columns(pl.col(key).cast(value["expected"]))
+        dtypes = self._contract["dtypes"]
+
+        for key, value in dtypes.items():
+            self.df = self.df.with_columns(pl.col(key).cast(DTYPES[value]))
         logging.info("Tipos de dados alterados com sucesso.")
 
     def _rename_columns(self) -> None:
