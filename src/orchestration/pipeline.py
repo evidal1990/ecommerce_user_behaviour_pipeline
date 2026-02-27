@@ -8,6 +8,7 @@ from src.orchestration import (
     SEMANTIC_MIN_VALUE_COLUMNS,
     DATE_COLUMNS,
 )
+from src.orchestration.pipeline_steps import PipelineSteps
 from src.ingestion.csv_ingestion import CsvIngestion
 from src.transformation.bronze.structure_data import StructureData
 from src.validation import RulesValidator, DtypeValidator, DataFrameValidator
@@ -34,6 +35,7 @@ class Pipeline:
         Retorno:
             None
         """
+        self.df = None
         self.settings = settings
 
     def run(self) -> None:
@@ -53,23 +55,9 @@ class Pipeline:
         Retorno:
             None
         """
-        logging.info("Ingestão de CSV iniciada...")
-        df = CsvIngestion(self.settings).execute()
-        logging.info("Ingestão de CSV finalizada...\n")
-
-        logging.info("Validação da estrutura do dataframe iniciada...")
-        DataFrameValidator(RuleType.DATAFRAME_STRUCTURE, [RequiredColumns()]).execute(
-            df
-        )
-        # DtypeValidator(
-        #     RuleType.DATAFRAME_STRUCTURE,
-        #     [ColumnDType(column=col) for col in DF_COLUMNS],
-        # ).execute(df)
-        # RulesValidator(
-        #     RuleType.DATAFRAME_STRUCTURE,
-        #     [NotAllowedNullCount(column=col) for col in NOT_ALLOWED_NULL_COLUMNS],
-        # ).execute(df)
-        # logging.info("Validação da estrutura do dataframe finalizada...\n")
+        PipelineSteps(
+            settings=self.settings
+        ).execute_csv_ingestion().execute_dataframe_structure_validation()
 
         # logging.info("Estruturação de dados brutos iniciada...")
         # df = StructureData(self.settings).execute()

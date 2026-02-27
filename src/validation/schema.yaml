@@ -37,6 +37,17 @@ columns:
     not_null: True
     required: True
     min: 0.0
+  education_level:
+    dtype: String
+    not_null: True
+    required: True
+    values: [
+      "High School",
+      "Bachelor",
+      "Master",
+      "PhD",
+      "Associate Degree",
+    ]
   employment_status:
     dtype: String
     not_null: True
@@ -109,6 +120,7 @@ columns:
       "Tablet",
     ]
   budgeting_style:
+    dtype: String
     not_null: False
     required: True
     values: [
@@ -338,6 +350,7 @@ columns:
     required: True
     min: 0
   last_purchase_date:
+    dtype: Date
     not_null: True
     required: True
   social_sharing_frequency:

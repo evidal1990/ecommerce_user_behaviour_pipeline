@@ -8,7 +8,7 @@ class DataFrameValidator:
         self.rules = rules
         self.rule_type = rule_type
 
-    def execute(self, df) -> dict:
+    def execute(self, df) -> None:
         results = {}
         for rule in self.rules:
             result = rule.validate(df)
@@ -18,10 +18,6 @@ class DataFrameValidator:
                 f"[{self.rule_type.value}_RULES_VALIDATION]\n"
                 f"rule={rule.name()}\n"
                 f"status={status}\n"
-                f"total_columns={result['total_columns']}\n"
-                f"not_found_columns={result['not_found_columns']}\n"
-                f"not_found_percentage={result['not_found_percentage']}\n"
-                f"columns={result['columns']}"
             )
             log_lvl = (
                 logging.info
@@ -33,4 +29,3 @@ class DataFrameValidator:
                 )
             )
             log_lvl(message)
-        return results

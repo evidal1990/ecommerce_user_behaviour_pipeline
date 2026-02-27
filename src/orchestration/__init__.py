@@ -11,6 +11,7 @@ from .config.semantic_validation_config import (
     SEMANTIC_MIN_VALUE_COLUMNS,
     DATE_COLUMNS,
 )
+from .config.df_columns import DF_COLUMNS
 
 __all__ = [
     DF_COLUMNS,
@@ -18,5 +19,4 @@ __all__ = [
     RANGE_COLUMNS,
     LIST_OPTIONS_COLUMNS,
     SEMANTIC_MIN_VALUE_COLUMNS,
-    DATE_COLUMNS,
 ]

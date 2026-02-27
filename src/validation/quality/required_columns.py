@@ -1,7 +1,6 @@
-from typing import Any
 import polars as pl
 from pathlib import Path
-from src.utils import file_io, statistics
+from src.utils import file_io
 from src.validation.interfaces.rule import Rule
 from consts.validation_status import ValidationStatus
 
@@ -10,36 +9,21 @@ BASE_DIR = Path(__file__).resolve().parents[3]
 
 
 class RequiredColumns(Rule):
-    def __init__(self) -> None:
-        pass
+    def __init__(self, column: str, contract: dict) -> None:
+        self.column = column
+        self._contract = contract
 
     def name(self) -> str:
         return f"required_columns"
 
-    def dtype(self) -> Any:
-        return
-
     def validate(self, df: pl.DataFrame) -> dict:
-        total_columns = len(df.columns)
-        contract = self._load_contract()
-        columns = [col for col in contract["required_columns"] if col not in df.schema]
-        not_found_columns = len(columns)
-        if len(columns) == 0:
-            status = ValidationStatus.PASS
-            percentage = 0.0
-        else:
-            status = ValidationStatus.FAIL
-            percentage = statistics.get_percentage(
-                dividend=not_found_columns, divider=total_columns
-            )
+        required = self._contract["columns"][self.column].get("required", False)
+        if not required:
+            return {}
         return {
-            "status": status,
-            "total_columns": total_columns,
-            "not_found_columns": not_found_columns,
-            "not_found_percentage": percentage,
-            "columns": columns,
+            "status": (
+                ValidationStatus.PASS
+                if self.column in df.columns
+                else ValidationStatus.FAIL
+            )
         }
-
-    def _load_contract(self) -> dict:
-        contract_path = BASE_DIR / "src" / "transformation" / "bronze" / "schema.yaml"
-        return file_io.read_yaml(contract_path)
