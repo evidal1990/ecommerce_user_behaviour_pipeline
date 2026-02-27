@@ -9,19 +9,7 @@ from src.orchestration import (
     DATE_COLUMNS,
 )
 from src.orchestration.pipeline_steps import PipelineSteps
-from src.ingestion.csv_ingestion import CsvIngestion
-from src.transformation.bronze.structure_data import StructureData
-from src.validation import RulesValidator, DtypeValidator, DataFrameValidator
-from src.validation.semantic import (
-    DuplicatedUserId,
-    FutureDates,
-    MinValue,
-    EmployedWithoutIncome,
-    UnemployedUserWithIncome,
-    SelfEmployedWithoutIncome,
-)
-from src.validation.business import AllowedMinMaxValues, AllowedColumnValues
-from src.validation.quality import NotAllowedNullCount, RequiredColumns, ColumnDType
+from src.orchestration.executors.ingestion_executor import IngestionExecutor
 
 
 class Pipeline:
@@ -55,13 +43,13 @@ class Pipeline:
         Retorno:
             None
         """
-        PipelineSteps(
-            settings=self.settings
-        ).execute_csv_ingestion().execute_dataframe_structure_validation()
-
-        # logging.info("Estruturação de dados brutos iniciada...")
-        # df = StructureData(self.settings).execute()
-        # logging.info("Estruturação de dados brutos finalizada...\n")
+        IngestionExecutor(settings=self.settings).execute()
+        # (
+        #     PipelineSteps(settings=self.settings)
+        #     .execute_csv_ingestion()
+        #     .execute_dataframe_structure_validation()
+        #     .execute_data_structuring()
+        # )
 
         # logging.info("Validação de regras semânticas iniciada...")
         # RulesValidator(

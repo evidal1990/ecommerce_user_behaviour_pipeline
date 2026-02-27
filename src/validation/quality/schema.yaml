@@ -3,12 +3,16 @@ columns:
     dtype: Int64
     not_null: True
     required: True
+    semantic_rules: True
+    business_rules: False
   age:
     dtype: Int64
     not_null: True
     required: True
     min: 18
     max: 99
+    semantic_rules: False
+    business_rules: True
   gender:
     dtype: String
     not_null: True
@@ -19,10 +23,14 @@ columns:
       "Non-binary",
       "Other",
     ]
+    semantic_rules: False
+    business_rules: False
   country:
     dtype: String
     not_null: True
     required: True
+    semantic_rules: False
+    business_rules: False
   urban_rural:
     dtype: String
     not_null: True
@@ -32,11 +40,15 @@ columns:
       "Rural",
       "Suburban",
     ]
+    semantic_rules: False
+    business_rules: False
   income_level:
     dtype: Float64
     not_null: True
     required: True
     min: 0.0
+    semantic_rules: True
+    business_rules: False
   education_level:
     dtype: String
     not_null: True
@@ -48,6 +60,8 @@ columns:
       "PhD",
       "Associate Degree",
     ]
+    semantic_rules: False
+    business_rules: True
   employment_status:
     dtype: String
     not_null: True
@@ -59,6 +73,8 @@ columns:
       "Student",
       "Self-employed",
     ]
+    semantic_rules: True
+    business_rules: True
   relationship_status:
     dtype: String
     not_null: True
@@ -70,17 +86,23 @@ columns:
       "Divorced",
       "Widowed",
     ]
+    semantic_rules: False
+    business_rules: True
   has_children:
     dtype: Boolean
     not_null: True
     required: True
     values: [True,False]
+    semantic_rules: False
+    business_rules: True
   dtype: Int64
   household_size:
     dtype: Int64
     not_null: True
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   occupation:
     dtype: String
     not_null: True
@@ -90,6 +112,8 @@ columns:
       "Desktop",
       "Tablet",
     ]
+    semantic_rules: False
+    business_rules: True
   ethnicity:
     dtype: String
     not_null: False
@@ -106,10 +130,14 @@ columns:
       "Pacific",
       "Other",
     ]
+    semantic_rules: False
+    business_rules: True
   language_preference:
     dtype: String
     not_null: False
     required: True
+    semantic_rules: False
+    business_rules: False
   device_type:
     dtype: String
     not_null: True
@@ -119,6 +147,8 @@ columns:
       "Desktop",
       "Tablet",
     ]
+    semantic_rules: False
+    business_rules: True
   budgeting_style:
     dtype: String
     not_null: False
@@ -128,100 +158,136 @@ columns:
       "Moderate",
       "Loose",
     ]
+    semantic_rules: False
+    business_rules: True
   brand_loyalty_score:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   impulse_buying_score:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   environmental_consciousness:
     dtype: Boolean
     not_null: False
     required: True
     values: [True,False]
+    semantic_rules: False
+    business_rules: True
   health_conscious_shopping:
     dtype: Boolean
     not_null: False
     required: True
     values: [True,False]
+    semantic_rules: False
+    business_rules: True
   travel_frequency:
     dtype: Int64
     not_null: False
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   hobby_count:
     dtype: Int64
     not_null: False
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   social_media_influence_score:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   reading_habits:
     dtype: Int64
     not_null: False
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   exercise_frequency:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 7
+    semantic_rules: False
+    business_rules: True
   stress_from_financial_decisions:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   overall_stress_level:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   sleep_quality:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   physical_activity_level:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   mental_health_score:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
+    semantic_rules: False
+    business_rules: True
   weekly_purchases:
     dtype: Int64
     not_null: True
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   monthly_spend:
     dtype: Float64
     not_null: True
     required: True
     min: 0.0
+    semantic_rules: True
+    business_rules: False
   average_order_value:
     dtype: Float64
     not_null: False
     required: True
     min: 0.0
+    semantic_rules: True
+    business_rules: False
   preferred_payment_method:
     dtype: String
     not_null: True
@@ -235,22 +301,30 @@ columns:
       "Bank Transfer", 
       "Other", 
     ]
+    semantic_rules: False
+    business_rules: True
   coupon_usage_frequency:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 7
+    semantic_rules: False
+    business_rules: True
   loyalty_program_member:
     dtype: Boolean
     not_null: False
     required: True
     values: [True,False]
+    semantic_rules: False
+    business_rules: True
   referral_count:
     dtype: Int64
     not_null: True
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   product_category_preference:
     dtype: String
     not_null: True
@@ -266,6 +340,8 @@ columns:
       "Fashion",
       "Books",
     ]
+    semantic_rules: False
+    business_rules: True
   shopping_time_of_day:
     dtype: String
     not_null: false
@@ -276,6 +352,8 @@ columns:
       "Evening",
       "Night",
     ]
+    semantic_rules: False
+    business_rules: True
   weekend_shopper:
     dtype: Boolean
     not_null: False
@@ -287,92 +365,126 @@ columns:
     required: True
     min: 0
     max: 31
+    semantic_rules: False
+    business_rules: True
   browse_to_buy_ratio:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 100
+    semantic_rules: False
+    business_rules: True
   return_frequency:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 12
+    semantic_rules: False
+    business_rules: True
   return_rate:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
+    semantic_rules: False
+    business_rules: True
   daily_session_time_minutes:
     dtype: Int64
     not_null: True
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   product_views_per_day:
     dtype: Int64
     not_null: True
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   ad_views_per_day:
     dtype: Int64
     not_null: False
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   checkout_abandonments_per_month:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 31
+    semantic_rules: False
+    business_rules: True
   purchase_conversion_rate:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
+    semantic_rules: False
+    business_rules: True
   app_usage_frequency:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 7
+    semantic_rules: False
+    business_rules: True
   notification_response_rate:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
+    semantic_rules: False
+    business_rules: True
   account_age_months:
     dtype: Int64
     not_null: True
     required: True
     min: 0
+    semantic_rules: True
+    business_rules: False
   last_purchase_date:
     dtype: Date
     not_null: True
     required: True
+    semantic_rules: True
+    business_rules: False
   social_sharing_frequency:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 7
+    semantic_rules: False
+    business_rules: True
   premium_subscription:
     dtype: Boolean
     not_null: True
     required: True
     values: [True,False]
+    semantic_rules: False
+    business_rules: True
   cart_abandonment_rate:
     dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
+    semantic_rules: False
+    business_rules: True
   review_writing_frequency:
     dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 12
+    semantic_rules: False
+    business_rules: True

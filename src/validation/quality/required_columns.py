@@ -1,11 +1,6 @@
 import polars as pl
-from pathlib import Path
-from src.utils import file_io
 from src.validation.interfaces.rule import Rule
 from consts.validation_status import ValidationStatus
-
-
-BASE_DIR = Path(__file__).resolve().parents[3]
 
 
 class RequiredColumns(Rule):

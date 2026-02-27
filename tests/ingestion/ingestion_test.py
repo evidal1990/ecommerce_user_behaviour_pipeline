@@ -3,7 +3,7 @@ import polars as pl
 import pytest
 import re
 from datetime import datetime
-from src.ingestion.csv_ingestion import CsvIngestion
+from ingestion.csv import CsvIngestion
 
 
 def test_csv_ingestion() -> None:

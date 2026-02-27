@@ -1,4 +1,5 @@
 import logging
+from typing import Self
 import polars as pl
 from pathlib import Path
 from src.utils import file_io
@@ -10,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parents[3]
 
 
 class StructureData:
-    def __init__(self, settings) -> None:
+    def __init__(self, settings, contract: dict) -> None:
         """
         Inicializa o objeto StructureData com as configurações fornecidas.
 
@@ -20,11 +21,10 @@ class StructureData:
         Retorno:
             None
         """
-        self.df = None
         self._settings = settings["data"]["bronze"]
-        self._contract = self._load_contract()
+        self._contract = contract
 
-    def execute(self) -> pl.DataFrame:
+    def execute(self, df: pl.DataFrame) -> pl.DataFrame:
         """
         Executa o pipeline de estruturação de dados brutos.
 
@@ -41,17 +41,6 @@ class StructureData:
 
         return self.df
 
-    def _load_contract(self) -> dict:
-        """
-        Carrega o contrato de estrutura de dados brutos à partir de um arquivo YAML
-        com as configurações de estrutura de dados brutos.
-
-        Retorno:
-            dict: Contrato de estrutura o de dados brutos.
-        """
-        contract_path = BASE_DIR / "src" / "transformation" / "bronze" / "schema.yaml"
-        return file_io.read_yaml(contract_path)
-
     def _read_csv(self) -> pl.DataFrame:
         """
         Realiza a leitura de um arquivo CSV na camada raw e retorna um objeto
@@ -60,13 +49,14 @@ class StructureData:
         Retorno:
             pl.DataFrame: Dataframe Polars com os dados lidos do arquivo CSV.
         """
+        logging.info("Leitura de dados da camada raw iniciada")
         df = pl.read_csv(self._settings["origin"])
         if df.is_empty():
             raise ValueError("Dataframe de raw está vazio.")
         logging.info("Leitura de dados na raw concluída com sucesso.")
         return df
 
-    def _structure_data(self) -> None:
+    def _structure_data(self) -> Self:
         """
         Altera os tipos de dados do DataFrame com base nas configurações do contrato.
 
@@ -76,11 +66,15 @@ class StructureData:
         Retorno:
             None
         """
+        required = self._contract["columns"][self.column].get("required", False)
+        if not required:
+            return {}
         dtypes = self._contract["dtypes"]
 
         for key, value in dtypes.items():
             self.df = self.df.with_columns(pl.col(key).cast(DTYPES[value]))
         logging.info("Tipos de dados alterados com sucesso.")
+        return self
 
     def _rename_columns(self) -> None:
         """
@@ -92,6 +86,7 @@ class StructureData:
         for key, value in self._contract["from-to"].items():
             self.df = self.df.rename({key: value})
         logging.info(f"Colunas renomeadas com sucesso: {self.df.columns}")
+        return self
 
     def _write_bronze(self) -> None:
         """
@@ -105,3 +100,4 @@ class StructureData:
             Path(path).parent.mkdir()
         self.df.write_csv(path)
         logging.info("Escrita de dados na camada bronze concluída com sucesso")
+        return self

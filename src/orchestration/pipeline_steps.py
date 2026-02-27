@@ -3,15 +3,7 @@ from typing import Self
 from pathlib import Path
 from consts.rule_type import RuleType
 from src.utils import file_io
-from src.orchestration import (
-    DF_COLUMNS,
-    NOT_ALLOWED_NULL_COLUMNS,
-    RANGE_COLUMNS,
-    LIST_OPTIONS_COLUMNS,
-    SEMANTIC_MIN_VALUE_COLUMNS,
-    DATE_COLUMNS,
-)
-from src.ingestion.csv_ingestion import CsvIngestion
+from src.orchestration import DF_COLUMNS
 from src.transformation.bronze.structure_data import StructureData
 from src.validation import RulesValidator, DtypeValidator, DataFrameValidator
 from src.validation.semantic import (
@@ -32,18 +24,16 @@ class PipelineSteps:
     def __init__(self, settings) -> None:
         self.df = None
         self.settings = settings
-        self.contract = self._load_contract()
+        self.contract = None
 
-    def _load_contract(self):
-        return file_io.read_yaml(BASE_DIR / "src" / "validation" / "schema.yaml")
-
-    def execute_csv_ingestion(self) -> Self:
-        logging.info("Ingestão de CSV iniciada...")
-        self.df = CsvIngestion(self.settings).execute()
-        logging.info("Ingestão de CSV finalizada...\n")
-        return self
+    def _load_contract(self, path: str) -> dict:
+        return file_io.read_yaml(path)
 
     def execute_dataframe_structure_validation(self) -> Self:
+        logging.info("Validação da estrutura do dataframe iniciada")
+        self.contract = self._load_contract(
+            BASE_DIR / "src" / "validation" / "quality" / "schema.yaml"
+        )
         DataFrameValidator(
             RuleType.DATAFRAME_STRUCTURE,
             [RequiredColumns(column=col, contract=self.contract) for col in DF_COLUMNS],
@@ -56,4 +46,17 @@ class PipelineSteps:
             RuleType.DATAFRAME_STRUCTURE,
             [NotAllowedNullCount(column=col) for col in DF_COLUMNS],
         ).execute(self.df)
+        logging.info("Validação da estrutura do dataframe finalizada\n")
         return self
+
+    def execute_data_structuring(self) -> Self:
+        logging.info("Estruturação de dados brutos iniciada")
+        self.df = StructureData(self.settings).execute()
+        logging.info("Estruturação de dados brutos finalizada\n")
+
+    def execute_semantic_validation(self) -> Self:
+        logging.info("Validação das regras semânticas iniciada")
+        self.contract = self._load_contract(
+            BASE_DIR / "src" / "validation" / "semantic" / "schema.yaml"
+        )
+        logging.info("Validação das regras semânticas finalizada")
