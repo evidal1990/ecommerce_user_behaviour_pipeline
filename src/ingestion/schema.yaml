@@ -1,120 +1,277 @@
-required_columns:
-  - user_id
-  - age
-  - gender
-  - country
-  - urban_rural
-  - income_level
-  - employment_status
-  - education_level
-  - relationship_status
-  - has_children
-  - household_size
-  - occupation
-  - ethnicity
-  - language_preference
-  - device_type
-  - budgeting_style
-  - brand_loyalty_score
-  - impulse_buying_score
-  - environmental_consciousness
-  - health_conscious_shopping
-  - travel_frequency
-  - hobby_count
-  - social_media_influence_score
-  - reading_habits
-  - exercise_frequency
-  - stress_from_financial_decisions
-  - overall_stress_level
-  - sleep_quality
-  - physical_activity_level
-  - mental_health_score
-  - weekly_purchases
-  - monthly_spend
-  - average_order_value
-  - preferred_payment_method
-  - coupon_usage_frequency
-  - loyalty_program_member
-  - referral_count
-  - product_category_preference
-  - shopping_time_of_day
-  - weekend_shopper
-  - impulse_purchases_per_month
-  - browse_to_buy_ratio
-  - return_frequency
-  - return_rate
-  - daily_session_time_minutes
-  - product_views_per_day
-  - ad_views_per_day
-  - wishlist_items_count
-  - cart_items_average
-  - checkout_abandonments_per_month
-  - purchase_conversion_rate
-  - app_usage_frequency
-  - notification_response_rate
-  - account_age_months
-  - last_purchase_date
-  - social_sharing_frequency
-  - premium_subscription
-  - cart_abandonment_rate
-  - review_writing_frequency
-
-dtypes:
-  user_id: Int64
-  age: Int64
-  gender: String
-  country: String
-  income_level: Float64
-  employment_status: String
-  education_level: String
-  relationship_status: String
-  has_children: Boolean
-  household_size: Int64
-  occupation: String
-  ethnicity: String
-  language_preference: String
-  device_type: String
-  budgeting_style: String
-  brand_loyalty_score: Int64
-  impulse_buying_score: Int64
-  environmental_consciousness: Boolean
-  health_conscious_shopping: Boolean
-  travel_frequency: Int64
-  hobby_count: Int64
-  social_media_influence_score: Int64
-  reading_habits: Int64
-  exercise_frequency: Int64
-  stress_from_financial_decisions: Int64
-  overall_stress_level: Int64
-  sleep_quality: Int64
-  physical_activity_level: Int64
-  mental_health_score: Int64
-  weekly_purchases: Int64
-  monthly_spend: Float64
-  average_order_value: Float64
-  preferred_payment_method: String
-  coupon_usage_frequency: Int64
-  loyalty_program_member: Boolean
-  referral_count: String
-  product_category_preference: String
-  shopping_time_of_day: String
-  weekend_shopper: Boolean
-  impulse_purchases_per_month: Int64
-  browse_to_buy_ratio: Int64
-  return_frequency: Int64
-  return_rate: Int64
-  daily_session_time_minutes: Int64
-  product_views_per_day: Int64
-  ad_views_per_day: Int64
-  wishlist_items_count: Int64
-  cart_items_average: Int64
-  checkout_abandonments_per_month: Int64
-  purchase_conversion_rate: Int64
-  app_usage_frequency: Int64
-  notification_response_rate: Int64
-  account_age_months: Int64
-  last_purchase_date: Date
-  social_sharing_frequency: Int64
-  premium_subscription: Boolean
-  cart_abandonment_rate: Int64
-  review_writing_frequency: Int64
+columns:
+  user_id:
+    not_null: True
+    required: True
+  age:
+    not_null: True
+    required: True
+    min: 18
+    max: 99
+  gender:
+    not_null: True
+    required: True
+    values: ["Male","Female","Non-binary","Other",]
+  country:
+    not_null: True
+    required: True
+  urban_rural:
+    not_null: True
+    required: True
+    values: ["Urban","Rural","Suburban",]
+  income_level:
+    not_null: True
+    required: True
+    min: 0.0
+  employment_status:
+    not_null: True
+    required: True
+    values: ["Employed","Unemployed","Retired","Student","Self-employed",]
+  relationship_status:
+    not_null: True
+    required: True
+    values: ["Single","In a relationship","Married","Divorced","Widowed",]
+  has_children:
+    not_null: True
+    required: True
+    values: [True,False]
+  household_size:
+    not_null: True
+    required: True
+    min: 0
+  occupation:
+    not_null: True
+    required: True
+    values: ["Mobile","Desktop","Tablet",]
+  ethnicity:
+    not_null: False
+    required: True
+    values: [
+      "African",
+      "African American",
+      "Caucasian",
+      "Asian",
+      "Indigebous/Native",
+      "Arabic",
+      "Jewish",
+      "Hispanic",
+      "Pacific",
+      "Other",
+    ]
+  language_preference:
+    not_null: False
+    required: True
+  device_type:
+    not_null: True
+    required: True
+    values: ["Mobile","Desktop","Tablet",]
+  budgeting_style:
+    not_null: False
+    required: True
+    values: ["Strict","Moderate","Loose",]
+  brand_loyalty_score:
+    not_null: True
+    required: True
+    min: 0
+    max: 10
+  impulse_buying_score:
+    not_null: False
+    required: True
+    min: 0
+    max: 10
+  environmental_consciousness:
+    not_null: False
+    required: True
+    values: [True,False]
+  health_conscious_shopping:
+    not_null: False
+    required: True
+    values: [True,False]
+  travel_frequency:
+    not_null: False
+    required: True
+    min: 0
+  hobby_count:
+    not_null: False
+    required: True
+    min: 0
+  social_media_influence_score:
+    not_null: False
+    required: True
+    min: 0
+    max: 10
+  reading_habits:
+    not_null: False
+    required: True
+    min: 0
+  exercise_frequency:
+    not_null: False
+    required: True
+    min: 0
+    max: 7
+  stress_from_financial_decisions:
+    not_null: False
+    required: True
+    min: 0
+    max: 10
+  overall_stress_level:
+    not_null: False
+    required: True
+    min: 0
+    max: 10
+  sleep_quality:
+    not_null: False
+    required: True
+    min: 0
+    max: 10
+  physical_activity_level:
+    not_null: False
+    required: True
+    min: 0
+    max: 10
+  mental_health_score:
+    not_null: False
+    required: True
+    min: 0
+    max: 10
+  weekly_purchases:
+    not_null: True
+    required: True
+    min: 0
+  monthly_spend:
+    not_null: True
+    required: True
+    min: 0.0
+  average_order_value:
+    not_null: False
+    required: True
+    min: 0
+  preferred_payment_method:
+    not_null: True
+    required: True
+    values: [
+      "Credit Card",
+      "Debit Card", 
+      "Apple Pay", 
+      "Google Pay", 
+      "PayPal", 
+      "Bank Transfer", 
+      "Other", 
+    ]
+  coupon_usage_frequency:
+    not_null: True
+    required: True
+    min: 0
+    max: 7
+  loyalty_program_member:
+    not_null: False
+    required: True
+    values: [True,False]
+  referral_count:
+    not_null: True
+    required: True
+    min: 0
+  product_category_preference:
+    not_null: True
+    required: True
+    values: [
+      "Groceries",
+      "Beauty",
+      "Toys",
+      "Home & Health",
+      "Home & Kitchen",
+      "Sports",
+      "Electronics",
+      "Fashion",
+      "Books",
+    ]
+  shopping_time_of_day:
+    not_null: false
+    required: True
+    values: [
+      "Morning",
+      "Afternoon",
+      "Evening",
+      "Night",
+    ]
+  weekend_shopper:
+    not_null: False
+    required: True
+    values: [True,False]
+  impulse_purchases_per_month:
+    not_null: True
+    required: True
+    min: 0
+    max: 31
+  browse_to_buy_ratio:
+    not_null: False
+    required: True
+    min: 0
+    max: 100
+  return_frequency:
+    not_null: True
+    required: True
+    min: 0
+    max: 12
+  return_rate:
+    not_null: True
+    required: True
+    min: 0
+    max: 100
+  daily_session_time_minutes:
+    not_null: True
+    required: True
+    min: 0
+  product_views_per_day:
+    not_null: True
+    required: True
+    min: 0
+  ad_views_per_day:
+    not_null: False
+    required: True
+    min: 0
+  checkout_abandonments_per_month:
+    not_null: True
+    required: True
+    min: 0
+    max: 31
+  purchase_conversion_rate:
+    not_null: True
+    required: True
+    min: 0
+    max: 100
+  app_usage_frequency:
+    not_null: True
+    required: True
+    min: 0
+    max: 7
+  notification_response_rate:
+    not_null: True
+    required: True
+    min: 0
+    max: 100
+  account_age_months:
+    not_null: True
+    required: True
+    min: 0
+  last_purchase_date:
+    not_null: True
+    required: True
+  social_sharing_frequency:
+    not_null: False
+    required: True
+    min: 0
+    max: 7
+  premium_subscription:
+    not_null: True
+    required: True
+    values: [True,False]
+  cart_abandonment_rate:
+    not_null: True
+    required: True
+    min: 0
+    max: 100
+  review_writing_frequency:
+    not_null: False
+    required: True
+    min: 0
+    max: 12
