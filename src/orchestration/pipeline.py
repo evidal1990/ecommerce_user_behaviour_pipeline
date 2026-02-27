@@ -1,15 +1,8 @@
 import logging
-from consts.rule_type import RuleType
-from src.orchestration import (
-    DF_COLUMNS,
-    NOT_ALLOWED_NULL_COLUMNS,
-    RANGE_COLUMNS,
-    LIST_OPTIONS_COLUMNS,
-    SEMANTIC_MIN_VALUE_COLUMNS,
-    DATE_COLUMNS,
-)
-from src.orchestration.pipeline_steps import PipelineSteps
 from src.orchestration.executors.ingestion_executor import IngestionExecutor
+from src.orchestration.executors.dataframe_validation_executor import (
+    DataFrameValidatorExecutor,
+)
 
 
 class Pipeline:
@@ -43,13 +36,10 @@ class Pipeline:
         Retorno:
             None
         """
-        IngestionExecutor(settings=self.settings).execute()
-        # (
-        #     PipelineSteps(settings=self.settings)
-        #     .execute_csv_ingestion()
-        #     .execute_dataframe_structure_validation()
-        #     .execute_data_structuring()
-        # )
+        logging.info("Pipeline iniciada")
+        df_after_ingestion = IngestionExecutor(settings=self.settings).execute()
+        DataFrameValidatorExecutor().execute(df_after_ingestion)
+        logging.info("Pipeline finalizada")
 
         # logging.info("Validação de regras semânticas iniciada...")
         # RulesValidator(
