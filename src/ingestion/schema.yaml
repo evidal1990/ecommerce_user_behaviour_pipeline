@@ -1,48 +1,86 @@
 columns:
   user_id:
+    dtype: Int64
     not_null: True
     required: True
   age:
+    dtype: Int64
     not_null: True
     required: True
     min: 18
     max: 99
   gender:
+    dtype: String
     not_null: True
     required: True
-    values: ["Male","Female","Non-binary","Other",]
+    values: [
+      "Male",
+      "Female",
+      "Non-binary",
+      "Other",
+    ]
   country:
+    dtype: String
     not_null: True
     required: True
   urban_rural:
+    dtype: String
     not_null: True
     required: True
-    values: ["Urban","Rural","Suburban",]
+    values: [
+      "Urban",
+      "Rural",
+      "Suburban",
+    ]
   income_level:
+    dtype: Float64
     not_null: True
     required: True
     min: 0.0
   employment_status:
+    dtype: String
     not_null: True
     required: True
-    values: ["Employed","Unemployed","Retired","Student","Self-employed",]
+    values: [
+      "Employed",
+      "Unemployed",
+      "Retired",
+      "Student",
+      "Self-employed",
+    ]
   relationship_status:
+    dtype: String
     not_null: True
     required: True
-    values: ["Single","In a relationship","Married","Divorced","Widowed",]
+    values: [
+      "Single",
+      "In a relationship",
+      "Married",
+      "Divorced",
+      "Widowed",
+    ]
   has_children:
+    dtype: Boolean
     not_null: True
     required: True
     values: [True,False]
+  dtype: Int64
   household_size:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
   occupation:
+    dtype: String
     not_null: True
     required: True
-    values: ["Mobile","Desktop","Tablet",]
+    values: [
+      "Mobile",
+      "Desktop",
+      "Tablet",
+    ]
   ethnicity:
+    dtype: String
     not_null: False
     required: True
     values: [
@@ -58,94 +96,122 @@ columns:
       "Other",
     ]
   language_preference:
+    dtype: String
     not_null: False
     required: True
   device_type:
+    dtype: String
     not_null: True
     required: True
-    values: ["Mobile","Desktop","Tablet",]
+    values: [
+      "Mobile",
+      "Desktop",
+      "Tablet",
+    ]
   budgeting_style:
     not_null: False
     required: True
-    values: ["Strict","Moderate","Loose",]
+    values: [
+      "Strict",
+      "Moderate",
+      "Loose",
+    ]
   brand_loyalty_score:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 10
   impulse_buying_score:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
   environmental_consciousness:
+    dtype: Boolean
     not_null: False
     required: True
     values: [True,False]
   health_conscious_shopping:
+    dtype: Boolean
     not_null: False
     required: True
     values: [True,False]
   travel_frequency:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
   hobby_count:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
   social_media_influence_score:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
   reading_habits:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
   exercise_frequency:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 7
   stress_from_financial_decisions:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
   overall_stress_level:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
   sleep_quality:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
   physical_activity_level:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
   mental_health_score:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 10
   weekly_purchases:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
   monthly_spend:
+    dtype: Float64
     not_null: True
     required: True
     min: 0.0
   average_order_value:
+    dtype: Float64
     not_null: False
     required: True
-    min: 0
+    min: 0.0
   preferred_payment_method:
+    dtype: String
     not_null: True
     required: True
     values: [
@@ -158,19 +224,23 @@ columns:
       "Other", 
     ]
   coupon_usage_frequency:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 7
   loyalty_program_member:
+    dtype: Boolean
     not_null: False
     required: True
     values: [True,False]
   referral_count:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
   product_category_preference:
+    dtype: String
     not_null: True
     required: True
     values: [
@@ -185,6 +255,7 @@ columns:
       "Books",
     ]
   shopping_time_of_day:
+    dtype: String
     not_null: false
     required: True
     values: [
@@ -194,62 +265,75 @@ columns:
       "Night",
     ]
   weekend_shopper:
+    dtype: Boolean
     not_null: False
     required: True
     values: [True,False]
   impulse_purchases_per_month:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 31
   browse_to_buy_ratio:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 100
   return_frequency:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 12
   return_rate:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
   daily_session_time_minutes:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
   product_views_per_day:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
   ad_views_per_day:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
   checkout_abandonments_per_month:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 31
   purchase_conversion_rate:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
   app_usage_frequency:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 7
   notification_response_rate:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
   account_age_months:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
@@ -257,20 +341,24 @@ columns:
     not_null: True
     required: True
   social_sharing_frequency:
+    dtype: Int64
     not_null: False
     required: True
     min: 0
     max: 7
   premium_subscription:
+    dtype: Boolean
     not_null: True
     required: True
     values: [True,False]
   cart_abandonment_rate:
+    dtype: Int64
     not_null: True
     required: True
     min: 0
     max: 100
   review_writing_frequency:
+    dtype: Int64
     not_null: False
     required: True
     min: 0

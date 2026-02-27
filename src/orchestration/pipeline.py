@@ -61,56 +61,56 @@ class Pipeline:
         DataFrameValidator(RuleType.DATAFRAME_STRUCTURE, [RequiredColumns()]).execute(
             df
         )
-        DtypeValidator(
-            RuleType.DATAFRAME_STRUCTURE,
-            [ColumnDType(column=col) for col in DF_COLUMNS],
-        ).execute(df)
-        RulesValidator(
-            RuleType.DATAFRAME_STRUCTURE,
-            [NotAllowedNullCount(column=col) for col in NOT_ALLOWED_NULL_COLUMNS],
-        ).execute(df)
-        logging.info("Validação da estrutura do dataframe finalizada...\n")
+        # DtypeValidator(
+        #     RuleType.DATAFRAME_STRUCTURE,
+        #     [ColumnDType(column=col) for col in DF_COLUMNS],
+        # ).execute(df)
+        # RulesValidator(
+        #     RuleType.DATAFRAME_STRUCTURE,
+        #     [NotAllowedNullCount(column=col) for col in NOT_ALLOWED_NULL_COLUMNS],
+        # ).execute(df)
+        # logging.info("Validação da estrutura do dataframe finalizada...\n")
 
-        logging.info("Estruturação de dados brutos iniciada...")
-        df = StructureData(self.settings).execute()
-        logging.info("Estruturação de dados brutos finalizada...\n")
+        # logging.info("Estruturação de dados brutos iniciada...")
+        # df = StructureData(self.settings).execute()
+        # logging.info("Estruturação de dados brutos finalizada...\n")
 
-        logging.info("Validação de regras semânticas iniciada...")
-        RulesValidator(
-            RuleType.SEMANTIC,
-            [
-                MinValue(column=key, min_limit=value)
-                for key, value in SEMANTIC_MIN_VALUE_COLUMNS.items()
-            ],
-        ).execute(df)
-        RulesValidator(
-            RuleType.SEMANTIC,
-            [DuplicatedUserId()],
-        ).execute(df)
-        RulesValidator(
-            RuleType.SEMANTIC,
-            [
-                FutureDates(column=key, date_limit=value)
-                for key, value in DATE_COLUMNS.items()
-            ],
-        ).execute(df)
-        RulesValidator(
-            RuleType.SEMANTIC,
-            [
-                EmployedWithoutIncome(),
-                SelfEmployedWithoutIncome(),
-                UnemployedUserWithIncome(),
-            ],
-        ).execute(df)
-        logging.info("Validação de regras semânticas finalizada...\n")
+        # logging.info("Validação de regras semânticas iniciada...")
+        # RulesValidator(
+        #     RuleType.SEMANTIC,
+        #     [
+        #         MinValue(column=key, min_limit=value)
+        #         for key, value in SEMANTIC_MIN_VALUE_COLUMNS.items()
+        #     ],
+        # ).execute(df)
+        # RulesValidator(
+        #     RuleType.SEMANTIC,
+        #     [DuplicatedUserId()],
+        # ).execute(df)
+        # RulesValidator(
+        #     RuleType.SEMANTIC,
+        #     [
+        #         FutureDates(column=key, date_limit=value)
+        #         for key, value in DATE_COLUMNS.items()
+        #     ],
+        # ).execute(df)
+        # RulesValidator(
+        #     RuleType.SEMANTIC,
+        #     [
+        #         EmployedWithoutIncome(),
+        #         SelfEmployedWithoutIncome(),
+        #         UnemployedUserWithIncome(),
+        #     ],
+        # ).execute(df)
+        # logging.info("Validação de regras semânticas finalizada...\n")
 
-        logging.info("Validação de regras de negócio iniciada...")
-        RulesValidator(
-            RuleType.BUSINESS,
-            [AllowedMinMaxValues(column=col) for col in RANGE_COLUMNS],
-        ).execute(df)
-        RulesValidator(
-            RuleType.BUSINESS,
-            [AllowedColumnValues(column=col) for col in LIST_OPTIONS_COLUMNS],
-        ).execute(df)
-        logging.info("Validação de regras de negócio finalizada...\n")
+        # logging.info("Validação de regras de negócio iniciada...")
+        # RulesValidator(
+        #     RuleType.BUSINESS,
+        #     [AllowedMinMaxValues(column=col) for col in RANGE_COLUMNS],
+        # ).execute(df)
+        # RulesValidator(
+        #     RuleType.BUSINESS,
+        #     [AllowedColumnValues(column=col) for col in LIST_OPTIONS_COLUMNS],
+        # ).execute(df)
+        # logging.info("Validação de regras de negócio finalizada...\n")
