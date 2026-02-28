@@ -96,7 +96,6 @@ columns:
     values: [True,False]
     semantic_rules: False
     business_rules: True
-  dtype: Int64
   household_size:
     dtype: Int64
     not_null: True

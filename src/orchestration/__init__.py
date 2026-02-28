@@ -4,7 +4,7 @@ from .config.dataframe_validation_config import (
 from .config.df_columns import DF_COLUMNS
 from .executors.ingestion_executor import IngestionExecutor
 from src.transformation.bronze.data_structuring import DataStructuring
-from src.transformation.bronze.fix_columns_dtypes import FixColumnsDTypes
+from src.transformation.bronze.fixes.fix_columns_dtypes import FixColumnsDTypes
 
 __all__ = [
     DF_COLUMNS,
