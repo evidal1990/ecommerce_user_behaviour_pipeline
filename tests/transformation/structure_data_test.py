@@ -1,7 +1,7 @@
 import polars as pl
 import pytest
 from datetime import datetime
-from src.transformation.bronze.structure_data import StructureData
+from transformation.bronze.data_structuring_old import StructureData
 
 
 def test_data_transformation() -> None:

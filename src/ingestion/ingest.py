@@ -20,7 +20,7 @@ class Ingest:
                 f"from={result["from"]}\n"
                 f"to={result["to"]}\n"
             )
-            if not result["dataset_found"]:
+            if result["dataset_found"]:
                 raise ValueError("Dataframe de origem está vazio.")
             log_lvl = (
                 logging.info

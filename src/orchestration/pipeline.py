@@ -3,6 +3,9 @@ from src.orchestration.executors.ingestion_executor import IngestionExecutor
 from src.orchestration.executors.dataframe_validation_executor import (
     DataFrameValidatorExecutor,
 )
+from src.orchestration.executors.data_structuring_executor import (
+    DataStructuringExecutor,
+)
 
 
 class Pipeline:
@@ -39,6 +42,7 @@ class Pipeline:
         logging.info("Pipeline iniciada")
         df_after_ingestion = IngestionExecutor(settings=self.settings).execute()
         DataFrameValidatorExecutor().execute(df_after_ingestion)
+        DataStructuringExecutor(self.settings).execute(df_after_ingestion)
         logging.info("Pipeline finalizada")
 
         # logging.info("Validação de regras semânticas iniciada...")

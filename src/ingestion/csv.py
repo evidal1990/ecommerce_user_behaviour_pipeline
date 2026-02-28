@@ -36,18 +36,16 @@ class CsvIngestion(IngestInterface):
         """
         self.df = pl.read_csv(self.origin)
         df_is_empty = self.df.is_empty()
-        if df_is_empty:
+        if self.df.is_empty():
             status = IngestionStatus.FAIL
-            dataset_found = False
         else:
             status = IngestionStatus.PASS
-            dataset_found = True
         path = self._settings["destination"]
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         self.df.write_csv(path)
         return {
             "status": status,
-            "dataset_found": dataset_found,
+            "dataset_found": df_is_empty,
             "dataframe": self.df,
             "from": self.origin,
             "to": path,

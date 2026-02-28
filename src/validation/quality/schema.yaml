@@ -49,6 +49,7 @@ columns:
     min: 0.0
     semantic_rules: True
     business_rules: False
+    rename: annual_income
   education_level:
     dtype: String
     not_null: True
@@ -183,6 +184,7 @@ columns:
     values: [True,False]
     semantic_rules: False
     business_rules: True
+    rename: has_environmental_consciousness
   health_conscious_shopping:
     dtype: Boolean
     not_null: False
@@ -190,6 +192,7 @@ columns:
     values: [True,False]
     semantic_rules: False
     business_rules: True
+    rename: has_health_conscious_shopping
   travel_frequency:
     dtype: Int64
     not_null: False
@@ -197,6 +200,7 @@ columns:
     min: 0
     semantic_rules: True
     business_rules: False
+    rename: travel_frequency_per_year
   hobby_count:
     dtype: Int64
     not_null: False
@@ -219,6 +223,7 @@ columns:
     min: 0
     semantic_rules: True
     business_rules: False
+    rename: reading_habits_per_month
   exercise_frequency:
     dtype: Int64
     not_null: False
@@ -227,6 +232,7 @@ columns:
     max: 7
     semantic_rules: False
     business_rules: True
+    rename: exercise_frequency_per_week
   stress_from_financial_decisions:
     dtype: Int64
     not_null: False
@@ -235,6 +241,7 @@ columns:
     max: 10
     semantic_rules: False
     business_rules: True
+    rename: stress_from_financial_decisions_level
   overall_stress_level:
     dtype: Int64
     not_null: False
@@ -251,6 +258,7 @@ columns:
     max: 10
     semantic_rules: False
     business_rules: True
+    rename: sleep_quality_level
   physical_activity_level:
     dtype: Int64
     not_null: False
@@ -318,6 +326,7 @@ columns:
     values: [True,False]
     semantic_rules: False
     business_rules: True
+    rename: is_loyalty_program_member
   referral_count:
     dtype: Int64
     not_null: True
@@ -359,6 +368,7 @@ columns:
     not_null: False
     required: True
     values: [True,False]
+    rename: is_weekend_shopper
   impulse_purchases_per_month:
     dtype: Int64
     not_null: True
@@ -383,6 +393,7 @@ columns:
     max: 12
     semantic_rules: False
     business_rules: True
+    rename: return_frequency_per_year
   return_rate:
     dtype: Int64
     not_null: True
@@ -436,6 +447,7 @@ columns:
     max: 7
     semantic_rules: False
     business_rules: True
+    rename: app_usage_frequency_per_week
   notification_response_rate:
     dtype: Int64
     not_null: True
@@ -465,6 +477,7 @@ columns:
     max: 7
     semantic_rules: False
     business_rules: True
+    rename: social_sharing_frequency_per_week
   premium_subscription:
     dtype: Boolean
     not_null: True
@@ -488,3 +501,4 @@ columns:
     max: 12
     semantic_rules: False
     business_rules: True
+    rename: review_writing_frequency_per_year

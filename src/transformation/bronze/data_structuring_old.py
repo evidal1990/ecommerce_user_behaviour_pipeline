@@ -4,13 +4,15 @@ import polars as pl
 from pathlib import Path
 from src.utils import file_io
 from consts.dtypes import DTypes
+from consts.action_status import ActionStatus
+from src.transformation.bronze.fix_columns_dtypes import FixColumnsDTypes
 
 DTYPES = DTypes.as_dict()
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 
 
-class StructureData:
+class DataStructuring:
     def __init__(self, settings, contract: dict) -> None:
         """
         Inicializa o objeto StructureData com as configurações fornecidas.
@@ -22,7 +24,6 @@ class StructureData:
             None
         """
         self._settings = settings["data"]["bronze"]
-        self._contract = contract
 
     def execute(self, df: pl.DataFrame) -> pl.DataFrame:
         """
@@ -34,10 +35,16 @@ class StructureData:
         Retorno:
             pl.DataFrame: Dataframe com os dados estruturados na camada bronze.
         """
-        self.df = self._read_csv()
-        self._structure_data()
-        self._rename_columns()
-        self._write_bronze()
+        self.contract = file_io.read_yaml(
+            BASE_DIR / "src" / "validation" / "quality" / "schema.yaml"
+        )
+        fix_columns_dtypes_result = FixColumnsDTypes(self.contract).execute(df)
+        log_lvl = (
+            logging.info
+            if status == ActionStatus.PASS
+            else (logging.warning if status == ActionStatus.WARN else logging.error)
+        )
+        log_lvl(fix_columns_dtypes_result)
 
         return self.df
 
