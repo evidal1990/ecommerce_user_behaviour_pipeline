@@ -6,16 +6,15 @@ from src.utils import dataframe, statistics
 
 class DuplicatedUserId(Rule):
     def __init__(self, sample_size: int = 10) -> None:
-        self.column = "user_id"
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return "duplicated_user_id"
+        return "DUPLICATED_USER_ID"
 
     def validate(self, df: pl.DataFrame) -> dict:
         total_records = df.shape[0]
         users = (
-            df[self.column].filter(df[self.column].is_duplicated()).unique().to_list()
+            df["user_id"].filter(df["user_id"].is_duplicated()).unique().to_list()
         )
         users_total = len(users)
         if users_total == 0:
@@ -25,7 +24,7 @@ class DuplicatedUserId(Rule):
         else:
             status = ValidationStatus.FAIL
             sample = dataframe.get_df_sample(
-                df=users, column=self.column, sample_size=self.sample_size
+                df=users, column="user_id", sample_size=self.sample_size
             )
             percentage = statistics.get_percentage(
                 dividend=users_total, divider=total_records

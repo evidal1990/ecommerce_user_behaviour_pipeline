@@ -1,11 +1,8 @@
 import logging
-from src.orchestration.executors.ingestion_executor import IngestionExecutor
-from src.orchestration.executors.dataframe_validation_executor import (
-    DataFrameValidatorExecutor,
-)
-from src.orchestration.executors.data_structuring_executor import (
-    DataStructuringExecutor,
-)
+from .executors.ingestion_executor import IngestionExecutor
+from .executors.dataframe_validation_executor import DataFrameValidatorExecutor
+from .executors.data_structuring_executor import DataStructuringExecutor
+from .executors.semantic_rules_executor import SemanticRulesExecutor
 
 
 class Pipeline:
@@ -40,39 +37,21 @@ class Pipeline:
             None
         """
         logging.info("Pipeline iniciada")
-        df_after_ingestion = IngestionExecutor(settings=self.settings).execute()
-        DataFrameValidatorExecutor().execute(df_after_ingestion)
-        DataStructuringExecutor(self.settings).execute(df_after_ingestion)
+        df_after_ingestion = IngestionExecutor(
+            settings=self.settings,
+        ).execute()
+        DataFrameValidatorExecutor().execute(
+            df=df_after_ingestion,
+        )
+        df_after_data_structuring = DataStructuringExecutor(
+            self.settings,
+        ).execute(
+            df=df_after_ingestion,
+        )
+        SemanticRulesExecutor().execute(
+            df=df_after_data_structuring,
+        )
         logging.info("Pipeline finalizada")
-
-        # logging.info("Validação de regras semânticas iniciada...")
-        # RulesValidator(
-        #     RuleType.SEMANTIC,
-        #     [
-        #         MinValue(column=key, min_limit=value)
-        #         for key, value in SEMANTIC_MIN_VALUE_COLUMNS.items()
-        #     ],
-        # ).execute(df)
-        # RulesValidator(
-        #     RuleType.SEMANTIC,
-        #     [DuplicatedUserId()],
-        # ).execute(df)
-        # RulesValidator(
-        #     RuleType.SEMANTIC,
-        #     [
-        #         FutureDates(column=key, date_limit=value)
-        #         for key, value in DATE_COLUMNS.items()
-        #     ],
-        # ).execute(df)
-        # RulesValidator(
-        #     RuleType.SEMANTIC,
-        #     [
-        #         EmployedWithoutIncome(),
-        #         SelfEmployedWithoutIncome(),
-        #         UnemployedUserWithIncome(),
-        #     ],
-        # ).execute(df)
-        # logging.info("Validação de regras semânticas finalizada...\n")
 
         # logging.info("Validação de regras de negócio iniciada...")
         # RulesValidator(

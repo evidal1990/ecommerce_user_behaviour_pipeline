@@ -11,7 +11,7 @@ class MinValue(Rule):
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return "min_value"
+        return f"MIN_VALUE_{self.column}"
 
     def validate(self, df: pl.DataFrame) -> dict:
         total_records = df.shape[0]

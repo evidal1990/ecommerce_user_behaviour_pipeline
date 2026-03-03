@@ -42,14 +42,13 @@ columns:
     ]
     semantic_rules: False
     business_rules: False
-  income_level:
+  annual_income:
     dtype: Float64
     not_null: True
     required: True
     min: 0.0
     semantic_rules: True
     business_rules: False
-    rename: annual_income
   education_level:
     dtype: String
     not_null: True

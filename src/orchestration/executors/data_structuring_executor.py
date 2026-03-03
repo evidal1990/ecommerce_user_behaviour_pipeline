@@ -20,18 +20,24 @@ class DataStructuringExecutor:
             df,
             [
                 FixColumnsDTypes(
-                    contract=contract,
+                    contract=contract
                 ),
                 RenameColumns(
-                    contract=contract,
+                    contract=contract
                 ),
             ],
         ).execute()
         self._write_bronze(df_structured)
         logging.info("Validação semântica do dataframe finalizada\n")
+        return df_structured
 
     def _set_contract(self) -> dict:
-        path = BASE_DIR.joinpath("src", "validation", "quality", "schema.yaml")
+        path = BASE_DIR.joinpath(
+            "src",
+            "validation",
+            "quality",
+            "schema.yaml",
+        )
         try:
             return file_io.read_yaml(path)
         except FileNotFoundError:

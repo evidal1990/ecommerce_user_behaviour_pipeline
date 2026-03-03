@@ -14,7 +14,7 @@ class FutureDates(Rule):
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return "future_dates"
+        return "FUTURE_DATES"
 
     def validate(self, df: pl.DataFrame) -> dict:
         total_records = df.shape[0]
