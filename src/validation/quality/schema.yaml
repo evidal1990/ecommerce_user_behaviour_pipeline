@@ -476,7 +476,7 @@ columns:
     max: 7
     semantic_rules: False
     business_rules: True
-    rename: social_sharing_frequency_per_week
+    rename: social_sharing_frequency_per_year
   premium_subscription:
     dtype: Boolean
     not_null: True

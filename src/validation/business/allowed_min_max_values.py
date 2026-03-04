@@ -1,55 +1,57 @@
+from numpy import divide
 import polars as pl
-from pathlib import Path
-from src.utils import file_io, dataframe, statistics
+from src.utils import statistics
 from src.validation.interfaces.rule import Rule
 from consts.validation_status import ValidationStatus
 
 
-BASE_DIR = Path(__file__).resolve().parents[3]
-
-
 class AllowedMinMaxValues(Rule):
-    def __init__(self, column: str, sample_size: int = 10) -> None:
+    def __init__(self, column: str, min: int, max: int, sample_size: int = 30) -> None:
         self.column = column
+        self.min = min
+        self.max = max
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return f"allowed_min_values_{self.column}"
+        return f"ALLOWED_MIN_MAX_VALUES_{self.column}"
 
     def validate(self, df: pl.DataFrame) -> dict:
-        total_records = df.shape[0]
-        contract = self._load_contract()
-        condition_1 = pl.col(self.column).min() < contract[self.column]["min"]
-        condition_2 = pl.col(self.column).max() > contract[self.column]["max"]
-        users = df.filter(condition_1 | condition_2).select([self.column])
-        users_total = len(users)
-        if users_total == 0:
-            status = ValidationStatus.PASS
-            sample = []
-            percentage = 0.0
-        else:
-            status = ValidationStatus.FAIL
-            sample = dataframe.get_df_sample(
-                df=users, column=self.column, sample_size=self.sample_size
-            )
-            percentage = statistics.get_percentage(
-                dividend=users_total, divider=total_records
-            )
+        df_shape = df.shape[0]
+        df_filtered = self._filter(df)
+        df_filtered_shape = len(df_filtered)
+
         return {
-            "status": status,
-            "total_records": total_records,
-            "invalid_records": users_total,
-            "invalid_percentage": percentage,
-            "sample": sample,
+            "status": (
+                ValidationStatus.PASS
+                if df_filtered_shape == 0
+                else ValidationStatus.FAIL
+            ),
+            "total_records": df_shape,
+            "invalid_records": df_filtered_shape,
+            "invalid_percentage": self._get_percentage(
+                dividend=df_filtered_shape, divider=df_shape
+            ),
+            "sample": self._get_sample(df=df_filtered),
         }
 
-    def _load_contract(self) -> dict:
-        """
-        Carrega o contrato de regras de negócios, que é um arquivo YAML
-        com as configurações de regras de negócios.
+    def _filter(self, df: pl.DataFrame) -> pl.DataFrame:
+        min, max = df.select(
+            pl.col(self.column).min().alias("min_value"),
+            pl.col(self.column).max().alias("max_value"),
+        ).row(0)
 
-        Retorno:
-            dict: Contrato de regras de negócios.
-        """
-        contract_path = BASE_DIR / "src" / "transformation" / "silver" / "schema.yaml"
-        return file_io.read_yaml(contract_path)
+        if min >= self.min and max <= self.max:
+            return df.clear()
+        return df.filter(
+            (pl.col(self.column) < self.min) | (pl.col(self.column) > self.max)
+        ).select(
+            [
+                self.column,
+            ]
+        )
+
+    def _get_sample(self, df: pl.DataFrame) -> pl.DataFrame:
+        return df.select(self.column).head(self.sample_size).to_series().to_list()
+
+    def _get_percentage(self, dividend: int, divider: int) -> float:
+        return statistics.get_percentage(dividend=dividend, divider=divider)

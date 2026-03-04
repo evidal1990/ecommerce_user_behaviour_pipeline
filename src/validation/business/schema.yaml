@@ -392,12 +392,12 @@ columns:
     not_null: True
     required: True
     business_rules: False
-  social_sharing_frequency_per_week:
+  social_sharing_frequency_per_year:
     dtype: Int64
     not_null: False
     required: True
     min: 0
-    max: 7
+    max: 12
     business_rules: True
   premium_subscription:
     dtype: Boolean

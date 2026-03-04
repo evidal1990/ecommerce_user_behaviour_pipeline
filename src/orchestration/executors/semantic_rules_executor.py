@@ -1,24 +1,20 @@
 import logging
 import polars as pl
-from pathlib import Path
 from datetime import datetime
 from consts.employment_status import EmploymentStatus
 from consts.rule_type import RuleType
-from src.utils import file_io
 from src.validation import RulesValidator
 from src.validation.semantic.duplicated_user_id import DuplicatedUserId
 from src.validation.semantic.employment_status_income import IncomePerEmploymentStatus
 from src.validation.semantic.future_dates import FutureDates
 from src.validation.semantic.min_value import MinValue
 
-BASE_DIR = Path(__file__).resolve().parents[3]
-
 
 class SemanticRulesExecutor:
     def __init__(self) -> None:
         pass
 
-    def execute(self, df: pl.DataFrame) -> None:
+    def start(self, df: pl.DataFrame) -> None:
         logging.info("Validação semântica do dataframe iniciada")
         RulesValidator(
             RuleType.SEMANTIC,
@@ -82,11 +78,3 @@ class SemanticRulesExecutor:
             ],
         ).execute(df)
         logging.info("Validação semântica do dataframe finalizada\n")
-
-    def _set_contract(self) -> dict:
-        path = BASE_DIR.joinpath("src", "validation", "semantic", "schema.yaml")
-        try:
-            return file_io.read_yaml(path)
-        except FileNotFoundError:
-            logging.error(f"Schema não encontrado em {path}")
-            raise

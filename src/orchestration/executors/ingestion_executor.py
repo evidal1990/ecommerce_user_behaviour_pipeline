@@ -14,7 +14,7 @@ class IngestionExecutor:
 
         self._settings = data["ingestion"]
 
-    def execute(self) -> pl.DataFrame:
+    def start(self) -> pl.DataFrame:
         logging.info("Ingestão de CSV iniciada")
 
         df = Ingest(

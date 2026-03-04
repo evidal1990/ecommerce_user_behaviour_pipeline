@@ -1,8 +1,9 @@
 import logging
 from .executors.ingestion_executor import IngestionExecutor
 from .executors.dataframe_validation_executor import DataFrameValidatorExecutor
-from .executors.data_structuring_executor import DataStructuringExecutor
+from .executors.transformation_bronze_executor import TransformationBronzeExecutor
 from .executors.semantic_rules_executor import SemanticRulesExecutor
+from .executors.business_rules_executor import BusinessRulesExecutor
 
 
 class Pipeline:
@@ -39,17 +40,20 @@ class Pipeline:
         logging.info("Pipeline iniciada")
         df_after_ingestion = IngestionExecutor(
             settings=self.settings,
-        ).execute()
-        DataFrameValidatorExecutor().execute(
+        ).start()
+        DataFrameValidatorExecutor().start(
             df=df_after_ingestion,
         )
-        df_after_data_structuring = DataStructuringExecutor(
+        df_after_transformation_bronze = TransformationBronzeExecutor(
             self.settings,
-        ).execute(
+        ).start(
             df=df_after_ingestion,
         )
-        SemanticRulesExecutor().execute(
-            df=df_after_data_structuring,
+        SemanticRulesExecutor().start(
+            df=df_after_transformation_bronze,
+        )
+        BusinessRulesExecutor().start(
+            df=df_after_transformation_bronze,
         )
         logging.info("Pipeline finalizada")
 

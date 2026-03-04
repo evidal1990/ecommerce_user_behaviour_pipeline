@@ -9,13 +9,13 @@ from src.transformation.bronze.fixes.rename_columns import RenameColumns
 BASE_DIR = Path(__file__).resolve().parents[3]
 
 
-class DataStructuringExecutor:
+class TransformationBronzeExecutor:
     def __init__(self, settings) -> None:
         self._settings = settings
 
-    def execute(self, df: pl.DataFrame) -> None:
+    def start(self, df: pl.DataFrame) -> None:
         logging.info("Validação semântica do dataframe iniciada")
-        contract = self._set_contract()
+        contract = self._get_contract()
         df_structured = DataStructuring(
             df,
             [
@@ -31,7 +31,7 @@ class DataStructuringExecutor:
         logging.info("Validação semântica do dataframe finalizada\n")
         return df_structured
 
-    def _set_contract(self) -> dict:
+    def _get_contract(self) -> dict:
         path = BASE_DIR.joinpath(
             "src",
             "validation",

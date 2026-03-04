@@ -22,9 +22,9 @@ class DataFrameValidatorExecutor:
     def __init__(self) -> None:
         pass
 
-    def execute(self, df: pl.DataFrame) -> None:
+    def start(self, df: pl.DataFrame) -> None:
         logging.info("Validação da estrutura do dataframe iniciada")
-        contract = self._set_contract()
+        contract = self._get_contract()
         for column in DF_COLUMNS:
             DataFrameValidator(
                 RuleType.DATAFRAME_STRUCTURE,
@@ -54,8 +54,13 @@ class DataFrameValidatorExecutor:
             ).execute(df)
         logging.info("Validação da estrutura do dataframe finalizada\n")
 
-    def _set_contract(self) -> dict:
-        path = BASE_DIR.joinpath("src", "validation", "quality", "schema.yaml")
+    def _get_contract(self) -> dict:
+        path = BASE_DIR.joinpath(
+            "src",
+            "validation",
+            "quality",
+            "schema.yaml",
+        )
         try:
             return file_io.read_yaml(path)
         except FileNotFoundError:
