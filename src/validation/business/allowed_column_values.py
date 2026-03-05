@@ -1,6 +1,6 @@
 import polars as pl
 from pathlib import Path
-from src.utils import file_io, dataframe, statistics
+from src.utils import statistics
 from src.validation.interfaces.rule import Rule
 from consts.validation_status import ValidationStatus
 
@@ -9,46 +9,40 @@ BASE_DIR = Path(__file__).resolve().parents[3]
 
 
 class AllowedColumnValues(Rule):
-    def __init__(self, column: str, sample_size: int = 5) -> None:
+    def __init__(self, column: str, values: list, sample_size: int = 5) -> None:
         self.column = column
+        self.values = values
         self.sample_size = sample_size
 
     def name(self) -> str:
-        return f"allowed_column_values_{self.column}"
+        return f"ALLOWED_COLUMN_VALUES_{self.column}"
 
     def validate(self, df: pl.DataFrame) -> dict:
-        total_records = df.shape[0]
-        contract = self._load_contract()
-        column_options = contract[self.column]["values"]
-        users = df.filter(~pl.col(self.column).is_in(column_options))
-        users_total = len(users)
-        if users_total == 0:
-            status = ValidationStatus.PASS
-            sample = []
-            percentage = 0.0
-        else:
-            status = ValidationStatus.FAIL
-            sample = dataframe.get_df_sample(
-                df=users, column=self.column, sample_size=self.sample_size
-            )
-            percentage = statistics.get_percentage(
-                dividend=users_total, divider=total_records
-            )
+        total_rows =df.height
+        df_filtered = self._filter(df=df)
+        invalid_rows = df_filtered.height
+
+        status = ValidationStatus.PASS if invalid_rows == 0 else ValidationStatus.FAIL
+
+        percentage = statistics.get_percentage(
+            dividend=invalid_rows, divider=total_rows
+        )
+
+        sample = self._get_sample(df_filtered)
+
         return {
             "status": status,
-            "total_records": total_records,
-            "invalid_records": users_total,
+            "total_records": total_rows,
+            "invalid_records": invalid_rows,
             "invalid_percentage": percentage,
             "sample": sample,
         }
 
-    def _load_contract(self) -> dict:
-        """
-        Carrega o contrato de regras de negócios, que é um arquivo YAML
-        com as configurações de regras de negócios.
+    def _filter(self, df: pl.DataFrame) -> pl.DataFrame:
+        return df.filter(~pl.col(self.column).is_in(self.values))
 
-        Retorno:
-            dict: Contrato de regras de negócios.
-        """
-        contract_path = BASE_DIR / "src" / "transformation" / "silver" / "schema.yaml"
-        return file_io.read_yaml(contract_path)
+    def _get_sample(self, df: pl.DataFrame) -> pl.DataFrame:
+        return df.select(self.column).head(self.sample_size).to_series().to_list()
+
+    def _get_percentage(self, dividend: int, divider: int) -> float:
+        return statistics.get_percentage(dividend=dividend, divider=divider)

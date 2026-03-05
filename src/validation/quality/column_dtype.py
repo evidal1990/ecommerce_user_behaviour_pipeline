@@ -16,13 +16,30 @@ class ColumnDType(Rule):
         return f"{self.column}_DTYPE_RULE"
 
     def validate(self, df: pl.DataFrame) -> dict:
-        dtype = self._contract["columns"][self.column].get("dtype", False)
-        if not dtype:
-            return {}
-        expected = DTYPES[dtype]
+        dtype_key = self._contract["columns"][self.column].get("dtype")
+        if not dtype_key:
+            return {
+                "status": ValidationStatus.PASS,
+                "expected": None,
+                "received": None,
+            }
+
+        expected = DTYPES[dtype_key]
+
+        if self.column not in df.columns:
+            return {
+                "status": ValidationStatus.FAIL,
+                "expected": expected,
+                "received": None,
+            }
+
         received = df[self.column].dtype
-        if expected == received:
-            status = ValidationStatus.PASS
-        else:
-            status = ValidationStatus.FAIL
-        return {"status": status, "expected": expected, "received": received}
+        status = (
+            ValidationStatus.PASS if expected == received else ValidationStatus.FAIL
+        )
+
+        return {
+            "status": status,
+            "expected": expected,
+            "received": received,
+        }

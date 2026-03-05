@@ -5,6 +5,7 @@ from consts.rule_type import RuleType
 from src.utils import file_io
 from src.validation import RulesValidator
 from src.validation.business.allowed_min_max_values import AllowedMinMaxValues
+from src.validation.business.allowed_column_values import AllowedColumnValues
 
 
 BASE_DIR = Path(__file__).resolve().parents[3]
@@ -18,25 +19,30 @@ class BusinessRulesExecutor:
         logging.info("Validação de regras de negócio iniciada")
 
         contract = self._get_contract()
-        contract_columns = contract["columns"].items()
-        for key, rules in contract_columns:
-            if (
-                "business_rules" not in rules
-                or "min" not in rules
-                or "max" not in rules
-                or not rules["business_rules"]
-            ):
-                continue
-            RulesValidator(
-                RuleType.BUSINESS,
-                [
+        contract_columns = contract["columns"]
+
+        rules = []
+
+        for key, value in contract_columns.items():
+            if {"min", "max"}.issubset(value):
+                rules.append(
                     AllowedMinMaxValues(
                         column=key,
-                        min=rules["min"],
-                        max=rules["max"],
+                        min=value["min"],
+                        max=value["max"],
                     )
-                ],
-            ).execute(df)
+                )
+
+            if {"values"}.issubset(value):
+                rules.append(
+                    AllowedColumnValues(
+                        column=key,
+                        values=value["values"],
+                    )
+                )
+
+        RulesValidator(RuleType.BUSINESS, rules).execute(df)
+
         logging.info("Validação de regras de negócio finalizada\n")
 
     def _get_contract(self) -> dict:
