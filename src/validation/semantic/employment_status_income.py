@@ -1,16 +1,15 @@
 import polars as pl
 from consts.validation_status import ValidationStatus
 from consts.employment_status import EmploymentStatus
-from src.validation.interfaces.rule import Rule
-from src.utils import statistics
+from src.validation.interfaces.semantic_rule import SemanticRule
 
 
-class IncomePerEmploymentStatus(Rule):
+class IncomePerEmploymentStatus(SemanticRule):
 
     def __init__(
         self,
         status: str,
-        sample_size: int = 5,
+        sample_size: int = 10,
     ) -> None:
         self.status = status
         self.sample_size = sample_size
@@ -18,26 +17,10 @@ class IncomePerEmploymentStatus(Rule):
     def name(self) -> str:
         return f"EMPLOYMENT_STATUS_{self.status}"
 
-    def validate(self, df: pl.DataFrame) -> dict:
-        df_shape = df.shape[0]
-        df_filtered = self._filter(df)
-        df_filtered_shape = len(df_filtered)
+    def sample_column(self) -> str:
+        return "annual_income"
 
-        return {
-            "status": (
-                ValidationStatus.PASS
-                if df_filtered_shape == 0
-                else ValidationStatus.WARN
-            ),
-            "total_records": df_shape,
-            "invalid_records": df_filtered_shape,
-            "invalid_percentage": self._get_percentage(
-                dividend=df_filtered_shape, divider=df_shape
-            ),
-            "sample": self._get_sample(df=df_filtered),
-        }
-
-    def _filter(self, df: pl.DataFrame) -> pl.DataFrame:
+    def invalid_df(self, df: pl.DataFrame) -> pl.DataFrame:
         condition_1 = pl.col("employment_status").is_in(
             [
                 EmploymentStatus.EMPLOYED.value,
@@ -60,8 +43,6 @@ class IncomePerEmploymentStatus(Rule):
             ]
         )
 
-    def _get_sample(self, df: pl.DataFrame) -> pl.DataFrame:
-        return df.select("annual_income").head(self.sample_size).to_series().to_list()
-
-    def _get_percentage(self, dividend: int, divider: int) -> float:
-        return statistics.get_percentage(dividend=dividend, divider=divider)
+    def decide_status(self) -> ValidationStatus:
+        condition_has_passed = self._invalid_records == 0
+        return ValidationStatus.PASS if condition_has_passed else ValidationStatus.WARN
