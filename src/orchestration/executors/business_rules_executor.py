@@ -2,11 +2,10 @@ import logging
 import polars as pl
 from pathlib import Path
 from consts.rule_type import RuleType
+from consts.employment_status import EmploymentStatus
 from src.utils import file_io
 from src.validation import RulesValidator
-from src.validation.business.allowed_min_max_values import AllowedMinMaxValues
-from src.validation.business.allowed_column_values import AllowedColumnValues
-from src.validation.business.allowed_null_columns import AllowedNullCount
+from src.validation.business.employment_status_income import IncomePerEmploymentStatus
 
 
 BASE_DIR = Path(__file__).resolve().parents[3]
@@ -19,26 +18,11 @@ class BusinessRulesExecutor:
     def start(self, df: pl.DataFrame) -> None:
         logging.info("Validação de regras de negócio iniciada")
 
-        contract = self._get_contract()
-        rules = []
-
-        for column, config in contract["columns"].items():
-            if "not_null" in config and config["not_null"]:
-                rules.append(
-                    AllowedNullCount(
-                        column=column,
-                    )
-                )
-            if "min" in config and "max" in config:
-                rules.append(
-                    AllowedMinMaxValues(
-                        column=column, min=config["min"], max=config["max"]
-                    )
-                )
-            if "values" in config:
-                rules.append(
-                    AllowedColumnValues(column=column, values=config["values"])
-                )
+        rules = [
+            IncomePerEmploymentStatus(status=EmploymentStatus.EMPLOYED),
+            IncomePerEmploymentStatus(status=EmploymentStatus.SELF_EMPLOYED),
+            IncomePerEmploymentStatus(status=EmploymentStatus.UNEMPLOYED),
+        ]
 
         RulesValidator(RuleType.BUSINESS, rules).execute(df)
         logging.info("Validação de regras de negócio finalizada\n")

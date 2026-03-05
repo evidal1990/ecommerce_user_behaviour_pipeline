@@ -89,6 +89,7 @@ columns:
     dtype: Int64
     not_null: True
     required: True
+    min: 0
     business_rules: False
   occupation:
     dtype: String
@@ -172,11 +173,13 @@ columns:
     dtype: Int64
     not_null: False
     required: True
+    min: 0
     business_rules: False
   hobby_count:
     dtype: Int64
     not_null: False
     required: True
+    min: 0
     business_rules: False
   social_media_influence_score:
     dtype: Int64
@@ -189,6 +192,7 @@ columns:
     dtype: Int64
     not_null: False
     required: True
+    min: 0
     business_rules: False
   exercise_frequency_per_week:
     dtype: Int64
@@ -236,16 +240,19 @@ columns:
     dtype: Int64
     not_null: True
     required: True
+    min: 0
     business_rules: False
   monthly_spend:
     dtype: Float64
     not_null: True
     required: True
+    min: 0
     business_rules: False
   average_order_value:
     dtype: Float64
     not_null: False
     required: True
+    min: 0.0
     business_rules: False
   preferred_payment_method:
     dtype: String
@@ -278,6 +285,7 @@ columns:
     dtype: Int64
     not_null: True
     required: True
+    min: 0
     business_rules: False
   product_category_preference:
     dtype: String
@@ -343,16 +351,19 @@ columns:
     dtype: Int64
     not_null: True
     required: True
+    min: 0
     business_rules: False
   product_views_per_day:
     dtype: Int64
     not_null: True
     required: True
+    min: 0
     business_rules: False
   ad_views_per_day:
     dtype: Int64
     not_null: False
     required: True
+    min: 0
     business_rules: False
   checkout_abandonments_per_month:
     dtype: Int64
@@ -386,13 +397,14 @@ columns:
     dtype: Int64
     not_null: True
     required: True
+    min: 0
     business_rules: False
   last_purchase_date:
     dtype: Date
     not_null: True
     required: True
     business_rules: False
-  social_sharing_frequency_per_week:
+  social_sharing_frequency_per_year:
     dtype: Int64
     not_null: False
     required: True
