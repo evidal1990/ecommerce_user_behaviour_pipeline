@@ -2,8 +2,8 @@ import logging
 import polars as pl
 from pathlib import Path
 from src.utils import file_io
-from src.transformation.silver.enrich.columns.is_column_future_date import (
-    IsColumnFutureDate,
+from src.transformation.silver.enrich.columns.create_is_future_date_column import (
+    CreateIsFutureDateColumn,
 )
 
 
@@ -21,7 +21,7 @@ class EnrichDataFrame:
 
     def _is_future_date(self, df) -> pl.DataFrame:
         columns = self.contract["is_future_date"]["columns"]
-        df = IsColumnFutureDate(df=df).execute(columns=columns)
+        df = CreateIsFutureDateColumn(df=df).execute(columns=columns)
         return df
 
     def _load_contract(self) -> dict:

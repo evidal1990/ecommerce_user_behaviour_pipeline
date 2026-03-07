@@ -3,7 +3,7 @@ import polars as pl
 from datetime import datetime
 
 
-class IsColumnFutureDate:
+class CreateIsFutureDateColumn:
 
     def __init__(self, df: pl.DataFrame) -> None:
         self.df = df
