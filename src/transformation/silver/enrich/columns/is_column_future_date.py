@@ -1,4 +1,3 @@
-from email import message
 import logging
 import polars as pl
 from datetime import datetime
