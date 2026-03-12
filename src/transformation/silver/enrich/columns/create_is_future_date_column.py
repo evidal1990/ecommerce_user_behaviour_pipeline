@@ -18,6 +18,7 @@ class CreateIsFutureDateColumn:
         for col in columns:
             new_col = f"{col}_{self._sufix()}"
             df = self._create(column=col, new_column=new_col)
+            self._save(df=df, column=col)
             self._log(
                 column=new_col,
                 total_records=df.height,
@@ -30,7 +31,6 @@ class CreateIsFutureDateColumn:
                     column=new_col,
                 ),
             )
-            self._save(df=df, column=col)
         return df
 
     def _create(
