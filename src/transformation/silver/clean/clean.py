@@ -1,4 +1,7 @@
 import polars as pl
+import logging
+from .format import FormatData
+from .remove_duplicates import RemoveDuplicates
 
 
 class CleanData:
@@ -9,26 +12,8 @@ class CleanData:
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
-        exprs = [
-            self._format(column=col) for col in df.columns if df[col].dtype == pl.String
-        ]
-        return df.with_columns(exprs)
-
-    def _format(
-        self,
-        column: str,
-    ) -> pl.Expr:
-        return (
-            pl.col(column)
-            .str.strip_chars()
-            .str.to_lowercase()
-            .str.replace_all(r"\s+", " ")
-            .str.to_titlecase()
-            .str.replace_all(r"\bA\b", "a")
-            .str.replace_all(r"\bE\b", "e")
-            .str.replace_all(r"\bI\b", "i")
-            .str.replace_all(r"\bO\b", "o")
-            .str.replace_all(r"\bU\b", "u")
-            .str.replace_all(r"\bOf\b", "of")
-            .alias(column)
-        )
+        logging.info(f"Total de registros antes da remoção de duplicatas: {df.height}")
+        df = RemoveDuplicates().execute(df=df)
+        logging.info(f"Total de registros depois da remoção de duplicatas: {df.height}")
+        df = FormatData().execute(df=df)
+        return df
