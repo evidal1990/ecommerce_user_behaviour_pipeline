@@ -1,5 +1,6 @@
 import logging
 import polars as pl
+from pathlib import Path
 from src.transformation.silver.enrich.enrich_dataframe import EnrichDataFrame
 from src.transformation.silver.clean.clean import CleanData
 
@@ -22,7 +23,6 @@ class TransformationSilverExecutor:
         return df
 
     def _write_silver(self, df) -> None:
-        pass
-        # path = self._settings["data"]["silver"]["destination"]
-        # Path(path).parent.mkdir(parents=True, exist_ok=True)
-        # df.write_csv(path)
+        path = self._settings["destination"]
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        df.write_csv(path)
