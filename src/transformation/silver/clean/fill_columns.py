@@ -70,7 +70,6 @@ class FillColumns:
                 col=col,
             ),
             pl.String: lambda col: self._fill_literal(
-                df=df,
                 col=col,
             ),
         }
