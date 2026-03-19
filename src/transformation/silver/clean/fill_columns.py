@@ -11,19 +11,14 @@ class FillColumns:
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
-        df_cleaned = self._fill(df=df)
-        logging.info(
-            (
-                f"DATA_CLEANING_FILL_EMPTY_REGISTRIES\n"
-                f"Registros: {df_cleaned.height}\n"
-                f"Registros inválidos antes da limpeza:\n"
-                f"{self._invalid_registries(df=df)}\n"
-                f"Registros inválidos depois da limpeza:\n"
-                f"{self._invalid_registries(df=df_cleaned)}\n"
-            )
+        df_cleaned = self._fill(
+            df=df,
         )
-
-        return df
+        self._log(
+            df=df,
+            df_cleaned=df_cleaned,
+        )
+        return df_cleaned
 
     def _invalid_registries(
         self,
@@ -113,3 +108,18 @@ class FillColumns:
             .pipe(lambda col: col.replace("", None))
             .fill_null("Missing")
         )
+
+    def _log(
+        self,
+        df: pl.DataFrame,
+        df_cleaned: pl.DataFrame,
+    ) -> None:
+        message = (
+            f"DATA_CLEANING_FILL_EMPTY_REGISTRIES\n"
+            f"Registros: {df.height}\n"
+            f"Registros inválidos antes da limpeza:\n"
+            f"{self._invalid_registries(df=df)}\n"
+            f"Registros inválidos depois da limpeza:\n"
+            f"{self._invalid_registries(df=df_cleaned)}\n"
+        )
+        logging.info(message)

@@ -13,10 +13,9 @@ class CleanData:
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
+        logging.info("Limpeza de dados iniciada")
         df = RemoveDuplicates().execute(df=df)
         df = FormatData().execute(df=df)
-        logging.info("Formatação de strings finalizada")
-
         df = FillColumns().execute(df=df)
-        logging.info("Tratamento de dados numéricos finalizado")
+        logging.info("Limpeza de dados finalizada")
         return df

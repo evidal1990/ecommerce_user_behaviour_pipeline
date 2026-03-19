@@ -9,7 +9,7 @@ class RemoveDuplicates:
 
     def execute(self, df: pl.DataFrame) -> pl.DataFrame:
         df_height_before_cleaning = df.height
-        df = df.with_row_index("row_id").unique(subset=["user_id"], keep="first")
+        df = df.with_row_index("row_id").unique(subset=["user_id"], keep="first",)
         duplicated_total = df_height_before_cleaning - df.height
         
         logging.info(
