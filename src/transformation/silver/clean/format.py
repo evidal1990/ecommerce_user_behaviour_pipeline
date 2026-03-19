@@ -1,9 +1,13 @@
 import polars as pl
+from src.transformation.silver.clean.cleanning_structure import CleanningStructure
 
 
-class FormatData:
+class FormatData(CleanningStructure):
     def __init__(self) -> None:
         pass
+
+    def name(self) -> str:
+        return "FORMAT_DATA"
 
     def execute(
         self,
