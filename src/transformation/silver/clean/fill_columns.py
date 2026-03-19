@@ -14,9 +14,16 @@ class FillColumns:
         df_cleaned = self._fill(
             df=df,
         )
-        self._log(
+        invalid_registries_old = self._invalid_registries(
             df=df,
-            df_cleaned=df_cleaned,
+        )
+        invalid_registries_new = self._invalid_registries(
+            df=df_cleaned,
+        )
+        self._log(
+            height=df.height,
+            invalid_registries_old=invalid_registries_old,
+            invalid_registries_new=invalid_registries_new,
         )
         return df_cleaned
 
@@ -24,11 +31,7 @@ class FillColumns:
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
-        pl_int = (
-            (pl.col(pl.Int64).is_null())
-            .sum()
-            .name.keep()
-        )
+        pl_int = (pl.col(pl.Int64).is_null()).sum().name.keep()
         pl_float = (
             (pl.col(pl.Float64).is_null() | pl.col(pl.Float64).is_nan())
             .sum()
@@ -47,7 +50,10 @@ class FillColumns:
                     pl_string,
                 ]
             )
-            .unpivot(variable_name="coluna", value_name="invalidos")
+            .unpivot(
+                variable_name="coluna",
+                value_name="invalidos",
+            )
             .filter(pl.col("invalidos") > 0)
         )
 
@@ -86,16 +92,15 @@ class FillColumns:
         df: pl.DataFrame,
         col: str,
     ) -> pl.Expr:
+        median = df.select(
+            pl.col(col).fill_nan(None).filter(pl.col(col) >= 0).median()
+        ).item()
         return (
             pl.when(pl.col(col) < 0)
             .then(None)
             .otherwise(pl.col(col))
             .fill_nan(None)
-            .fill_null(
-                df.select(
-                    pl.col(col).fill_nan(None).filter(pl.col(col) >= 0).median()
-                ).item()
-            )
+            .fill_null(median)
         )
 
     def _fill_literal(
@@ -111,15 +116,14 @@ class FillColumns:
 
     def _log(
         self,
-        df: pl.DataFrame,
-        df_cleaned: pl.DataFrame,
+        height:int,
+        invalid_registries_old: pl.DataFrame,
+        invalid_registries_new: pl.DataFrame,
     ) -> None:
         message = (
             f"DATA_CLEANING_FILL_EMPTY_REGISTRIES\n"
-            f"Registros: {df.height}\n"
-            f"Registros inválidos antes da limpeza:\n"
-            f"{self._invalid_registries(df=df)}\n"
-            f"Registros inválidos depois da limpeza:\n"
-            f"{self._invalid_registries(df=df_cleaned)}\n"
+            f"Registros: {height}\n"
+            f"Registros inválidos (antes):{invalid_registries_old}\n"
+            f"Registros inválidos (depsois):{invalid_registries_new}:\n"
         )
         logging.info(message)
