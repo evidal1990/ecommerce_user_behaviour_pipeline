@@ -28,6 +28,7 @@ from src.transformation.silver.enrich.columns import (
     PhysicalActivityLevelGroup,
     ReferralCountGroup,
     ImpulsePurchasesPerMonthGroup,
+    BrowseToBuyRatioGroup,
 )
 
 # Utils
@@ -118,6 +119,7 @@ class TransformationSilverExecutor:
                 PhysicalActivityLevelGroup(),
                 ReferralCountGroup(),
                 ImpulsePurchasesPerMonthGroup(),
+                BrowseToBuyRatioGroup(),
             ]
         ).execute(df=df)
 
