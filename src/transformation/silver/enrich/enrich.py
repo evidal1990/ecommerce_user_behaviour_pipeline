@@ -6,14 +6,17 @@ from src.transformation.silver.enrich.enrich_structure import EnrichStructure
 
 class EnrichData:
 
-    def __init__(self, actions: list[EnrichStructure],) -> None:
+    def __init__(
+        self,
+        actions: list[EnrichStructure],
+    ) -> None:
         self.actions = actions
 
     def execute(
         self,
         df,
     ) -> pl.DataFrame:
-        
+
         for action in self.actions:
             df = action.execute(df)
             if df.shape[0] == 0:
@@ -22,10 +25,11 @@ class EnrichData:
             else:
                 status = ActionStatus.PASS
                 log_lvl = logging.info
+            column = action.name().lower()
             message = (
                 f"[ENRICH_DATA_{action.name()}]\n"
                 f"status={status}\n"
-                f"dataframe={df.schema}\n"
+                f"dataframe={df.select([column]).group_by(column).len()}\n"
             )
             log_lvl(message)
         return df

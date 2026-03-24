@@ -17,13 +17,13 @@ class CreateIsFutureDateColumn(EnrichStructure):
         self.current_date = datetime.now().date()
 
     def name(self) -> str:
-        return "IS_FUTURE"
+        return f"{self.column.upper()}_IS_FUTURE"
 
     def execute(
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
-        new_col = f"{self.column}_{self.name().lower()}"
+        new_col = self.name().lower()
         df = self._create(
             df=df,
             column=self.column,

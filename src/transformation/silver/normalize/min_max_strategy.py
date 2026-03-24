@@ -19,5 +19,6 @@ class MinMaxScaling(EnrichStructure):
     ) -> pl.DataFrame:
         min = df.select(pl.col(self._column).min()).item()
         max = df.select(pl.col(self._column).max()).item()
-        scaled = (pl.col(self._column) - min) / (max - min)
-        return df.with_columns(scaled.alias(f"{self._column}_scaled"))
+        return df.with_columns(
+            ((pl.col(self._column) - min) / (max - min)).alias(f"{self._column}_scaled")
+        )
