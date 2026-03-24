@@ -29,11 +29,11 @@ class ImpulseBuyingScoreGroup(EnrichStructure):
         if impulse_buying_score < 0:
             return "Other"
         elif impulse_buying_score <= 2:
-            return "Very Low Impulse"
+            return "Very Low"
         elif impulse_buying_score <= 4:
-            return "Low Impulse"
+            return "Low"
         elif impulse_buying_score <= 6:
-            return "Moderate Impulse"
+            return "Moderate"
         elif impulse_buying_score <= 8:
-            return "High Impulse"
-        return "Very High Impulse"
+            return "High"
+        return "Very High"

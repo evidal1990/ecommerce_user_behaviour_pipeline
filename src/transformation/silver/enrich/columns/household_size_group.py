@@ -29,9 +29,9 @@ class HouseholdSizeGroup(EnrichStructure):
         if household_size < 1:
             return "Other"
         elif household_size == 1:
-            return "Single-person Household"
+            return "Single-person"
         elif household_size <= 3:
-            return "Small Household"
+            return "Small"
         elif household_size <= 5:
-            return "Medium Household"
-        return "Large Household"
+            return "Medium"
+        return "Large"

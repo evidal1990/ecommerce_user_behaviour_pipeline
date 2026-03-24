@@ -31,7 +31,7 @@ class AgeGroup(EnrichStructure):
         elif age <= 34:
             return "Early Career Professionals"
         elif age <= 44:
-            return "Professional / Family Consolidation"
+            return "Professional Consolidation"
         elif age <= 54:
             return "High Financial Stability"
         elif age <= 64:
