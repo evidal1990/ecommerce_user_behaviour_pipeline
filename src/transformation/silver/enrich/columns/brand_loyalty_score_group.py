@@ -24,12 +24,12 @@ class BrandLoyaltyScoreGroup(EnrichStructure):
 
     def _classify(
         self,
-        household_size: int,
+        brand_loyalty_score: int,
     ) -> str:
-        if household_size < 0:
+        if brand_loyalty_score < 0:
             return "Other"
-        elif household_size <= 6:
+        elif brand_loyalty_score <= 6:
             return "Detractors"
-        elif household_size <= 8:
+        elif brand_loyalty_score <= 8:
             return "Neutral"
         return "Promoters"

@@ -17,9 +17,11 @@ from src.transformation.silver.enrich.columns.household_size_group import (
 from src.transformation.silver.enrich.columns.brand_loyalty_score_group import (
     BrandLoyaltyScoreGroup,
 )
+from src.transformation.silver.enrich.columns.impulse_buying_score_group import (
+    ImpulseBuyingScoreGroup,
+)
 from src.transformation.silver.normalize.min_max_strategy import MinMaxScaling  # noqa.
 from src.utils import file_io
-from src.transformation.silver.enrich.columns import brand_loyalty_score_group
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 
@@ -75,6 +77,7 @@ class TransformationSilverExecutor:
                 AgeGroup(),
                 HouseholdSizeGroup(),
                 BrandLoyaltyScoreGroup(),
+                ImpulseBuyingScoreGroup()
             ]
         ).execute(df=df)
 
