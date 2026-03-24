@@ -1,44 +1,36 @@
 import logging
 import polars as pl
 from pathlib import Path
-from src.transformation.silver.enrich.enrich import EnrichData
+# Clean
 from src.transformation.silver.clean.clean import CleanData
-from src.transformation.silver.normalize.normalize import Normalize
 from src.transformation.silver.clean.format import FormatData
 from src.transformation.silver.clean.remove_duplicates import RemoveDuplicates
 from src.transformation.silver.clean.fill_columns import FillColumns
-from src.transformation.silver.enrich.columns.create_is_future_date_column import (
+
+# Normalize
+from src.transformation.silver.normalize.normalize import Normalize
+from src.transformation.silver.normalize.min_max_strategy import MinMaxScaling
+
+# Enrich (core)
+from src.transformation.silver.enrich.enrich import EnrichData
+
+# Enrich (columns)
+from src.transformation.silver.enrich.columns import (
     CreateIsFutureDateColumn,
-)
-from src.transformation.silver.enrich.columns.age_group import AgeGroup
-from src.transformation.silver.enrich.columns.household_size_group import (
+    AgeGroup,
     HouseholdSizeGroup,
-)
-from src.transformation.silver.enrich.columns.brand_loyalty_score_group import (
     BrandLoyaltyScoreGroup,
-)
-from src.transformation.silver.enrich.columns.impulse_buying_score_group import (
     ImpulseBuyingScoreGroup,
-)
-from src.transformation.silver.enrich.columns.social_media_influence_score_group import (
     SocialMediaInfluenceScoreGroup,
-)
-from src.transformation.silver.enrich.columns.exercise_frequency_group import (
     ExerciseFrequencyGroup,
-)
-from src.transformation.silver.enrich.columns.stress_from_financial_decisions_group import (
     StressFromFinancialDecisionsGroup,
-)
-from src.transformation.silver.enrich.columns.overall_stress_level_group import (
     OverallStressLevelGroup,
-)
-from src.transformation.silver.enrich.columns.physical_activity_level_group import (
     PhysicalActivityLevelGroup,
-)
-from src.transformation.silver.enrich.columns.referral_count_group import (
     ReferralCountGroup,
+    ImpulsePurchasesPerMonthGroup,
 )
-from src.transformation.silver.normalize.min_max_strategy import MinMaxScaling  # noqa.
+
+# Utils
 from src.utils import file_io
 
 BASE_DIR = Path(__file__).resolve().parents[3]
@@ -81,11 +73,29 @@ class TransformationSilverExecutor:
     ) -> pl.DataFrame:
         contract = self._load_contract()
         columns = contract["actions"]["normalize"]["columns"]
-        min_max = [MinMaxScaling(column=col) for col in columns]
         return Normalize(
             [
                 MinMaxScaling(column="stress_from_financial_decisions_level"),
                 MinMaxScaling(column="overall_stress_level"),
+                MinMaxScaling(column="sleep_quality_level"),
+                MinMaxScaling(column="physical_activity_level"),
+                MinMaxScaling(column="brand_loyalty_score"),
+                MinMaxScaling(column="impulse_buying_score"),
+                MinMaxScaling(column="social_media_influence_score"),
+                MinMaxScaling(column="mental_health_score"),
+                MinMaxScaling(column="impulse_purchases_per_month"),
+                MinMaxScaling(column="checkout_abandonments_per_month"),
+                MinMaxScaling(column="product_views_per_day"),
+                MinMaxScaling(column="ad_views_per_day"),
+                MinMaxScaling(column="social_sharing_frequency_per_year"),
+                MinMaxScaling(column="review_writing_frequency_per_year"),
+                MinMaxScaling(column="return_frequency_per_year"),
+                MinMaxScaling(column="travel_frequency_per_year"),
+                MinMaxScaling(column="return_rate"),
+                MinMaxScaling(column="purchase_conversion_rate"),
+                MinMaxScaling(column="notification_response_rate"),
+                MinMaxScaling(column="cart_abandonment_rate"),
+                MinMaxScaling(column="browse_to_buy_ratio"),
             ]
         ).execute(df=df)
 
@@ -107,6 +117,7 @@ class TransformationSilverExecutor:
                 OverallStressLevelGroup(),
                 PhysicalActivityLevelGroup(),
                 ReferralCountGroup(),
+                ImpulsePurchasesPerMonthGroup(),
             ]
         ).execute(df=df)
 
