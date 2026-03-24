@@ -31,6 +31,7 @@ from src.transformation.silver.enrich.columns import (
     BrowseToBuyRatioGroup,
     ReturnRateGroup,
     PurchaseConversionRateGroup,
+    AppUsageFrequencyGroup,
 )
 
 # Utils
@@ -74,8 +75,6 @@ class TransformationSilverExecutor:
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
-        contract = self._load_contract()
-        columns = contract["actions"]["normalize"]["columns"]
         return Normalize(
             [
                 MinMaxScaling(column="stress_from_financial_decisions_level"),
@@ -124,6 +123,7 @@ class TransformationSilverExecutor:
                 BrowseToBuyRatioGroup(),
                 ReturnRateGroup(),
                 PurchaseConversionRateGroup(),
+                AppUsageFrequencyGroup(),
             ]
         ).execute(df=df)
 

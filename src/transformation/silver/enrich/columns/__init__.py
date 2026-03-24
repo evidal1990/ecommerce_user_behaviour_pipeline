@@ -13,6 +13,7 @@ from .impulse_purchases_per_month_group import ImpulsePurchasesPerMonthGroup
 from .browse_to_buy_ratio_group import BrowseToBuyRatioGroup
 from .return_rate_group import ReturnRateGroup
 from .purchase_conversion_rate_group import PurchaseConversionRateGroup
+from .app_usage_frequency_group import AppUsageFrequencyGroup
 
 __all__ = [
     "CreateIsFutureDateColumn",
@@ -30,4 +31,5 @@ __all__ = [
     "BrowseToBuyRatioGroup",
     "ReturnRateGroup",
     "PurchaseConversionRateGroup",
+    "AppUsageFrequencyGroup",
 ]
