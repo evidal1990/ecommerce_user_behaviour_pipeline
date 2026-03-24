@@ -11,6 +11,7 @@ from .physical_activity_level_group import PhysicalActivityLevelGroup
 from .referral_count_group import ReferralCountGroup
 from .impulse_purchases_per_month_group import ImpulsePurchasesPerMonthGroup
 from .browse_to_buy_ratio_group import BrowseToBuyRatioGroup
+from .return_rate_group import ReturnRateGroup
 
 __all__ = [
     "CreateIsFutureDateColumn",
@@ -25,4 +26,6 @@ __all__ = [
     "PhysicalActivityLevelGroup",
     "ReferralCountGroup",
     "ImpulsePurchasesPerMonthGroup",
+    "BrowseToBuyRatioGroup",
+    "ReturnRateGroup",
 ]

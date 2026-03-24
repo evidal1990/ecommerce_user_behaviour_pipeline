@@ -29,6 +29,7 @@ from src.transformation.silver.enrich.columns import (
     ReferralCountGroup,
     ImpulsePurchasesPerMonthGroup,
     BrowseToBuyRatioGroup,
+    ReturnRateGroup,
 )
 
 # Utils
@@ -120,6 +121,7 @@ class TransformationSilverExecutor:
                 ReferralCountGroup(),
                 ImpulsePurchasesPerMonthGroup(),
                 BrowseToBuyRatioGroup(),
+                ReturnRateGroup(),
             ]
         ).execute(df=df)
 
