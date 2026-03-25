@@ -47,4 +47,4 @@ class TransformationBronzeExecutor:
     def _write_bronze(self, df) -> None:
         path = self._settings["data"]["bronze"]["destination"]
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        df.write_csv(path)
+        df.write_parquet(path, compression="zstd", statistics=True)

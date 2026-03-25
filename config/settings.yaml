@@ -1,14 +1,14 @@
 data:
   ingestion:
     origin: "dhrubangtalukdar/e-commerce-shopper-behavior-amazonshopify-based"
-    destination: "data/raw/data.csv"
+    destination: "data/raw/data.parquet"
   bronze:
-    origin: "data/raw/data.csv"
-    destination: "data/bronze/data.csv"
+    origin: "data/raw/data.parquet"
+    destination: "data/bronze/data.parquet"
   silver:
     parent: "data/silver/"
-    origin: "data/bronze/data.csv"
+    origin: "data/bronze/data.parquet"
     destination: "data/silver/data.parquet"
   gold:
-    origin: "data/silver/data.csv"
-    destination: "data/gold/data.csv"
+    origin: "data/silver/data.parquet"
+    destination: "data/gold/data.parquet"

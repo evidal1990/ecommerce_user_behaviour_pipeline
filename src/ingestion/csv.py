@@ -42,7 +42,7 @@ class CsvIngestion(IngestInterface):
             status = IngestionStatus.PASS
         path = self._settings["destination"]
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.df.write_csv(path)
+        self.df.write_parquet(path, compression="zstd", statistics=True)
         return {
             "status": status,
             "dataset_found": df_is_empty,

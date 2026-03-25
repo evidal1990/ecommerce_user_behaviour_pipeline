@@ -5,6 +5,7 @@ from .executors.transformation_bronze_executor import TransformationBronzeExecut
 from .executors.semantic_rules_executor import SemanticRulesExecutor
 from .executors.business_rules_executor import BusinessRulesExecutor
 from .executors.transformation_silver_executor import TransformationSilverExecutor
+from .executors.transformation_gold_executor import TransformationGoldExecutor
 
 
 class Pipeline:
@@ -59,6 +60,11 @@ class Pipeline:
             df=df_after_transformation_bronze,
         )
         BusinessRulesExecutor().start(
+            df=df_after_transformation_silver,
+        )
+        df_after_transformation_gold = TransformationGoldExecutor(
+            settings=self.settings,
+        ).start(
             df=df_after_transformation_silver,
         )
         logging.info("Pipeline finalizada")
