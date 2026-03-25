@@ -1,44 +1,10 @@
 import logging
-import statistics
+from typing import Self
 import polars as pl
 from pathlib import Path
-
-# Clean
-from src.transformation.silver.clean.clean import CleanData
-from src.transformation.silver.clean.format import FormatData
-from src.transformation.silver.clean.remove_duplicates import RemoveDuplicates
-from src.transformation.silver.clean.fill_columns import FillColumns
-
-# Normalize
-from src.transformation.silver.normalize.normalize import Normalize
-from src.transformation.silver.normalize.min_max_strategy import MinMaxScaling
-
-# Enrich (core)
-from src.transformation.silver.enrich.enrich import EnrichData
-
-# Enrich (columns)
-from src.transformation.silver.enrich.columns import (
-    CreateIsFutureDateColumn,
-    AgeGroup,
-    HouseholdSizeGroup,
-    BrandLoyaltyScoreGroup,
-    ImpulseBuyingScoreGroup,
-    SocialMediaInfluenceScoreGroup,
-    ExerciseFrequencyGroup,
-    StressFromFinancialDecisionsGroup,
-    OverallStressLevelGroup,
-    PhysicalActivityLevelGroup,
-    ReferralCountGroup,
-    ImpulsePurchasesPerMonthGroup,
-    BrowseToBuyRatioGroup,
-    ReturnRateGroup,
-    PurchaseConversionRateGroup,
-    AppUsageFrequencyGroup,
-    NotificationResponseRateGroup,
-    SocialSharingFrequencyGroup,
-    CartAbandonmentRateGroup,
-    ReviewWrightingFrequencyGroup,
-)
+from .clean_executor import CleanExecutor
+from .normalize_executor import NormalizeExecutor
+from .enrich_executor import EnrichExecutor
 
 
 class TransformationSilverExecutor:
@@ -48,98 +14,42 @@ class TransformationSilverExecutor:
             raise ValueError("Configuração de silver não encontrada")
 
         self._settings = data["silver"]
+        self.df = None
 
     def start(
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
         logging.info("Transformação de dados provenientes da camada bronze iniciada")
-        df_after_cleanning = self._clean(df=df)
-        df_after_normalization = self._normalize(df=df_after_cleanning)
-        df_after_enrichment = self._enrich(df=df_after_normalization)
-        self._write_silver(df=df_after_enrichment)
+        self.df = df
+        self._clean()._normalize()._enrich()._write_silver()
         logging.info("Transformação de dados provenientes da camada bronze finalizada")
-        return df_after_enrichment
-
-    def _clean(
-        self,
-        df: pl.DataFrame,
-    ) -> pl.DataFrame:
-        return CleanData(
-            [
-                RemoveDuplicates(),
-                FormatData(),
-                FillColumns(),
-            ]
-        ).execute(df=df)
-
-    def _normalize(
-        self,
-        df: pl.DataFrame,
-    ) -> pl.DataFrame:
-        return Normalize(
-            [
-                MinMaxScaling(column="stress_from_financial_decisions_level"),
-                MinMaxScaling(column="overall_stress_level"),
-                MinMaxScaling(column="sleep_quality_level"),
-                MinMaxScaling(column="physical_activity_level"),
-                MinMaxScaling(column="brand_loyalty_score"),
-                MinMaxScaling(column="impulse_buying_score"),
-                MinMaxScaling(column="social_media_influence_score"),
-                MinMaxScaling(column="mental_health_score"),
-                MinMaxScaling(column="impulse_purchases_per_month"),
-                MinMaxScaling(column="checkout_abandonments_per_month"),
-                MinMaxScaling(column="product_views_per_day"),
-                MinMaxScaling(column="ad_views_per_day"),
-                MinMaxScaling(column="social_sharing_frequency_per_year"),
-                MinMaxScaling(column="review_writing_frequency_per_year"),
-                MinMaxScaling(column="return_frequency_per_year"),
-                MinMaxScaling(column="travel_frequency_per_year"),
-                MinMaxScaling(column="return_rate"),
-                MinMaxScaling(column="purchase_conversion_rate"),
-                MinMaxScaling(column="notification_response_rate"),
-                MinMaxScaling(column="cart_abandonment_rate"),
-                MinMaxScaling(column="browse_to_buy_ratio"),
-                MinMaxScaling(column="exercise_frequency_per_week"),
-                MinMaxScaling(column="coupon_usage_frequency"),
-                MinMaxScaling(column="app_usage_frequency_per_week"),
-            ]
-        ).execute(df=df)
-
-    def _enrich(
-        self,
-        df: pl.DataFrame,
-    ) -> pl.DataFrame:
-        parent = self._settings["parent"]
-        return EnrichData(
-            [
-                CreateIsFutureDateColumn(settings=parent, column="last_purchase_date"),
-                AgeGroup(),
-                HouseholdSizeGroup(),
-                BrandLoyaltyScoreGroup(),
-                ImpulseBuyingScoreGroup(),
-                SocialMediaInfluenceScoreGroup(),
-                ExerciseFrequencyGroup(),
-                StressFromFinancialDecisionsGroup(),
-                OverallStressLevelGroup(),
-                PhysicalActivityLevelGroup(),
-                ReferralCountGroup(),
-                ImpulsePurchasesPerMonthGroup(),
-                BrowseToBuyRatioGroup(),
-                ReturnRateGroup(),
-                PurchaseConversionRateGroup(),
-                AppUsageFrequencyGroup(),
-                NotificationResponseRateGroup(),
-                SocialSharingFrequencyGroup(),
-                CartAbandonmentRateGroup(),
-                ReviewWrightingFrequencyGroup(),
-            ]
-        ).execute(df=df)
+        return self.df
 
     def _write_silver(
-        self,
-        df,
+        self
     ) -> None:
         path = self._settings["destination"]
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        df.write_parquet(path, compression="zstd", statistics=True)
+        self.df.write_parquet(path, compression="zstd", statistics=True)
+
+    def _clean(
+        self
+    ) -> Self:
+        df = self.df
+        self.df = CleanExecutor().start(df=df)
+        return self
+
+    def _normalize(
+        self
+    ) -> Self:
+        df = self.df
+        self.df = NormalizeExecutor().start(df=df)
+        return self
+
+    def _enrich(
+        self
+   ) -> Self:
+        df = self.df
+        self.df = EnrichExecutor(self._settings["parent"]).start(df=df)
+        return self
