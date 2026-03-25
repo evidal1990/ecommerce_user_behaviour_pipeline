@@ -1,6 +1,8 @@
 import logging
+import statistics
 import polars as pl
 from pathlib import Path
+
 # Clean
 from src.transformation.silver.clean.clean import CleanData
 from src.transformation.silver.clean.format import FormatData
@@ -35,13 +37,8 @@ from src.transformation.silver.enrich.columns import (
     NotificationResponseRateGroup,
     SocialSharingFrequencyGroup,
     CartAbandonmentRateGroup,
-    ReviewWrightingFrequencyGroup
+    ReviewWrightingFrequencyGroup,
 )
-
-# Utils
-from src.utils import file_io
-
-BASE_DIR = Path(__file__).resolve().parents[3]
 
 
 class TransformationSilverExecutor:
@@ -142,17 +139,4 @@ class TransformationSilverExecutor:
     ) -> None:
         path = self._settings["destination"]
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        df.write_csv(path)
-
-    def _load_contract(self) -> dict:
-        path = BASE_DIR.joinpath(
-            "src",
-            "transformation",
-            "silver",
-            "schema.yaml",
-        )
-        try:
-            return file_io.read_yaml(path)
-        except FileNotFoundError:
-            logging.error(f"Schema não encontrado em {path}")
-            raise
+        df.write_parquet(path, compression="zstd", statistics=True)

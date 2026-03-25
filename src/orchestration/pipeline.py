@@ -58,7 +58,7 @@ class Pipeline:
         ).start(
             df=df_after_transformation_bronze,
         )
-        # BusinessRulesExecutor().start(
-        #     df=df_after_transformation_bronze,
-        # )
+        BusinessRulesExecutor().start(
+            df=df_after_transformation_bronze,
+        )
         logging.info("Pipeline finalizada")

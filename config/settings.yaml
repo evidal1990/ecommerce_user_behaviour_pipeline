@@ -8,7 +8,7 @@ data:
   silver:
     parent: "data/silver/"
     origin: "data/bronze/data.csv"
-    destination: "data/silver/data.csv"
+    destination: "data/silver/data.parquet"
   gold:
     origin: "data/silver/data.csv"
     destination: "data/gold/data.csv"
