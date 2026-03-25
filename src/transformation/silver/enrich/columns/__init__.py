@@ -16,6 +16,7 @@ from .purchase_conversion_rate_group import PurchaseConversionRateGroup
 from .app_usage_frequency_group import AppUsageFrequencyGroup
 from .notification_response_rate_group import NotificationResponseRateGroup
 from .social_sharing_frequency_group import SocialSharingFrequencyGroup
+from .cart_abandonment_rate_group import CartAbandonmentRateGroup
 
 __all__ = [
     "CreateIsFutureDateColumn",
@@ -36,4 +37,5 @@ __all__ = [
     "AppUsageFrequencyGroup",
     "NotificationResponseRateGroup",
     "SocialSharingFrequencyGroup",
+    "CartAbandonmentRateGroup",
 ]
