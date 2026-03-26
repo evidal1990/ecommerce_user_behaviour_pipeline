@@ -11,4 +11,4 @@ data:
     destination: "data/silver/data.parquet"
   gold:
     origin: "data/silver/data.parquet"
-    destination: "data/gold/data.parquet"
+    destination: "data/gold/data.csv"

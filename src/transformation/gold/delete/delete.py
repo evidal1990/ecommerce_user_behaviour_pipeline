@@ -1,7 +1,6 @@
 import polars as pl
 import logging
 from consts.action_status import ActionStatus
-from .delete_unused_columns import DeleteUnusedColumns
 
 
 class Delete:

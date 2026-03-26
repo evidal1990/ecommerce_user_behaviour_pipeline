@@ -95,12 +95,7 @@ columns:
     dtype: String
     not_null: True
     required: True
-    values: [
-      "Mobile",
-      "Desktop",
-      "Tablet",
-    ]
-    business_rules: True
+    business_rules: False
   ethnicity:
     dtype: String
     not_null: False

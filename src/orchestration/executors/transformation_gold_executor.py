@@ -3,6 +3,7 @@ import polars as pl
 from typing import Self
 from pathlib import Path
 from src.transformation.gold.delete.delete import Delete
+from src.transformation.gold.aggregate.aggregate_data import AggregateData
 
 
 class TransformationGoldExecutor:
@@ -23,8 +24,8 @@ class TransformationGoldExecutor:
         df: pl.DataFrame,
     ) -> pl.DataFrame:
         logging.info("Transformação de dados provenientes da camada silver iniciada")
-        self.df = df
-        self._delete_unused_columns()
+        self.df = AggregateData().execute(df)
+        self._write_gold()
         logging.info("Transformação de dados provenientes da camada silver finalizada")
         return self.df
 
@@ -62,4 +63,5 @@ class TransformationGoldExecutor:
     def _write_gold(self) -> None:
         path = self._settings["destination"]
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.df.write_parquet(path, compression="zstd", statistics=True)
+        self.df.write_csv(path)
+        #self.df.write_parquet(path, compression="zstd", statistics=True)
