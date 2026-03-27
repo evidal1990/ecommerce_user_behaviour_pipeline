@@ -2,9 +2,9 @@ import polars as pl
 
 
 class CountStructure:
-    def __init__(self, column: str, agg_name: str) -> None:
+    def __init__(self, column: str, sufix: str) -> None:
         self.column = column
-        self.agg_name = agg_name
+        self.sufix = sufix
 
     def aggregate(self) -> pl.Expr:
-        return pl.col(self.column).count().alias(self.agg_name)
+        return pl.col(self.column).count().alias(f"count_{self.sufix}")

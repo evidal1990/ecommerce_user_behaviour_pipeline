@@ -6,4 +6,4 @@ from src.transformation.gold.aggregate.sum_structure import SumStructure
 class SumMonthlySpend(SumStructure):
 
     def __init__(self) -> None:
-        super().__init__(column="monthly_spend", agg_name="total_monthly_spend")
+        super().__init__(column="monthly_spend", sufix="monthly_spend")
