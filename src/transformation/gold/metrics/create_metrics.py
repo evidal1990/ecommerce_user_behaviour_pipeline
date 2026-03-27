@@ -1,13 +1,13 @@
 import polars as pl
-from .kpis.percentage.users_by_age_group import PercentageUsersByAgeGroup
-from .kpis.percentage.users_by_gender import PercentageUsersByGender
-from .kpis.percentage.users_by_country import PercentageUsersByCountry
-from .kpis.percentage.users_by_urban_rural import PercentageUsersByUrbanRural
-from .kpis.percentage.users_by_annual_income import PercentageUsersByAnnualIncome
-from .kpis.percentage.users_by_education_level import PercentageUsersByEducationLevel
-from .kpis.percentage.users_by_employment_status import PercentageUsersByEmploymentStatus
-from .kpis.percentage.users_by_device_type import PercentageUsersByDeviceType
-from .kpis.percentage.users_by_has_children import PercentageUsersByHasChildren
+from .kpis.descriptive.users_by_age_group import PercentageUsersByAgeGroup
+from .kpis.descriptive.users_by_gender import PercentageUsersByGender
+from .kpis.descriptive.users_by_country import PercentageUsersByCountry
+from .kpis.descriptive.users_by_urban_rural import PercentageUsersByUrbanRural
+from .kpis.descriptive.users_by_annual_income import PercentageUsersByAnnualIncome
+from .kpis.descriptive.users_by_education_level import PercentageUsersByEducationLevel
+from .kpis.descriptive.users_by_employment_status import PercentageUsersByEmploymentStatus
+from .kpis.descriptive.users_by_device_type import PercentageUsersByDeviceType
+from .kpis.descriptive.users_by_has_children import PercentageUsersByHasChildren
 
 
 class CreateMetrics:
