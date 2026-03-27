@@ -16,8 +16,16 @@ class EnrichStructure(ABC):
         self,
         df: pl.DataFrame,
         column: str,
-        labels: list[str],
+        labels: list[str] = [],
     ) -> dict:
+        if df[column].dtype == pl.Boolean:
+            return df.with_columns(
+                pl.when(pl.col(column))
+                .then(pl.lit("Yes").cast(pl.Utf8))
+                .otherwise(pl.lit("No").cast(pl.Utf8))
+                .alias(f"{column}_group")
+            )
+
         x_pieces = len(labels)
         group = (
             pl.col(column)

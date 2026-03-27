@@ -60,6 +60,7 @@ class AggregateData:
             "purchase_conversion_rate_group",
             "cart_abandonment_rate_group",
             "app_usage_frequency_per_week_group",
+            "has_children_group",
         ]
         agg_result = []
         # Count
