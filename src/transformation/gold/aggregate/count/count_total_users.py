@@ -4,4 +4,4 @@ from src.transformation.gold.aggregate.count_structure import CountStructure
 class CountTotalUsers(CountStructure):
 
     def __init__(self) -> None:
-        super().__init__(column="user_id", sufix="all_users")
+        super().__init__(column="user_id", sufix="users")
