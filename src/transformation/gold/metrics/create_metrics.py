@@ -1,43 +1,39 @@
 import polars as pl
-from .kpis.descriptive.users_by_age_group import PercentageUsersByAgeGroup
-from .kpis.descriptive.users_by_gender import PercentageUsersByGender
-from .kpis.descriptive.users_by_country import PercentageUsersByCountry
-from .kpis.descriptive.users_by_urban_rural import PercentageUsersByUrbanRural
-from .kpis.descriptive.users_by_annual_income import PercentageUsersByAnnualIncome
-from .kpis.descriptive.users_by_education_level import PercentageUsersByEducationLevel
-from .kpis.descriptive.users_by_employment_status import (
+from src.transformation.gold.metrics.kpis.descriptive import (
+    PercentageUsersByAgeGroup,
+    PercentageUsersByGender,
+    PercentageUsersByCountry,
+    PercentageUsersByUrbanRural,
+    PercentageUsersByAnnualIncome,
+    PercentageUsersByEducationLevel,
     PercentageUsersByEmploymentStatus,
+    PercentageUsersByDeviceType,
+    PercentageUsersByHasChildren,
 )
-from .kpis.descriptive.users_by_device_type import PercentageUsersByDeviceType
-from .kpis.descriptive.users_by_has_children import PercentageUsersByHasChildren
+
+from src.transformation.gold.metrics.kpis.behavioral import (
+    PremiumSubscriptionAdoption,
+)
 
 
 class CreateMetrics:
 
     def __init__(self) -> None:
-        pass
+        self.kpis = [
+            PercentageUsersByAgeGroup(),
+            PercentageUsersByGender(),
+            PercentageUsersByCountry(),
+            PercentageUsersByUrbanRural(),
+            PercentageUsersByAnnualIncome(),
+            PercentageUsersByEducationLevel(),
+            PercentageUsersByEmploymentStatus(),
+            PercentageUsersByDeviceType(),
+            PercentageUsersByHasChildren(),
+            PremiumSubscriptionAdoption(),
+        ]
 
     def execute(
         self,
         df: pl.DataFrame,
     ) -> pl.DataFrame:
-        kpis = []
-
-        # Descriptive
-        kpis.append(PercentageUsersByAgeGroup().calculate(df=df))
-        kpis.append(PercentageUsersByGender().calculate(df=df))
-        kpis.append(PercentageUsersByCountry().calculate(df=df))
-        kpis.append(PercentageUsersByUrbanRural().calculate(df=df))
-        kpis.append(PercentageUsersByAnnualIncome().calculate(df=df))
-        kpis.append(PercentageUsersByEducationLevel().calculate(df=df))
-        kpis.append(PercentageUsersByEmploymentStatus().calculate(df=df))
-        kpis.append(PercentageUsersByDeviceType().calculate(df=df))
-        kpis.append(PercentageUsersByHasChildren().calculate(df=df))
-
-        # Behavioural
-
-        # Operational
-
-        # Strategic
-
-        return pl.concat(kpis)
+        return pl.concat([kpi.calculate(df) for kpi in self.kpis])

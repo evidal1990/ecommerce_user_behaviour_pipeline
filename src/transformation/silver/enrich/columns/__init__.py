@@ -20,6 +20,7 @@ from .cart_abandonment_rate_group import CartAbandonmentRateGroup
 from .review_wrighting_frequency_group import ReviewWrightingFrequencyGroup
 from .annual_income_group import AnnualIncomeGroup
 from .has_children_group import HasChildrenGroup
+from .premium_subscription_group import PremiumSubscriptionGroup
 
 __all__ = [
     "CreateIsFutureDateColumn",
@@ -44,4 +45,5 @@ __all__ = [
     "ReviewWrightingFrequencyGroup",
     "AnnualIncomeGroup",
     "HasChildrenGroup",
+    "PremiumSubscriptionGroup",
 ]

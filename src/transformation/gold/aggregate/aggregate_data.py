@@ -45,7 +45,6 @@ class AggregateData:
             "employment_status",
             "device_type",
             "preferred_payment_method",
-            "premium_subscription",
             "age_group",
             "annual_income_group",
             "household_size_group",
@@ -61,6 +60,7 @@ class AggregateData:
             "cart_abandonment_rate_group",
             "app_usage_frequency_per_week_group",
             "has_children_group",
+            "premium_subscription_group",
         ]
         agg_result = []
         # Count

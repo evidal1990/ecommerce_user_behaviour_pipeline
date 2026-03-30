@@ -23,6 +23,7 @@ from src.transformation.silver.enrich.columns import (
     ReviewWrightingFrequencyGroup,
     AnnualIncomeGroup,
     HasChildrenGroup,
+    PremiumSubscriptionGroup,
 )
 
 
@@ -62,5 +63,6 @@ class EnrichExecutor:
         columns.append(ReviewWrightingFrequencyGroup())
         columns.append(AnnualIncomeGroup())
         columns.append(HasChildrenGroup())
+        columns.append(PremiumSubscriptionGroup())
 
         return EnrichData(columns).execute(df=df)
