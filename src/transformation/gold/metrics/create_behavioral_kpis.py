@@ -6,6 +6,7 @@ from src.transformation.gold.metrics.kpis.behavioral import (
     AvgProductViewsPerDay,
     PreferredProductCategory,
     PreferredPaymentMethod,
+    AvgBrandLoyaltyScore,
 )
 from .create_kpis import CreateKpis
 
@@ -24,13 +25,15 @@ class CreateBehavioralKpis(CreateKpis):
                 "annual_income_group",
                 "education_level",
                 "device_type",
+                "cart_abandonment_rate_group",
+                "avg_brand_loyalty_score",
                 "metric_value",
             ],
             kpis=self.build_kpis(
                 [
                     {
                         "class": PremiumSubscriptionAdoption,
-                        "dimension": "premium_subscription_group",
+                        "dimensions": ["premium_subscription_group"],
                         "group_by": [
                             "country",
                             "age_group",
@@ -41,52 +44,34 @@ class CreateBehavioralKpis(CreateKpis):
                     },
                     {
                         "class": AvgDailySessionTime,
-                        "dimension": "country",
-                        "group_by": [],
-                    },
-                    {
-                        "class": AvgDailySessionTime,
-                        "dimension": "age_group",
-                        "group_by": [],
-                    },
-                    {
-                        "class": AvgDailySessionTime,
-                        "dimension": "device_type",
+                        "dimensions": [
+                            "country",
+                            "age_group",
+                            "device_type",
+                        ],
                         "group_by": [],
                     },
                     {
                         "class": AvgAppUsageFrequency,
-                        "dimension": "country",
-                        "group_by": [],
-                    },
-                    {
-                        "class": AvgAppUsageFrequency,
-                        "dimension": "age_group",
-                        "group_by": [],
-                    },
-                    {
-                        "class": AvgAppUsageFrequency,
-                        "dimension": "device_type",
+                        "dimensions": [
+                            "country",
+                            "age_group",
+                            "device_type",
+                        ],
                         "group_by": [],
                     },
                     {
                         "class": AvgProductViewsPerDay,
-                        "dimension": "country",
-                        "group_by": [],
-                    },
-                    {
-                        "class": AvgProductViewsPerDay,
-                        "dimension": "age_group",
-                        "group_by": [],
-                    },
-                    {
-                        "class": AvgProductViewsPerDay,
-                        "dimension": "device_type",
+                        "dimensions": [
+                            "country",
+                            "age_group",
+                            "device_type",
+                        ],
                         "group_by": [],
                     },
                     {
                         "class": PreferredProductCategory,
-                        "dimension": "product_category_preference",
+                        "dimensions": ["product_category_preference"],
                         "group_by": [
                             "country",
                             "age_group",
@@ -95,14 +80,25 @@ class CreateBehavioralKpis(CreateKpis):
                     },
                     {
                         "class": PreferredPaymentMethod,
-                        "dimension": "preferred_payment_method",
+                        "dimensions": ["preferred_payment_method"],
                         "group_by": [
                             "country",
                             "age_group",
                             "annual_income_group",
                             "device_type",
-                            "cart_abandonment_rate_group"
+                            "cart_abandonment_rate_group",
                         ],
+                    },
+                    {
+                        "class": AvgBrandLoyaltyScore,
+                        "dimensions": [
+                            "country",
+                            "age_group",
+                            "annual_income_group",
+                            "education_level",
+                            "premium_subscription_group",
+                        ],
+                        "group_by": [],
                     },
                 ]
             ),
