@@ -1,8 +1,8 @@
 import polars as pl
-from src.transformation.gold.metrics.strcutures.base_structure import BaseStructure
+from src.transformation.gold.metrics.strcutures.percentage_structure import PercentageStructure
 
 
-class PercentageUsersByEmploymentStatus(BaseStructure):
+class PercentageUsersByEmploymentStatus(PercentageStructure):
     def __init__(
         self,
         dimension:str,
@@ -10,7 +10,6 @@ class PercentageUsersByEmploymentStatus(BaseStructure):
     ) -> None:
         super().__init__(
             metric="users_by_employment_status",
-            metric_type="percentage",
             dimension_col=dimension,
             group_cols=group_by,
         )
@@ -20,5 +19,6 @@ class PercentageUsersByEmploymentStatus(BaseStructure):
         df: pl.DataFrame,
     ) -> pl.DataFrame:
         df = self._apply_filter(df)
-        result = self._calculate_percentage(df)
-        return self._finalize_output(result)
+        df = self._calculate_percentage(df)
+        df = self._finalize_output(df)
+        return df

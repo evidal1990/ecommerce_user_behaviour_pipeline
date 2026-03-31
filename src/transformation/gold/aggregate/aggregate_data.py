@@ -61,6 +61,7 @@ class AggregateData:
             "app_usage_frequency_per_week_group",
             "has_children_group",
             "premium_subscription_group",
+            "product_category_preference",
         ]
         agg_result = []
         # Count

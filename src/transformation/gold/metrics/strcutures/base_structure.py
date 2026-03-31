@@ -32,54 +32,6 @@ class BaseStructure:
     ) -> pl.DataFrame:
         return df
 
-    def _calculate_rate(
-        self,
-        df: pl.DataFrame,
-        condition: pl.Expr,
-    ) -> pl.DataFrame:
-        return (
-            df.with_columns(condition.cast(pl.Int8).alias("metric_value"))
-            .group_by(self.all_group_cols)
-            .agg(pl.col("metric_value").mean().round(2))
-            .sort(by=self.all_group_cols)
-        )
-
-    def _calculate_percentage(
-        self,
-        df: pl.DataFrame,
-    ) -> pl.DataFrame:
-        total = df.select(pl.col("count_users").sum()).item()
-
-        return df.group_by(self.all_group_cols).agg(
-            (pl.col("count_users").sum() / total * 100).round(2).alias("metric_value")
-        )
-
-    # ✔️ MÉDIA (valor contínuo)
-    def _calculate_average(
-        self,
-        df: pl.DataFrame,
-        column: str,
-    ) -> pl.DataFrame:
-        return df.group_by(self.all_group_cols).agg(
-            pl.col(column)
-            .mul(pl.col("count_users"))
-            .sum()
-            .truediv(pl.col("count_users").sum())
-            .round(2)
-            .alias("metric_value")
-        )
-
-    def _calculate_count(
-        self,
-        df: pl.DataFrame,
-    ) -> pl.DataFrame:
-        return (
-            df.group_by(self.all_group_cols)
-            .agg(pl.count().alias("metric_value"))
-            .sort(by=self.all_group_cols)
-        )
-
-    # ✔️ PADRONIZAÇÃO FINAL (único ponto de formatação)
     def _finalize_output(
         self,
         df: pl.DataFrame,

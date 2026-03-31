@@ -4,6 +4,7 @@ from src.transformation.gold.metrics.kpis.behavioral import (
     AvgDailySessionTime,
     AvgAppUsageFrequency,
     AvgProductViewsPerDay,
+    PreferredProductCategory,
 )
 from .create_kpis import CreateKpis
 
@@ -81,6 +82,15 @@ class CreateBehavioralKpis(CreateKpis):
                         "class": AvgProductViewsPerDay,
                         "dimension": "device_type",
                         "group_by": [],
+                    },
+                    {
+                        "class": PreferredProductCategory,
+                        "dimension": "product_category_preference",
+                        "group_by": [
+                            "country",
+                            "age_group",
+                            "device_type",
+                        ],
                     },
                 ]
             ),

@@ -16,3 +16,15 @@ class AvgDailySessionTime(AvgStructure):
             dimension_col=dimension,
             group_cols=group_by,
         )
+
+    def calculate(
+        self,
+        df: pl.DataFrame,
+    ) -> pl.DataFrame:
+        df = self._apply_filter(df)
+        df = self._calculate_average(
+            df,
+            column=self.column,
+        )
+        df = self._finalize_output(df)
+        return df

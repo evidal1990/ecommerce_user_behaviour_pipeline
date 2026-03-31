@@ -10,7 +10,7 @@ class AvgStructure(BaseStructure):
         metric: str,
         column: str,
         dimension_col: str,
-        group_cols: list[str]=[],
+        group_cols: list[str] = [],
     ) -> None:
         self.column = column
         super().__init__(
@@ -20,15 +20,30 @@ class AvgStructure(BaseStructure):
             group_cols=group_cols,
         )
 
-    def calculate(
+    def _calculate_average(
         self,
         df: pl.DataFrame,
+        column: str,
     ) -> pl.DataFrame:
-        df = self._apply_filter(df)
+        return self._aggregate_weighted_avg(df, column)
 
-        result = self._calculate_average(
-            df,
-            column=self.column,
+    def _weighted_avg_expr(
+        self,
+        column: str,
+    ) -> pl.Expr:
+        return (
+            pl.col(column)
+            .mul(pl.col("count_users"))
+            .sum()
+            .truediv(pl.col("count_users").sum())
+            .round(2)
         )
 
-        return self._finalize_output(result)
+    def _aggregate_weighted_avg(
+        self,
+        df: pl.DataFrame,
+        column: str,
+    ) -> pl.DataFrame:
+        return df.group_by(self.all_group_cols).agg(
+            self._weighted_avg_expr(column).alias("metric_value")
+        )

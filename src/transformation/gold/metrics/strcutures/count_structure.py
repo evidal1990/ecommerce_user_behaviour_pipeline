@@ -4,7 +4,7 @@ from src.transformation.gold.metrics.strcutures.base_structure import (
 )
 
 
-class PercentageStructure(BaseStructure):
+class CountStructure(BaseStructure):
     def __init__(
         self,
         metric: str,
@@ -13,33 +13,20 @@ class PercentageStructure(BaseStructure):
     ) -> None:
         super().__init__(
             metric=metric,
-            metric_type="percentage",
+            metric_type="count",
             dimension_col=dimension_col,
             group_cols=group_cols,
         )
 
-    def _calculate_percentage(
-        self,
-        df: pl.DataFrame,
-    ) -> pl.DataFrame:
-        total = self._calculate_total(df)
-        df = self._aggregate_percentage(df, total)
-        df = self._sort_output(df)
-        return df
+    def _count_expr(self) -> pl.Expr:
+        return pl.count()
 
-    def _calculate_total(
+    def _aggregate_count(
         self,
         df: pl.DataFrame,
-    ) -> int:
-        return df.select(pl.col("count_users").sum()).item()
-
-    def _aggregate_percentage(
-        self,
-        df: pl.DataFrame,
-        total: int = 0,
     ) -> pl.DataFrame:
         return df.group_by(self.all_group_cols).agg(
-            (pl.col("count_users").sum() / total * 100).round(2).alias("metric_value")
+            self._count_expr().alias("metric_value")
         )
 
     def _sort_output(
