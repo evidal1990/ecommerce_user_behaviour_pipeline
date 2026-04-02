@@ -2,14 +2,65 @@
 
 ## Objetivo
 
-Este pipeline foi desenvolvido para automatizar o processo de ingestão de dados (de diferentes fontes), transformar esses dados e armazená-los para análise. 
-O objetivo é garantir que os dados estejam sempre atualizados e disponíveis para análise e tomada de decisões.
+O projeto tem como foco automatizar o fluxo de ingestão de dados provenientes de diferentes fontes, aplicar processos de transformação e disponibilizar dados estruturados e confiáveis para análise. Dessa forma, os dados permanecem atualizados, consistentes e prontos para suportar decisões orientadas por dados em contextos de E-commerce.
+
+O desenvolvimento do projeto iniciou com a definição do dicionário de dados, levantamento de requisitos de negócio e definição de KPIs. A partir disso, foi desenhada a arquitetura do pipeline, estruturando o fluxo de ingestão, transformação e armazenamento dos dados.
+
+Após a conclusão do pipeline, os dados serão utilizados para análises exploratórias, desenvolvimento de modelos de Machine Learning e criação de dashboards, permitindo extrair insights sobre o comportamento dos usuários e apoiar estratégias de negócio.
+
+## KPIS Descritivos
+
+- % de usuários por faixa etária
+- % de usuários por gênero
+- % de usuários por país
+- % de usuários por contexto urbano x rural
+- % de usuários por faixa de renda
+- % de usuários por nível de escolaridade
+- % de usuários por status de emprego
+- % de usuários por tipo de dispositivo
+- % de usuários com filhos
+
+## KPIS Comportamentais
+
+- % de usuários que adotam a assinatura premium 
+- Tempo médio diário na plataforma
+- Frequência média de uso da plataforma por semana
+- Média de produtos vistos por dia
+- Categoria de produtos preferida mais populares
+- Meio de pagamento preferido
+
+## KPIS Operacionais
+
+- Média de lealdade à marca
+- Média de dependência de cupom de desconto
+- Média de atividade de referência
+
+## KPIS Estratégicos
+
+- Taxa de conversão
+- Taxa de abandono de carrinho
+- Taxa de churn
+- DAU
+- Score de engajamento
+- NPS
 
 ## Link para a Documentação do Projeto
 https://drive.google.com/file/d/1To4Z_KnayDgVKSdtN9Zu-NozFfFH2g0c/view?usp=drive_link
 
 ## Arquitetura
 RAW -> BRONZE -> SILVER -> GOLD
+
+### Camada RAW
+Armazena os dados exatamente como foram recebidos, sem nenhum tipo de modificação.
+
+### Camada BRONZE
+Transforma dados brutos em dadoss tecnicamente utilizáveis, sem lógica de negócio.
+
+### Camada SILVER
+Os dados passam a representar a realidade do negócio.
+
+### Camada GOLD
+Armazena os dados prontos para consumo (análises).
 
 ## Stack
 - Python
@@ -21,91 +72,50 @@ RAW -> BRONZE -> SILVER -> GOLD
 ```
 .
 ├── config
-│   ├── connections.yaml
-│   ├── google_cloud_platform.yaml
-│   ├── loggin.yaml
-│   └── settings.yaml
 ├── consts
-│   └── dtypes.py
 ├── credentials
 ├── data
 │   ├── bronze
 │   ├── gold
-│   ├── origin
 │   ├── raw
 │   └── silver
 ├── database
-│   ├── bigquery.py
-│   ├── engine.py
-│   └── metadata.py
 ├── docker
-│   ├── docker-compose.yml
-│   └── Dockerfile
 ├── logs
-├── pytest.ini
-├── README.md
-├── requirements.txt
 ├── scripts
-│   ├── backkfill.py
-│   ├── cleanup.py
-│   ├── run_pipeline.py
-│   ├── seed_data.py
-│   └── validate_data.py
 ├── src
 │   ├── ingestion
-│   │   ├── __init__.py
-│   │   ├── csv_ingestion.py
-│   │   └── schema.yaml
 │   ├── load
-│   │   ├── __init__.py
-│   │   ├── load_gold.py
-│   │   └── load_silver.py
 │   ├── orchestration
-│   │   ├── __init__.py
-│   │   └── pipeline.py
+│   │   ├── config
+│   │   └── executors
 │   ├── transformation
 │   │   ├── bronze
-│   │   │   ├── __init__.py
-│   │   │   ├── clean.py
-│   │   │   └── structure_data.py
+│   │   │   └── fixes
+│   │   ├── gold
+│   │   │   ├── aggregate
+│   │   │   └── metrics
 │   │   └── silver
-│   │       ├── __init__.py
-│   │       ├── clean.py
-│   │       ├── enrich.py
-│   │       └── normalize.py
+│   │       ├── clean
+│   │       ├── enrich
+│   │       └── normalize
 │   ├── utils
-│   │   ├── dataframe.py
-│   │   ├── db.py
-│   │   ├── file_io.py
-│   │   └── get_env_variables.py
 │   └── validation
-│       ├── __init__.py
-│       └── quality_checks.py
+│       ├── business
+│       ├── quality
+│       ├── rules
+│       └── semantic
 ├── storage
-│   ├── __init__.py
-│   └── gcs.py
-└── tests
-    ├── data
-    ├── dataframe
-    │   ├── __init__.py
-    │   └── dataframe_test.py
-    ├── file_io
-    │   ├── __init__.py
-    │   └── file_io_test.py
-    ├── gcp
-    │   ├── __init__.py
-    │   ├── bucket_test.py
-    │   └── connection_test.py
-    ├── ingestion
-    │   ├── __init__.py
-    │   └── ingestion_test.py
-    ├── load
-    │   └── load.test.py
-    ├── results
-    ├── transformation
-    │   └── transformation.test.py
-    └── validation
-        └── test.py
+├── tests
+│   ├── data
+│   ├── dataframe
+│   ├── file_io
+│   ├── gcp
+│   ├── ingestion
+│   ├── load
+│   ├── results
+│   ├── transformation
+│   └── validation
 ```
 
 ## Link do Kaggle
@@ -130,16 +140,4 @@ https://www.kaggle.com/datasets/dhrubangtalukdar/e-commerce-shopper-behavior-ama
 O pipeline é composto por três camadas: raw, bronze, silver e gold. 
 O pipeline é executado pelo arquivo `pipeline.py`, que carrega as configurações do pipeline, cria um objeto `Pipeline` e executa o método `run()`.
 **O resultado de cada etapa é registrado em um arquivo de log.**
-
-### Camada raw
-Armazena os dados exatamente como foram recebidos, sem nenhum tipo de modificação.
-
-### Camada bronze
-Transforma dados brutos em dadoss tecnicamente utilizáveis, sem lógica de negócio.
-
-### Camada silver
-Os dados passam a representar a realidade do negócio.
-
-### Camada gold
-Armazena os dados prontos para consumo (análises).
 
