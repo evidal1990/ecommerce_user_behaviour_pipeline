@@ -6,6 +6,8 @@ from .executors.semantic_rules_executor import SemanticRulesExecutor
 from .executors.business_rules_executor import BusinessRulesExecutor
 from .executors.transformation_silver_executor import TransformationSilverExecutor
 from .executors.transformation_gold_executor import TransformationGoldExecutor
+from src.load.load_gold import LoadGold
+from database.supabase import SupabaseConnectionManager
 
 
 class Pipeline:
@@ -62,9 +64,15 @@ class Pipeline:
         BusinessRulesExecutor().start(
             df=df_after_transformation_silver,
         )
-        df_after_transformation_gold = TransformationGoldExecutor(
+        TransformationGoldExecutor(
             settings=self.settings,
         ).start(
             df=df_after_transformation_silver,
+        )
+        LoadGold(
+            db=SupabaseConnectionManager(),
+        ).load_all(
+            truncate_first=True,
+            upsert=False,
         )
         logging.info("Pipeline finalizada")
