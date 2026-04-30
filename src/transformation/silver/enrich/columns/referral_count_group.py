@@ -15,9 +15,9 @@ class ReferralCountGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Rare Referrer",
-            "Occasional Referrer",
-            "Active Referrer",
-            "Advocate",
+            "Raramente Indicadores",
+            "Ocasionalmente Indicam",
+            "Frequentemente Indicam",
+            "Defensores",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

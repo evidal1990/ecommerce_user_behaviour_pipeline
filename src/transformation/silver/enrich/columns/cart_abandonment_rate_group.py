@@ -15,9 +15,9 @@ class CartAbandonmentRateGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Rare Abandoner",
-            "Occasional Abandoner",
-            "Frequent Abandoner",
-            "Heavy Abandoner",
+            "Raramente Abandonam",
+            "Ocasionalmente Abandonam",
+            "Frequentemente Abandonam",
+            "Muito Frequentemente Abandonam",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

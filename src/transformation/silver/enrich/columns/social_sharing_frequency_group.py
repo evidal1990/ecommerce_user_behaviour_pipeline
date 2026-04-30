@@ -15,9 +15,9 @@ class SocialSharingFrequencyGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Rare Sharer",
-            "Occasional Sharer",
-            "Frequent Sharer",
-            "Heavy Sharer",
+            "Compartilham Raramente",
+            "Compartilham Ocasionalmente",
+            "Compartilham Frequentemente",
+            "Compartilham Muitas Vezes",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

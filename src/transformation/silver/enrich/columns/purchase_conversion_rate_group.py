@@ -15,10 +15,9 @@ class PurchaseConversionRateGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Rare Buyer",
-            "Occasional Buyer",
-            "Considered Buyer",
-            "Frequent Buyer",
-            "Power Buyer",
+            "Compradores Raros",
+            "Compradores Ocasionais",
+            "Compradores em Potencial",
+            "Compradores Frequentes",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

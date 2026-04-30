@@ -15,9 +15,9 @@ class PhysicalActivityLevelGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Lightly Activity",
-            "Moderate Activity",
-            "Intense Activity",
-            "Very Intense Activity",
+            "Atividades Leves",
+            "Atividades Moderadas",
+            "Atividades Intensas",
+            "Atividades Muito Intensas",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

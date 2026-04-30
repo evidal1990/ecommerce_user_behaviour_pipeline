@@ -15,9 +15,9 @@ class ExerciseFrequencyGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Sedentary",
-            "Lightly Active",
-            "Moderately Active",
-            "Highly Active",
+            "Sedentário",
+            "Levemente Ativo",
+            "Moderadamente Ativo",
+            "Muito Ativo",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

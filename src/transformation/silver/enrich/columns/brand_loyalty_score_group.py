@@ -15,8 +15,8 @@ class BrandLoyaltyScoreGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Detractors",
-            "Neutral",
-            "Promoters",
+            "Detratores",
+            "Neutros",
+            "Promotores",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

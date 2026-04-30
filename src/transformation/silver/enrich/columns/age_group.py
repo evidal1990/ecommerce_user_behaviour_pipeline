@@ -15,11 +15,11 @@ class AgeGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Early Adopters",
-            "Early Career Professionals",
-            "Professional Consolidation",
-            "High Financial Stability",
-            "Pre-Retirement",
-            "Low Digital Adoption",
+            "Alta Adoção Digital",
+            "Início de Carreira",
+            "Consolidamento de Carreira",
+            "Estabilidade Financeira",
+            "Próximas da Aposentadoria",
+            "com Baixa Adoção Digital",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

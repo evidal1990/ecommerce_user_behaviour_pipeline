@@ -15,10 +15,10 @@ class OverallStressLevelGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Very Relaxed",
-            "Relaxed",
-            "Balanced",
-            "Stressed",
-            "Highly Stressed",
+            "Muito Relaxados",
+            "Relaxados",
+            "Equilibrados",
+            "Estressados",
+            "Muito Estressados",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

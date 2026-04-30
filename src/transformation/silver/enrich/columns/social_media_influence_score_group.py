@@ -15,8 +15,8 @@ class SocialMediaInfluenceScoreGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Independent",
-            "Influence-Aware",
-            "Highly Influenced",
+            "Não Influenciados",
+            "Influenciados",
+            "Altamente Influenciados",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

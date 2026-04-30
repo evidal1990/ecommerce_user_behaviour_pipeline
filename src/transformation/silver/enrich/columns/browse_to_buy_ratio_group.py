@@ -15,10 +15,10 @@ class BrowseToBuyRatioGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Heavy Browser",
-            "Casual Browser",
-            "Considering Buyer",
-            "Intentional Buyer",
-            "Decisive Buyer",
+            "Navegam Frequentemente",
+            "Navegam Casualmente",
+            "Consideram Comprar",
+            "Compram Intencionalmente",
+            "Compram Decisivamente",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

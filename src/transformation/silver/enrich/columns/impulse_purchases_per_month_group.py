@@ -15,9 +15,9 @@ class ImpulsePurchasesPerMonthGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Non-impulsive",
-            "Occasional Impulse Buyer",
-            "Moderate Impulse Buyer",
-            "Frequent Impulse Buyer",
+            "Não Impulsivos",
+            "Compradores por Impulso Ocasional",
+            "Compradores por Impulso Moderado",
+            "Compradores por Impulso Frequentemente",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

@@ -15,9 +15,9 @@ class NotificationResponseRateGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Rarely Responsive",
-            "Occasionally Responsive",
-            "Responsive",
-            "Highly Responsive",
+            "Raramente Responsivos",
+            "Ocasionalmente Responsivos",
+            "Responsivos",
+            "Muito Responsivos",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

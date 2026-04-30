@@ -15,9 +15,9 @@ class ReviewWrightingFrequencyGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Rare Reviewer",
-            "Occasional Contributor",
-            "Active Contributor",
-            "Power Contributor",
+            "Contribuidores Raros",
+            "Contribuidores Ocasionais",
+            "Contribuidores Ativos",
+            "Contribuidores Poderosos",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

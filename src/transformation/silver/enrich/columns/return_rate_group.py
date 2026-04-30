@@ -15,9 +15,9 @@ class ReturnRateGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Rare Returner",
-            "Occasional Returner",
-            "Frequent Returner",
-            "Heavy Returner",
+            "Retornam Raramente",
+            "Retornam Ocasionalmente",
+            "Retornam Frequentemente",
+            "Retornam Muitas Vezes",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

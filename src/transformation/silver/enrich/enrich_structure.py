@@ -21,8 +21,8 @@ class EnrichStructure(ABC):
         if df[column].dtype == pl.Boolean:
             return df.with_columns(
                 pl.when(pl.col(column))
-                .then(pl.lit("Yes").cast(pl.Utf8))
-                .otherwise(pl.lit("No").cast(pl.Utf8))
+                .then(pl.lit("Sim").cast(pl.Utf8))
+                .otherwise(pl.lit("Não").cast(pl.Utf8))
                 .alias(f"{column}_group")
             )
 
