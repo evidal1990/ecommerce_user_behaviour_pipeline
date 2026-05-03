@@ -37,7 +37,7 @@ class CsvIngestion(IngestInterface):
             None
         """
         self.df = pl.read_csv(self.origin)
-        self.df = self.df.sample(n=SAMPLE_SIZE, shuffle=True)
+        self.df = self.df.head(SAMPLE_SIZE)
         df_is_empty = self.df.is_empty()
         if self.df.is_empty():
             status = IngestionStatus.FAIL

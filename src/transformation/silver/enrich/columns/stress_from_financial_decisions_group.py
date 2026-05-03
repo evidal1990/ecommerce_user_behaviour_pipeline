@@ -15,9 +15,9 @@ class StressFromFinancialDecisionsGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Financeiramente Despreocupados",
-            "Financeiramente Confortáveis",
-            "Financeiramente Conscientes",
-            "Financeiramente Estressados",
+            "Despreocupados",
+            "Confortáveis",
+            "Conscientes",
+            "Estressados",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)

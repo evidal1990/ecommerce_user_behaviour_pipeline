@@ -15,7 +15,7 @@ class AgeGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Jovens Estudantes",
+            "Jovens Adultos",
             "Início de Carreira",
             "Consolidação de Carreira",
             "Estabilidade Financeira",

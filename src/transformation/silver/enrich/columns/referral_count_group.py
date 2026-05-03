@@ -15,7 +15,7 @@ class ReferralCountGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Raramente Indicadores",
+            "Raramente Indicam",
             "Ocasionalmente Indicam",
             "Frequentemente Indicam",
             "Defensores da Marca",

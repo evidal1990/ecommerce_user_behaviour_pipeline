@@ -135,7 +135,7 @@ columns:
     not_null: True
     required: True
     values: [
-      "Jovens Estudantes",
+      "Jovens Adultos",
       "Início de Carreira",
       "Consolidação de Carreira",
       "Estabilidade Financeira",
@@ -185,10 +185,10 @@ columns:
     required: True
     values: [
       "Altamente Ponderados",
-      "Compradores Criteriosos",
-      "Compradores Equilibrados",
-      "Compradores Impulsivos",
-      "Compradores Altamente Impulsivos",
+      "Criteriosos",
+      "Equilibrados",
+      "Impulsivos",
+      "Altamente Impulsivos",
     ]
   social_media_influence_score_group:
     dtype: String
@@ -214,10 +214,10 @@ columns:
     not_null: True
     required: True
     values: [
-      "Financeiramente Despreocupados",
-      "Financeiramente Confortáveis",
-      "Financeiramente Conscientes",
-      "Financeiramente Estressados",
+      "Despreocupados",
+      "Confortáveis",
+      "Conscientes",
+      "Estressados",
     ]
   overall_stress_level_group:
     dtype: String
@@ -245,7 +245,7 @@ columns:
     not_null: True
     required: True
     values: [
-      "Raramente Indicadores",
+      "Raramente Indicam",
       "Ocasionalmente Indicam",
       "Frequentemente Indicam",
       "Defensores da Marca",
@@ -323,10 +323,10 @@ columns:
     not_null: True
     required: True
     values: [
-      "Compartilham Raramente",
-      "Compartilham Ocasionalmente",
-      "Compartilham Frequentemente",
-      "Compartilham Muitas Vezes",
+      "Raramente",
+      "Ocasionalmente",
+      "Frequentemente",
+      "Sempre",
     ]
   cart_abandonment_rate_group:
     dtype: String

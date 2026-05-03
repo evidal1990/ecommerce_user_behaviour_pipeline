@@ -15,7 +15,7 @@ class HouseholdSizeGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "Mora Sozinho ou Com Poucas Pessoas",
+            "Mora Sozinho ou com Poucas Pessoas",
             "Mora com Algumas Pessoas",
             "Mora com Muitas Pessoas",
         ]

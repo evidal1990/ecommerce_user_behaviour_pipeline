@@ -16,9 +16,9 @@ class ImpulseBuyingScoreGroup(EnrichStructure):
     ) -> pl.DataFrame:
         labels = [
             "Altamente Ponderados",
-            "Compradores Criteriosos",
-            "Compradores Equilibrados",
-            "Compradores Impulsivos",
-            "Compradores Altamente Impulsivos",
+            "Criteriosos",
+            "Equilibrados",
+            "Impulsivos",
+            "Altamente Impulsivos",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)
