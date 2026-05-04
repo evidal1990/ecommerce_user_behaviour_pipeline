@@ -147,11 +147,11 @@ columns:
     not_null: True
     required: True
     values: [
-      "E (Classe Baixa)",
-      "D (Classe Média Baixa)",
-      "C (Classe Média)",
-      "B (Classe Média Alta)",
-      "A (Classe Alta)",
+      "Classe E",
+      "Classe D",
+      "Classe C",
+      "Classe B",
+      "Classe A",
     ]
   has_children_group:
     dtype: String

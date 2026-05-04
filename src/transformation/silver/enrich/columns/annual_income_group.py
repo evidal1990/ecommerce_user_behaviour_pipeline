@@ -15,10 +15,10 @@ class AnnualIncomeGroup(EnrichStructure):
         df,
     ) -> pl.DataFrame:
         labels = [
-            "E (Classe Baixa)",
-            "D (Classe Média Baixa)",
-            "C (Classe Média)",
-            "B (Classe Média Alta)",
-            "A (Classe Alta)",
+            "Classe E",
+            "Classe D",
+            "Classe C",
+            "Classe B",
+            "Classe A",
         ]
         return super().aggregate(df=df, column=self.column, labels=labels)
